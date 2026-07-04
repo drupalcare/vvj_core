@@ -178,12 +178,12 @@ After `drush cr`, confirm:
 
 | Symptom | Fix |
 |---------|-----|
-| `Class "Drupal\vvja\Twig\VVJATwigExtension" not found` | Stale cache after v2 code deploy — `drush cr`; if Drush won't bootstrap, clear `cache_container` in the database, then retry |
-| Pattern enabled but format missing | Install and enable `vvj_core` — `drush en vvj_core -y && drush cr` |
-| JS error loading `vvj-element-base.js` | Confirm `vvj_core` exists at `modules/contrib/vvj_core` |
-| Composer did not install vvj_core | Pattern `composer.json` must require `drupal/vvj_core:^2.0` |
-| `updb` errors before `vvj_core` is enabled | Enable it first: `drush en vvj_core -y`, then `drush updb -y && drush cr` |
-| Dependency error: pattern needs `vvj_core` | Manual install — download the `vvj_core` tarball to `modules/contrib/vvj_core` |
+| `Class "Drupal\vvja\Twig\VVJATwigExtension… | Stale cache after v2 code deploy
+| Pattern enabled but format missing | Install and enable `vvj_core` |
+| JS error loading `vvj-element-base.js` | Confirm `vvj_core` exists at `modules
+| Composer did not install vvj_core | Pattern `composer.json` must require `drup
+| `updb` errors before `vvj_core` is enabled | Enable it first: `drush en vvj_co
+| Dependency error: pattern needs `vvj_core` | Manual install |
 
 ---
 
@@ -193,41 +193,41 @@ After `drush cr`, confirm:
 
 | Class / service | Purpose |
 |---|---|
-| `Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase` | Abstract Views Style plugin base. Pattern modules subclass and implement four small hooks (`getModuleSlug()`, `getCustomElementTag()`, `definePatternOptions()`, `buildPatternSections()`) — everything else (form weights, warning, advanced/deeplinking/token-doc sections, library list, render(), validate()) is inherited. |
-| `vvj_core.svg_sanitizer` | Whitelist-driven SVG sanitizer for admin-pasted icons. |
-| `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` token resolution. Pattern modules call `$this->tokenResolver->resolve($namespace, $tokens, $data, $bubbleable, $expectedClass)` from their `hook_tokens()` implementation. |
-| `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable labels. |
+| `Drupal\vvj_core\Plugin\views\style\VvjSty… | Abstract Views Style plugin base
+| `vvj_core.svg_sanitizer` | Whitelist-driven SVG sanitizer for admin-p… |
+| `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` to… |
+| `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable… |
 | `vvj_core.unique_id_generator` | `random_int`-based 8-digit unique IDs. |
-| `vvj_core.twig_extension` | Registers the `safe_html` Twig filter (one copy, all patterns inherit). |
-| `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`: adds `.vvj-component` and `.vvj-{slug}` on the view wrapper for every display using `VvjStylePluginBase`, so global CSS/a11y in `vvj-a11y.css` applies to all patterns. |
-| `Drupal\vvj_core\Hook\VvjCoreHelpHook` | `hook_help()` implementation — extended help for the foundation module at `/admin/help/vvj_core`. |
+| `vvj_core.twig_extension` | Registers the `safe_html` Twig filter . |
+| `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`:
+| `Drupal\vvj_core\Hook\VvjCoreHelpHook` | `hook_help` implementation |
 
 ### Constants enums (typed PHP 8.3 const classes)
 
 | Class | Purpose |
 |---|---|
-| `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint values (`576`, `768`, `992`, `1200`, `1400`, `all`). |
-| `Drupal\vvj_core\Constants\Easing` | CSS easing keywords (`ease`, `ease-in`, `ease-out`, `ease-in-out`, `linear`). |
-| `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets (`a-fade`, `a-zoom`, `a-top`, `a-bottom`, `a-left`, `a-right`). |
-| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds, token pattern, deeplink reserved words. |
+| `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint valu
+| `Drupal\vvj_core\Constants\Easing` | CSS easing keywords . |
+| `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets . |
+| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds, token pattern, 
 
 ### JS
 
 | Module | Purpose |
 |---|---|
-| `js/vvj-element-base.js` | `VvjElementBase extends HTMLElement` — Custom Element base with lazy IntersectionObserver hydration, AbortController-tracked listeners, reduced-motion awareness, View Transitions helper, `vvj:*` CustomEvent dispatch. Pattern modules `import { VvjElementBase }` and extend. |
-| `js/vvj-keyboard-nav.js` | `handleArrowKeyNav(event, items, currentIndex, options)` — shared Up/Down/Home/End primitive used by accordion / tabs / carousels. |
-| `js/vvj-focus-trap.js` | `trapFocus(container, signal)` — keyboard-trap helper for modal-style patterns (lightbox). Prefer `<dialog>` where possible; this is for cases that can't use it. |
-| `js/vvj-deeplink-bridge.js` | `wireDeeplink(...)` + `writeDeeplinkHash(...)` — URL-hash sync for any pattern that supports deep-linking. |
-| `js/vvj-token-bridge.js` | `registerVvjBehavior(behaviorKey, selector)` — registers a no-op `Drupal.behaviors` entry that exists for v1 backwards-compat. Hydration happens via the custom element. |
+| `js/vvj-element-base.js` | `VvjElementBase extends HTMLElement` |
+| `js/vvj-keyboard-nav.js` | `handleArrowKeyNav` |
+| `js/vvj-focus-trap.js` | `trapFocus` |
+| `js/vvj-deeplink-bridge.js` | `wireDeeplink` + `writeDeeplinkHash` |
+| `js/vvj-token-bridge.js` | `registerVvjBehavior` |
 
 ### CSS
 
 | File | Purpose |
 |---|---|
-| `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge. Aliases them as `--vvj-*` with system-color-keyword fallbacks for non-APEX sites. |
-| `css/vvj-base.css` | Cascade-layer ladder (`vvj.foundation, .tokens, .base, .pattern, .theme`), container-query setup, reduced-motion baseline, FOUC-prevention for unupgraded custom elements. |
-| `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidden utility, with forced-colors-mode fallbacks. |
+| `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge.… |
+| `css/vvj-base.css` | Cascade-layer ladder , container-query set… |
+| `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidd… |
 
 ---
 
@@ -238,11 +238,11 @@ module’s `README.md` for specifics):
 
 | Surface | Typical contents |
 |--------|------------------|
-| `src/Hook/*ThemeHook.php` | `hook_theme()` — registers `views_view_vvj*` templates + field variants. |
-| `src/Hook/*PreprocessHooks.php` | Style preprocess + row/field preprocess via core `ViewsThemeHooks` (Drupal 12-safe). |
-| `src/Hook/*TokenHooks.php` | `hook_token_info()` / `hook_tokens()` — `[vvjX:field]` and `[vvjX:field:plain]` from the **first row** when that Views style is selected. |
-| `src/Hook/*HelpHook.php` | `hook_help()` — extended documentation at `/admin/help/{module}`. |
-| `config/optional/views.view.*_example.yml` | Optional starter View (imports when there is no machine-name conflict). |
+| `src/Hook/*ThemeHook.php` | `hook_theme` |
+| `src/Hook/*PreprocessHooks.php` | Style preprocess + row/field preprocess vi… 
+| `src/Hook/*TokenHooks.php` | `hook_token_info` / `hook_tokens` |
+| `src/Hook/*HelpHook.php` | `hook_help` |
+| `config/optional/views.view.*_example.yml` | Optional starter View . |
 
 ---
 
@@ -377,6 +377,8 @@ GPL-2.0-or-later. See [LICENSE.txt](./LICENSE.txt).
 
 ## Maintainer
 
-Alaa Haddad — [drupal.org/u/flashwebcenter](https://www.drupal.org/u/flashwebcenter)
+Alaa Haddad —
+[drupal.org/u/flashwebcenter](https://www.drupal.org/u/flashwebcenter)
 
-Issues: [drupal.org/project/issues/vvj_core](https://www.drupal.org/project/issues/vvj_core)
+Issues:
+[drupal.org/project/issues/vvj_core](https://www.drupal.org/project/issues/vvj_core)
