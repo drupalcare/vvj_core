@@ -1,0 +1,45 @@
+/**
+ * @file
+ * VVJ Core — design token bridge.
+ *
+ * Exposes APEX `--apex-*` and `--r-*` tokens to all VVJ components,
+ * with system-color-keyword fallbacks for non-APEX sites. Pattern
+ * modules consume these `--vvj-*` aliases instead of reaching for
+ * APEX tokens directly — that way a non-APEX site still gets a
+ * coherent default palette without needing APEX installed.
+ *
+ * Filename:     vvj-tokens.css
+ * Website:      https://www.flashwebcenter.com
+ * Developer:    Alaa Haddad https://www.alaahaddad.com.
+ */
+
+:root {
+  /* Surface colors. */
+  --vvj-bg:                 var(--r-background, Canvas);
+  --vvj-text:               var(--r-text, CanvasText);
+  --vvj-heading:            var(--r-heading, var(--r-text, CanvasText));
+  --vvj-link:               var(--r-link, Highlight);
+  --vvj-link-hover:         var(--r-link-hover, var(--r-link, Highlight));
+  --vvj-border:             var(--r-border, color-mix(in srgb, currentColor 15%, transparent));
+  --vvj-hover-bg:           var(--r-menu-background-hover, color-mix(in srgb, currentColor 8%, transparent));
+
+  /* Focus ring. */
+  --vvj-focus-color:        var(--apex-focus-ring-color, var(--vvj-link));
+  --vvj-focus-width:        var(--apex-focus-ring-width, 2px);
+  --vvj-focus-offset:       var(--apex-focus-ring-offset, 2px);
+
+  /* Typography. */
+  --vvj-font:               var(--apex-font-system, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  --vvj-font-bold:          var(--apex-font-semibold, 600);
+
+  /* Spacing + surface treatment. */
+  --vvj-radius:             var(--apex-radius-md, 0.25rem);
+  --vvj-gap:                var(--apex-grid-gap, 1rem);
+  --vvj-pad:                var(--apex-component-padding, 1rem);
+  --vvj-pad-sm:             var(--apex-space-2xs, 0.5rem);
+  --vvj-pad-xs:             var(--apex-space-xs, 0.875rem);
+
+  /* Motion. */
+  --vvj-transition-speed:   0.3s;
+  --vvj-transition-easing:  ease-in-out;
+}

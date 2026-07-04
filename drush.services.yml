@@ -1,0 +1,11 @@
+services:
+  # `drush vvj:upgrade` — audits VVJ views for v2 schema drift.
+  # Thin wrapper over vvj_core.upgrade_auditor. Registered here (not in
+  # vvj_core.services.yml) so the Drush dependency stays isolated to the
+  # CLI context.
+  vvj_core.commands.upgrade:
+    class: Drupal\vvj_core\Commands\VvjUpgradeCommands
+    arguments:
+      - '@vvj_core.upgrade_auditor'
+    tags:
+      - { name: drush.command }

@@ -1,0 +1,51 @@
+tokens:
+  css:
+    theme:
+      css/vvj-tokens.css: { }
+  dependencies:
+    - core/drupal
+
+base:
+  css:
+    theme:
+      css/vvj-base.css: { }
+  dependencies:
+    - vvj_core/tokens
+
+a11y:
+  css:
+    theme:
+      css/vvj-a11y.css: { }
+  dependencies:
+    - vvj_core/base
+
+element-base:
+  js:
+    js/vvj-element-base.js: { }
+  dependencies:
+    - core/drupal
+
+deeplink-bridge:
+  js:
+    js/vvj-deeplink-bridge.js: { }
+  dependencies:
+    - vvj_core/element-base
+
+keyboard-nav:
+  js:
+    js/vvj-keyboard-nav.js: { }
+  dependencies:
+    - core/drupal
+
+focus-trap:
+  js:
+    js/vvj-focus-trap.js: { }
+  dependencies:
+    - core/drupal
+
+token-bridge:
+  js:
+    js/vvj-token-bridge.js: { }
+  dependencies:
+    - core/drupal
+    - core/once

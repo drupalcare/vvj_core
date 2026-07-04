@@ -1,0 +1,87 @@
+/**
+ * @file
+ * VVJ Core — AAA-level accessibility primitives.
+ *
+ * Cross-cutting accessibility CSS that every VVJ pattern inherits:
+ *
+ *   - Focus indicators: 2px ring with 2px offset (WCAG 2.2 AAA-compliant
+ *     non-text contrast). Uses --vvj-focus-color with system-color
+ *     fallback so it remains visible in any theme.
+ *   - Forced-colors mode: focus + interactive elements use
+ *     `Highlight` / `ButtonText` system tokens for Windows High
+ *     Contrast Mode compliance.
+ *   - Visually-hidden: standard SR-only utility (clip-path-based).
+ *
+ * Pattern modules inherit these rules — they don't need to redefine
+ * focus rings or visually-hidden in their own stylesheets.
+ *
+ * Filename:     vvj-a11y.css
+ * Website:      https://www.flashwebcenter.com
+ * Developer:    Alaa Haddad https://www.alaahaddad.com.
+ */
+
+@layer vvj.foundation, vvj.tokens, vvj.base, vvj.pattern, vvj.theme;
+
+@layer vvj.base {
+
+  /* Universal focus ring for every VVJ component's focusable descendants.
+     Pattern stylesheets can override per-element, but the default ring
+     here is sufficient for AAA without any pattern-specific work. */
+  .vvj-component :focus-visible,
+  vvja-accordion :focus-visible,
+  vvjb-carousel  :focus-visible,
+  vvjc-carousel-3d :focus-visible,
+  vvjf-flipbox   :focus-visible,
+  vvjh-hero      :focus-visible,
+  vvjl-lightbox  :focus-visible,
+  vvjp-parallax  :focus-visible,
+  vvjr-reveal    :focus-visible,
+  vvjs-slideshow :focus-visible,
+  vvjt-tabs      :focus-visible {
+    outline: var(--vvj-focus-width, 2px) solid var(--vvj-focus-color, Highlight);
+    outline-offset: var(--vvj-focus-offset, 2px);
+    border-radius: var(--vvj-radius, 0.25rem);
+  }
+
+  /* Visually-hidden utility shared by every pattern.
+     Use for skip links, accessible labels of decorative spans, etc. */
+  .vvj-component .visually-hidden,
+  vvja-accordion .visually-hidden,
+  vvjb-carousel  .visually-hidden,
+  vvjc-carousel-3d .visually-hidden,
+  vvjf-flipbox   .visually-hidden,
+  vvjh-hero      .visually-hidden,
+  vvjl-lightbox  .visually-hidden,
+  vvjp-parallax  .visually-hidden,
+  vvjr-reveal    .visually-hidden,
+  vvjs-slideshow .visually-hidden,
+  vvjt-tabs      .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+  }
+}
+
+@media (forced-colors: active) {
+  @layer vvj.base {
+    .vvj-component :focus-visible,
+    vvja-accordion :focus-visible,
+    vvjb-carousel  :focus-visible,
+    vvjc-carousel-3d :focus-visible,
+    vvjf-flipbox   :focus-visible,
+    vvjh-hero      :focus-visible,
+    vvjl-lightbox  :focus-visible,
+    vvjp-parallax  :focus-visible,
+    vvjr-reveal    :focus-visible,
+    vvjs-slideshow :focus-visible,
+    vvjt-tabs      :focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

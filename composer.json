@@ -1,0 +1,24 @@
+{
+    "name": "drupal/vvj_core",
+    "description": "Foundation module for the VVJ Views renderer family — abstract Style plugin base, shared services, custom-element JS base, cascade-layer CSS contract. Required by every drupal/vvjX module.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Alaa Haddad (alaahaddad.com)",
+            "homepage": "https://www.drupal.org/u/flashwebcenter",
+            "role": "Maintainer"
+        }
+    ],
+    "homepage": "https://drupal.org/project/vvj_core",
+    "require": {
+        "php": ">=8.3",
+        "drupal/core": "^11.3 || ^12"
+    },
+    "support": {
+        "issues": "https://drupal.org/project/issues/vvj_core",
+        "source": "https://git.drupalcode.org/project/vvj_core"
+    }
+}

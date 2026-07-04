@@ -1,0 +1,9 @@
+name: 'VVJ Core'
+type: module
+description: 'Shared foundation for the VVJ Views display formats; installed automatically with any VVJ module.'
+core_version_requirement: ^11.3 || ^12
+package: VVJ
+php: 8.3
+dependencies:
+  - drupal:views
+  - drupal:filter

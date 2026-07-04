@@ -1,0 +1,46 @@
+services:
+  # Twig extension — exposes the `safe_html` filter to every VVJ template.
+  vvj_core.twig_extension:
+    class: Drupal\vvj_core\Twig\VvjCoreTwigExtension
+    tags:
+      - { name: twig.extension }
+
+  # Utility services — shared across all 10 pattern modules.
+  vvj_core.svg_sanitizer:
+    class: Drupal\vvj_core\Service\SvgSanitizer
+
+  vvj_core.unique_id_generator:
+    class: Drupal\vvj_core\Service\UniqueIdGenerator
+
+  vvj_core.breakpoint_registry:
+    class: Drupal\vvj_core\Service\BreakpointRegistry
+
+  vvj_core.token_resolver:
+    class: Drupal\vvj_core\Service\TokenResolver
+    arguments:
+      - '@logger.factory'
+      - '@renderer'
+
+  # Audits Views config for VVJ style-plugin usage + schema drift.
+  # Drush-independent so it is unit-testable; the vvj:upgrade command
+  # (drush.services.yml) is a thin wrapper over it.
+  vvj_core.upgrade_auditor:
+    class: Drupal\vvj_core\Service\VvjUpgradeAuditor
+    arguments:
+      - '@entity_type.manager'
+
+  # OOP hook classes — Drupal 11.1+ pattern: register FQCN as the
+  # primary service ID so the OOP-hook dispatcher can resolve each
+  # class via ClassResolver.
+  Drupal\vvj_core\Hook\VvjCoreHelpHook:
+    arguments:
+      - '@extension.list.module'
+      - '@module_handler'
+      - '@plugin.manager.filter'
+      - '@config.factory'
+
+  Drupal\vvj_core\Hook\VvjCoreThemeHook:
+    autowire: true
+
+  Drupal\vvj_core\Hook\VvjCorePreprocessHook:
+    autowire: true

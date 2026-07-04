@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * VVJ Core — foundation module bootstrap.
+ *
+ * All hooks live as OOP `#[Hook]` attribute classes under `src/Hook/`.
+ * This file is intentionally minimal; it exists for Drupal's
+ * module-handler discovery only.
+ *
+ * @license SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+declare(strict_types=1);

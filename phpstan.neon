@@ -1,0 +1,22 @@
+# PHPStan configuration for VVJ Core.
+#
+# Strict array shapes enforced — every `array` parameter / return must
+# have a documented shape (list<T>, array<K, V>, or array{key: type}).
+parameters:
+  level: max
+  paths:
+    - src
+    - tests
+    - vvj_core.module
+  excludePaths:
+    - vendor (?)
+    # Drush is not a project dependency (installed on host sites), so the
+    # DrushCommands base class is unresolvable at analysis time. The scan
+    # logic lives in the analyzed, unit-tested VvjUpgradeAuditor service.
+    - src/Commands
+  treatPhpDocTypesAsCertain: false
+  ignoreErrors:
+    # Consumed by pattern modules' Kernel tests (outside this package path).
+    -
+      identifier: trait.unused
+      path: tests/src/Kernel/VvjArticleImageExampleKernelTrait.php
