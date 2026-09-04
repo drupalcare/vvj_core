@@ -83,8 +83,15 @@ abstract class VvjStylePluginBase extends StylePluginBase {
    *
    * Memoized so defineOptions() doesn't regenerate a fresh ID on every
    * form rebuild.
+   *
+   * `protected`, not `private`, for the same reason the class docblock gives
+   * for the service properties: `DependencySerializationTrait` cannot restore
+   * private properties from a parent scope (drupal.org/node/3110266). As a
+   * private property this memo silently reset to NULL after Views form-state
+   * caching — defeating the exact regeneration this cache exists to prevent,
+   * and doing it invisibly.
    */
-  private ?int $cachedUniqueId = NULL;
+  protected ?int $cachedUniqueId = NULL;
 
   /**
    * {@inheritdoc}

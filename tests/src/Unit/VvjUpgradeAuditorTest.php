@@ -92,7 +92,11 @@ final class VvjUpgradeAuditorTest extends UnitTestCase {
    *   The auditor under test.
    */
   private function auditorWithViews(array $views): VvjUpgradeAuditor {
-    $storage = $this->createMock(EntityStorageInterface::class);
+    // createStub(), not createMock(): nothing here verifies an interaction
+    // with the storage — it exists only to hand back the views under test.
+    // PHPUnit 12 emits a notice for a mock configured with no expectations
+    // and points at exactly this refactor.
+    $storage = $this->createStub(EntityStorageInterface::class);
     $storage->method('loadMultiple')->willReturn($views);
 
     $entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
