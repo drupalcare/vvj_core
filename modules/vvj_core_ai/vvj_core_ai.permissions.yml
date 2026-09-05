@@ -1,0 +1,6 @@
+'use vvj views assistant':
+  title: 'Use the VVJ views assistant'
+  description: 'Show the views assistant on the Views administration pages. The assistant can only do what the person using it may already do by hand — creating a view still requires "Administer views", which every tool re-checks on each call.'
+  # Not restricted. The tools check the person's own permissions on every call,
+  # so this grants a surface, not an escalation. Marking it restricted would
+  # imply otherwise.

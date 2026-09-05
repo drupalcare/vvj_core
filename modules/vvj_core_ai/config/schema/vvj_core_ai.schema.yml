@@ -1,0 +1,9 @@
+vvj_core_ai.settings:
+  type: config_object
+  label: 'VVJ Core AI settings'
+  mapping:
+    assistant:
+      type: string
+      label: 'AI assistant used on the Views pages'
+      # '' means the surface is off, which is the installed default and a
+      # legitimate resting state — not a missing value.

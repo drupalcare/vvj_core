@@ -1,0 +1,5 @@
+# Empty on purpose. No assistant can be shipped: an ai_assistant entity names
+# an llm_provider and llm_model that exist on one site only, so a default would
+# install something that looks configured and fails on first use. The settings
+# form says exactly this, and what to do about it.
+assistant: ''

@@ -1,0 +1,86 @@
+services:
+  # The registry is a service, not logic inside a tool plugin, so it can be
+  # tested without the AI stack present — the same reason paragraphs_bundles_ai
+  # separates its resolver. It holds a plugin manager and nothing it could
+  # write with; see docs/VVJ-AI-BRIEF.md section 5.
+  vvj_core_ai.format_registry:
+    class: Drupal\vvj_core_ai\Service\FormatRegistry
+    arguments:
+      - '@plugin.manager.views.style'
+
+  Drupal\vvj_core_ai\Service\FormatRegistryInterface: '@vvj_core_ai.format_registry'
+
+  # Reads a format's settings from its own settings form. Takes the registry
+  # so an unknown format is refused before any form is built, and holds no
+  # storage — the view it constructs is in-memory and never saved.
+  vvj_core_ai.settings_reader:
+    class: Drupal\vvj_core_ai\Service\SettingsReader
+    arguments:
+      - '@plugin.manager.views.style'
+      - '@vvj_core_ai.format_registry'
+      - '@logger.channel.vvj_core_ai'
+
+  Drupal\vvj_core_ai\Service\SettingsReaderInterface: '@vvj_core_ai.settings_reader'
+
+  # Its own channel, so a site builder can see why a settings read failed
+  # without wading through every other module's log.
+  logger.channel.vvj_core_ai:
+    parent: logger.channel_base
+    arguments: ['vvj_core_ai']
+
+  # Diagnoses a view using a VVJ format. It executes the view — a read — to
+  # answer "does this return anything", because inferring that from the
+  # filters would be a guess presented as a diagnosis. It holds no storage it
+  # could write with.
+  vvj_core_ai.view_doctor:
+    class: Drupal\vvj_core_ai\Service\ViewDoctor
+    arguments:
+      - '@entity_type.manager'
+      - '@vvj_core_ai.format_registry'
+      - '@vvj_core_ai.settings_reader'
+
+  Drupal\vvj_core_ai\Service\ViewDoctorInterface: '@vvj_core_ai.view_doctor'
+
+  # Negotiates what a view needs before anything is written. Reads only; the
+  # creator calls it again rather than trusting it ran.
+  vvj_core_ai.view_planner:
+    class: Drupal\vvj_core_ai\Service\ViewPlanner
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_type.bundle.info'
+      - '@entity_field.manager'
+      - '@vvj_core_ai.format_registry'
+      - '@current_user'
+
+  Drupal\vvj_core_ai\Service\ViewPlannerInterface: '@vvj_core_ai.view_planner'
+
+  # The only service here that writes, and it only creates. It takes the
+  # planner and re-runs it, so a model that skips vvj_resolve_view cannot
+  # cause a bad write — the redundancy IS the safety model.
+  vvj_core_ai.view_creator:
+    class: Drupal\vvj_core_ai\Service\ViewCreator
+    arguments:
+      - '@entity_type.manager'
+      - '@vvj_core_ai.view_planner'
+
+  Drupal\vvj_core_ai\Service\ViewCreatorInterface: '@vvj_core_ai.view_creator'
+
+  # Decides whether the Views chat panel appears, and builds it. It reads its
+  # own setting and never writes any configuration — placing a panel is not a
+  # reason to alter someone's block layout or their assistant.
+  vvj_core_ai.chat_surface:
+    class: Drupal\vvj_core_ai\Service\ChatSurface
+    arguments:
+      - '@config.factory'
+      - '@module_handler'
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@plugin.manager.block'
+      - '@vvj_core_ai.format_registry'
+
+  Drupal\vvj_core_ai\Service\ChatSurfaceInterface: '@vvj_core_ai.chat_surface'
+
+  # The hook object. Registered here because an OOP hook with dependencies is
+  # a service like any other; the #[Hook] attribute only says when it runs.
+  Drupal\vvj_core_ai\Hook\VvjAiPageHook:
+    autowire: true

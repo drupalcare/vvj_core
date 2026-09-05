@@ -1,0 +1,7 @@
+vvj_core_ai.settings:
+  path: '/admin/config/content/vvj-core-ai'
+  defaults:
+    _form: 'Drupal\vvj_core_ai\Form\VvjAiSettingsForm'
+    _title: 'VVJ Views AI'
+  requirements:
+    _permission: 'administer site configuration'

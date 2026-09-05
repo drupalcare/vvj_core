@@ -12,6 +12,11 @@
   <file>src</file>
   <file>tests</file>
   <file>vvj_core.module</file>
+  <!-- Submodules. Without this line the whole of modules/vvj_core_ai was
+       outside the gate: a phpcs.xml.dist that looks like a quality check and
+       does not check the newest code in the package is the exact failure the
+       comment at the top of .gitlab-ci.yml describes. -->
+  <file>modules</file>
 
   <exclude-pattern>*/vendor/*</exclude-pattern>
   <exclude-pattern>*/node_modules/*</exclude-pattern>

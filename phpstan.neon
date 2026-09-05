@@ -8,6 +8,15 @@ parameters:
     - src
     - tests
     - vvj_core.module
+    # Submodules. Added 2026-09-04, and only once the code was actually clean:
+    # until then modules/vvj_core_ai had NEVER been analysed, because neither
+    # this file nor phpcs.xml.dist listed modules/. Closing the gap took 34 real
+    # fixes, almost all of them unchecked array shapes read off
+    # ConfigEntityBase::get(), which returns mixed — a view whose stored display
+    # is not the shape Views normally writes is exactly what the diagnosis tool
+    # gets pointed at, so those were worth having. Adding this path with a
+    # baseline instead would have recreated the gate that gates nothing.
+    - modules
   excludePaths:
     - vendor (?)
     # Drush is not a project dependency (installed on host sites), so the

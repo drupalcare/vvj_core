@@ -1,0 +1,5 @@
+vvj_core_ai.settings:
+  title: 'VVJ Views AI'
+  description: 'Choose the assistant that appears on the Views pages, and see why the chat panel is or is not showing.'
+  parent: system.admin_config_content
+  route_name: vvj_core_ai.settings

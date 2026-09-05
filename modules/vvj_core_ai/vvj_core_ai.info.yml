@@ -1,0 +1,32 @@
+name: 'VVJ Core AI'
+type: module
+description: 'Optional. Answers questions about the VVJ Views display formats — which one to use, what its settings do, and why a view is not rendering. It never changes a view or a setting.'
+package: VVJ
+
+# NOT `^11.3 || ^12`, and the difference is deliberate.
+#
+# vvj_core advertises `^11.3 || ^12`. This module cannot, because it
+# hard-depends on `ai:ai`, and drupal/ai 1.5.0-rc1 declares
+# `core_version_requirement: ^10.5 || ^11.2` (measured 2026-09-04 in
+# web/modules/contrib/ai/ai.info.yml). Claiming `^12` here would offer the
+# module on a Drupal 12 site where it cannot install — worse than not offering
+# it at all.
+#
+# The intersection of `^11.3` (parent) and `^11.2` (ai) is `^11.3`.
+#
+# This costs the VVJ formats nothing, which is the point of shipping the AI
+# features as a separate optional module: a Drupal 12 site installs vvj_core
+# and every format, and simply does not get this one. Widen the day drupal/ai
+# declares `^12`.
+core_version_requirement: ^11.3
+
+# Both are hard dependencies, and that is correct precisely BECAUSE this module
+# is itself optional. vvj_core must stay installable without drupal/ai, and it
+# does — nothing here is referenced from vvj_core or from any format module.
+#
+# ai_assistant_api, ai_agents and ai_chatbot are deliberately absent: each adds
+# only a surface, and requiring them would make a site take modules it did not
+# ask for. The tools work through any drupal/ai caller.
+dependencies:
+  - vvj_core:vvj_core
+  - ai:ai
