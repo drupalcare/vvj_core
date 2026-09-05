@@ -41,7 +41,12 @@ trait VvjOptionalModulesTrait {
    * read — reported on drupal.org CI as offsetAccess.nonOffsetAccessible. A
    * typed static local is not valid PHP, which is the other thing tried first.
    *
-   * @var array<string, \Drupal\Core\Extension\Extension>|null
+   * Typed exactly as ExtensionDiscovery::scan() declares its return, and not
+   * narrowed to array<string, Extension>: the keys ARE machine names at
+   * runtime, but narrowing a value the analyser types more loosely is an
+   * assertion, not a fact, and PHPStan 2.x at level 10 rejects it.
+   *
+   * @var array<\Drupal\Core\Extension\Extension>|null
    */
   private static ?array $availableModules = NULL;
 
