@@ -66,7 +66,7 @@ final class SettingsReaderTest extends KernelTestBase {
     $this->installEntitySchema('node');
     $this->installConfig(['system', 'filter', 'node']);
 
-    $this->reader = $this->container->get(SettingsReaderInterface::class);
+    $this->reader = \Drupal::service(SettingsReaderInterface::class);
   }
 
   /**
@@ -182,7 +182,7 @@ final class SettingsReaderTest extends KernelTestBase {
    * brief forbids outright.
    */
   public function testReadingLeavesNoViewBehind(): void {
-    $storage = $this->container->get('entity_type.manager')->getStorage('view');
+    $storage = \Drupal::service('entity_type.manager')->getStorage('view');
     $before = count($storage->loadMultiple());
 
     $this->reader->read('vvjtest');

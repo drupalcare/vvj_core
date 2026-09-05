@@ -158,7 +158,14 @@ final class ChatSurfaceTest extends KernelTestBase {
    *   The surface.
    */
   private function surface(): ChatSurfaceInterface {
-    $surface = $this->container->get(ChatSurfaceInterface::class);
+    // \Drupal::service() and not $this->container->get(): on Drupal 12
+    // KernelTestBase types $container as ?ContainerBuilder, so every call
+    // through it is a null-call. Measured on drupal.org CI 2026-09-05 — ten
+    // findings across six test classes, in the `phpstan (next major)` job
+    // only, because Drupal 11 does not type it that way. The static accessor
+    // has no nullable receiver, so the whole class of error is gone by
+    // construction rather than suppressed by an assertion.
+    $surface = \Drupal::service(ChatSurfaceInterface::class);
     self::assertInstanceOf(ChatSurfaceInterface::class, $surface);
 
     return $surface;

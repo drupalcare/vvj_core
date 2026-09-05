@@ -71,7 +71,7 @@ final class ViewCreatorTest extends KernelTestBase {
     NodeType::create(['type' => 'article', 'name' => 'Article'])->save();
     $this->setUpCurrentUser(permissions: ['administer views', 'access content']);
 
-    $this->creator = $this->container->get(ViewCreatorInterface::class);
+    $this->creator = \Drupal::service(ViewCreatorInterface::class);
   }
 
   /**
@@ -181,7 +181,7 @@ final class ViewCreatorTest extends KernelTestBase {
    */
   public function testWithoutPermissionNothingIsCreated(): void {
     $this->setUpCurrentUser(permissions: ['access content']);
-    $creator = $this->container->get(ViewCreatorInterface::class);
+    $creator = \Drupal::service(ViewCreatorInterface::class);
     $before = count(View::loadMultiple());
 
     $result = $creator->create('node', 'article', 'vvjtest', ['title'], 'Not allowed');

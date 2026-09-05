@@ -66,7 +66,7 @@ final class ViewDoctorTest extends KernelTestBase {
 
     NodeType::create(['type' => 'page', 'name' => 'Page'])->save();
 
-    $this->doctor = $this->container->get(ViewDoctorInterface::class);
+    $this->doctor = \Drupal::service(ViewDoctorInterface::class);
   }
 
   /**
@@ -189,7 +189,7 @@ final class ViewDoctorTest extends KernelTestBase {
     Node::create(['type' => 'page', 'title' => 'X', 'status' => 1])->save();
     $this->makeView('untouched', fields: TRUE);
 
-    $storage = $this->container->get('entity_type.manager')->getStorage('view');
+    $storage = \Drupal::service('entity_type.manager')->getStorage('view');
     $before = $storage->load('untouched')?->toArray();
     self::assertIsArray($before, 'The fixture view must exist before the check.');
 

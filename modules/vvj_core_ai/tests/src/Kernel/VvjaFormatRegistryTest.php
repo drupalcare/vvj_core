@@ -66,7 +66,7 @@ final class VvjaFormatRegistryTest extends KernelTestBase {
     parent::setUp();
     $this->installConfig(['system', 'filter']);
 
-    $this->registry = $this->container->get(FormatRegistryInterface::class);
+    $this->registry = \Drupal::service(FormatRegistryInterface::class);
   }
 
   /**

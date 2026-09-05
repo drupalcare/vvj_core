@@ -96,7 +96,7 @@ final class ToolDiscoveryTest extends KernelTestBase {
    * Every tool is registered with the id and function name it claims.
    */
   public function testEveryToolIsDiscoverable(): void {
-    $definitions = $this->container->get('plugin.manager.ai.function_calls')->getDefinitions();
+    $definitions = \Drupal::service('plugin.manager.ai.function_calls')->getDefinitions();
 
     foreach (self::TOOLS as $functionName => $pluginId) {
       self::assertIsArray($definitions);
@@ -273,7 +273,7 @@ final class ToolDiscoveryTest extends KernelTestBase {
    *   The tool.
    */
   private function tool(string $pluginId): ExecutableFunctionCallInterface {
-    $tool = $this->container->get('plugin.manager.ai.function_calls')->createInstance($pluginId);
+    $tool = \Drupal::service('plugin.manager.ai.function_calls')->createInstance($pluginId);
 
     self::assertInstanceOf(ExecutableFunctionCallInterface::class, $tool, $pluginId . ' cannot be executed.');
 

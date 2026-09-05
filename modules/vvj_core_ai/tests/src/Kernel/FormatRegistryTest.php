@@ -58,7 +58,7 @@ final class FormatRegistryTest extends KernelTestBase {
     parent::setUp();
     $this->installConfig(['system', 'filter']);
 
-    $this->registry = $this->container->get(FormatRegistryInterface::class);
+    $this->registry = \Drupal::service(FormatRegistryInterface::class);
   }
 
   /**
@@ -90,7 +90,7 @@ final class FormatRegistryTest extends KernelTestBase {
    * project shipped a plugin whose name began the same way.
    */
   public function testCoreViewsStylesAreNotTreatedAsVvjFormats(): void {
-    $manager = $this->container->get('plugin.manager.views.style');
+    $manager = \Drupal::service('plugin.manager.views.style');
     $all = array_keys($manager->getDefinitions());
 
     self::assertNotEmpty($all, 'Views must have registered its own styles.');
