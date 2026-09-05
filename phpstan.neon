@@ -39,6 +39,14 @@ parameters:
     - modules/vvj_core_ai/src/Tool
     # The test fixture module's style plugin is exercised by the kernel tests.
     - modules/vvj_core_ai/tests/modules
+    # The only TEST file that names a drupal/ai type: it type-hints
+    # ExecutableFunctionCallInterface because that is the contract it exists to
+    # check. Measured 2026-09-05 by simulating the CI build — 25 class.notFound
+    # errors from this one file, and none from any other test. It is skipped at
+    # runtime on the same sites for the same reason (see
+    # VvjOptionalModulesTrait), so nothing is being hidden that would otherwise
+    # have run.
+    - modules/vvj_core_ai/tests/src/Kernel/ToolDiscoveryTest.php
     # Drush is not a project dependency (installed on host sites), so the
     # DrushCommands base class is unresolvable at analysis time. The scan
     # logic lives in the analyzed, unit-tested VvjUpgradeAuditor service.
