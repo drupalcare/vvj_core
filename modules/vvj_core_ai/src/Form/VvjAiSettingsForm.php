@@ -44,16 +44,28 @@ final class VvjAiSettingsForm extends ConfigFormBase {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     TypedConfigManagerInterface $typedConfigManager,
-    // PROTECTED, not private, and that is not a style choice.
-    // ConfigFormBase uses DependencySerializationTrait, which cannot restore
-    // private properties (drupal.org #3110266): the form is serialised into
-    // the form cache and these would come back unset, so the next submit
-    // fatals. Caught by PHPStan 2.x at level 10 —
-    // `dependencySerializationTraitProperty.unsupportedPrivateProperty` —
-    // which PHPStan 1.x at level 9 does not report.
-    protected readonly ChatSurfaceInterface $surface,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly ModuleHandlerInterface $moduleHandler,
+    // PROTECTED AND NOT READONLY. Both halves are forced, and the second was
+    // learned the hard way — an earlier version of this comment asserted that
+    // `protected readonly` was the fix, and it was wrong.
+    //
+    // ConfigFormBase uses DependencySerializationTrait. The form is serialised
+    // into the form cache, and on wake the trait re-injects these from the
+    // container. That rules out BOTH:
+    //
+    //   - `private`, which the trait cannot restore at all (drupal.org
+    //     #3110266) — the next submit fatals on an unset property;
+    //   - `readonly`, which the trait cannot initialise either, because
+    //     __wakeup() lives in a PARENT class and PHP before 8.4 forbids
+    //     writing a child's readonly property from there.
+    //
+    // The second only surfaced on drupal.org CI, at PHPStan level 10, as
+    // `dependencySerializationTraitProperty.unsupportedReadOnlyProperty`. It
+    // was invisible locally: PHPStan 1.x does not report it, and this machine
+    // runs PHP 8.5, where the restriction does not apply — so the bug is real
+    // on every site running 8.3 and could not be reproduced here.
+    protected ChatSurfaceInterface $surface,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected ModuleHandlerInterface $moduleHandler,
   ) {
     parent::__construct($config_factory, $typedConfigManager);
   }

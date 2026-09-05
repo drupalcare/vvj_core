@@ -34,6 +34,18 @@ use Drupal\Core\Extension\ExtensionDiscovery;
 trait VvjOptionalModulesTrait {
 
   /**
+   * The modules this site has, scanned once.
+   *
+   * A declared property rather than a `static $x` local: an untyped static
+   * local is `mixed` to a static analyser, so indexing into it is an unchecked
+   * read — reported on drupal.org CI as offsetAccess.nonOffsetAccessible. A
+   * typed static local is not valid PHP, which is the other thing tried first.
+   *
+   * @var array<string, \Drupal\Core\Extension\Extension>|null
+   */
+  private static ?array $availableModules = NULL;
+
+  /**
    * Skips the test when a module is not available to install.
    *
    * @param string $module
@@ -42,18 +54,16 @@ trait VvjOptionalModulesTrait {
    *   What cannot be checked without it, and where it can be checked instead.
    */
   protected function skipUnlessModuleAvailable(string $module, string $because): void {
-    static $available = NULL;
-
-    if ($available === NULL) {
+    if (self::$availableModules === NULL) {
       // FALSE disables the file cache. It is not an optimisation choice: the
       // cache needs a prefix that FileCacheFactory only has once a site has
       // booted, and this runs before parent::setUp(). Measured — with the
       // default it throws "Required prefix configuration is missing".
       $discovery = new ExtensionDiscovery(DRUPAL_ROOT, FALSE);
-      $available = $discovery->scan('module');
+      self::$availableModules = $discovery->scan('module');
     }
 
-    if (!isset($available[$module])) {
+    if (!isset(self::$availableModules[$module])) {
       $this->markTestSkipped(sprintf('%s is not installed. %s', $module, $because));
     }
   }
