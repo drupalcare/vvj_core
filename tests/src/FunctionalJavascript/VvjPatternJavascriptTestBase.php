@@ -91,7 +91,15 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
    */
   public function testShippedExampleViewRendersPatternCustomElement(): void {
     $this->drupalGet('<front>');
-    $this->assertSession()->statusCodeEquals(200);
+    // NOT statusCodeEquals(). A WebDriver test drives a real browser through
+    // DrupalSelenium2Driver, which cannot report an HTTP status code at all —
+    // it throws UnsupportedDriverActionException. This was invisible until the
+    // optional-config fix let these tests get past setUp and reach it.
+    // Checking for the error page is the equivalent that does work here, and a
+    // page that failed to build would fail the assertions below in any case.
+    $this->assertSession()->pageTextNotContains(
+      'The website encountered an unexpected error',
+    );
     $this->assertSession()->elementExists(
       'css',
       $this->vvjCustomElementTag(),
@@ -112,7 +120,15 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
    */
   public function testVvjNamespaceAndCustomElementRegistration(): void {
     $this->drupalGet('<front>');
-    $this->assertSession()->statusCodeEquals(200);
+    // NOT statusCodeEquals(). A WebDriver test drives a real browser through
+    // DrupalSelenium2Driver, which cannot report an HTTP status code at all —
+    // it throws UnsupportedDriverActionException. This was invisible until the
+    // optional-config fix let these tests get past setUp and reach it.
+    // Checking for the error page is the equivalent that does work here, and a
+    // page that failed to build would fail the assertions below in any case.
+    $this->assertSession()->pageTextNotContains(
+      'The website encountered an unexpected error',
+    );
     $tag = $this->vvjCustomElementTag();
 
     // vvj_core/element-base ran first and populated the shared namespace.
