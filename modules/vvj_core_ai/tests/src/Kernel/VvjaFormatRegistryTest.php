@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\vvj_core_ai\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\vvj_core_ai\Traits\VvjOptionalModulesTrait;
 use Drupal\vvj_core_ai\Service\FormatRegistryInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 #[Group('vvj_core')]
 #[RunTestsInSeparateProcesses]
 final class VvjaFormatRegistryTest extends KernelTestBase {
+
+  use VvjOptionalModulesTrait;
 
   /**
    * {@inheritdoc}
@@ -51,6 +54,15 @@ final class VvjaFormatRegistryTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
+    // This class deliberately uses the REAL vvja module rather than the
+    // fixture, because its whole point is that the registry resolves an
+    // actual shipped format.
+    $this->skipUnlessModuleAvailable(
+      'vvja',
+      'The vvjtest fixture covers the same registry behaviour; this class additionally '
+      . 'checks a real shipped format.',
+    );
+
     parent::setUp();
     $this->installConfig(['system', 'filter']);
 

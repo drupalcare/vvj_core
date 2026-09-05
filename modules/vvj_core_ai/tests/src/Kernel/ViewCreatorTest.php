@@ -49,7 +49,7 @@ final class ViewCreatorTest extends KernelTestBase {
     'views',
     'views_ui',
     'vvj_core',
-    'vvja',
+    'vvjtest',
     'vvj_core_ai',
   ];
 
@@ -81,7 +81,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * is the failure this guards against.
    */
   public function testItCreatesTheViewDisabled(): void {
-    $result = $this->creator->create('node', 'article', 'vvja', ['title'], 'Featured work');
+    $result = $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Featured work');
 
     self::assertTrue($result['created'], implode(' | ', $result['refusals']));
 
@@ -98,10 +98,10 @@ final class ViewCreatorTest extends KernelTestBase {
    * outcome here: it reports success and produces the wrong thing.
    */
   public function testTheViewUsesTheFormatAndFieldsAsked(): void {
-    $result = $this->creator->create('node', 'article', 'vvja', ['title', 'created'], 'Case studies');
+    $result = $this->creator->create('node', 'article', 'vvjtest', ['title', 'created'], 'Case studies');
     $display = $this->displayOf($result);
 
-    self::assertSame('views_vvja', $this->arr($display['style'] ?? NULL)['type'] ?? NULL);
+    self::assertSame('views_vvjtest', $this->arr($display['style'] ?? NULL)['type'] ?? NULL);
     self::assertSame(['title', 'created'], array_keys($this->arr($display['fields'] ?? NULL)));
     self::assertSame('fields', $this->arr($display['row'] ?? NULL)['type'] ?? NULL);
   }
@@ -113,7 +113,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * not a display preference, so it is never the default.
    */
   public function testItFiltersToPublishedContent(): void {
-    $result = $this->creator->create('node', 'article', 'vvja', ['title'], 'Published only');
+    $result = $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Published only');
     $filters = $this->arr($this->displayOf($result)['filters'] ?? NULL);
 
     self::assertArrayHasKey('status', $filters);
@@ -126,10 +126,10 @@ final class ViewCreatorTest extends KernelTestBase {
    * Rule 2. Someone's view is their work.
    */
   public function testItRefusesRatherThanOverwriteAnExistingView(): void {
-    $this->creator->create('node', 'article', 'vvja', ['title'], 'Taken name');
+    $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Taken name');
     $before = $this->load('taken_name')->toArray();
 
-    $second = $this->creator->create('node', 'article', 'vvja', ['title'], 'Taken name');
+    $second = $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Taken name');
 
     self::assertFalse($second['created']);
     self::assertStringContainsString('already exists', implode(' ', $second['refusals']));
@@ -147,7 +147,7 @@ final class ViewCreatorTest extends KernelTestBase {
   public function testItRevalidatesInsteadOfTrustingItsCaller(): void {
     $before = count(View::loadMultiple());
 
-    $result = $this->creator->create('node', 'no_such_bundle', 'vvja', ['title'], 'Bad bundle');
+    $result = $this->creator->create('node', 'no_such_bundle', 'vvjtest', ['title'], 'Bad bundle');
 
     self::assertFalse($result['created'], 'An unknown bundle must be refused.');
     self::assertStringContainsString('no "no_such_bundle" content type', implode(' ', $result['refusals']));
@@ -162,7 +162,7 @@ final class ViewCreatorTest extends KernelTestBase {
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('does not have', implode(' ', $result['refusals']));
-    self::assertStringContainsString('views_vvja', implode(' ', $result['refusals']),
+    self::assertStringContainsString('views_vvjtest', implode(' ', $result['refusals']),
       'The refusal must name what IS available.');
   }
 
@@ -170,7 +170,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * Fields that do not exist on the bundle are refused, with the real list.
    */
   public function testUnknownFieldsAreRefusedWithTheRealOnes(): void {
-    $result = $this->creator->create('node', 'article', 'vvja', ['not_a_field'], 'Bad fields');
+    $result = $this->creator->create('node', 'article', 'vvjtest', ['not_a_field'], 'Bad fields');
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('not fields on that content', implode(' ', $result['refusals']));
@@ -184,7 +184,7 @@ final class ViewCreatorTest extends KernelTestBase {
     $creator = $this->container->get(ViewCreatorInterface::class);
     $before = count(View::loadMultiple());
 
-    $result = $creator->create('node', 'article', 'vvja', ['title'], 'Not allowed');
+    $result = $creator->create('node', 'article', 'vvjtest', ['title'], 'Not allowed');
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('administer views', implode(' ', $result['refusals']));
@@ -202,7 +202,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * model a field list for a content type that does not exist.
    */
   public function testAnUnknownBundleIsNotThenDescribed(): void {
-    $result = $this->creator->create('node', 'no_such_bundle', 'vvja', [], 'Ghost');
+    $result = $this->creator->create('node', 'no_such_bundle', 'vvjtest', [], 'Ghost');
     $said = implode(' ', $result['refusals']);
 
     self::assertStringContainsString('no "no_such_bundle" content type', $said);
@@ -223,7 +223,7 @@ final class ViewCreatorTest extends KernelTestBase {
   public function testNearMissBundleIsSuggested(): void {
     NodeType::create(['type' => 'apex_faq', 'name' => 'FAQ'])->save();
 
-    $result = $this->creator->create('node', 'faq', 'vvja', ['title'], 'Faqs');
+    $result = $this->creator->create('node', 'faq', 'vvjtest', ['title'], 'Faqs');
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('Did you mean "apex_faq"?', implode(' ', $result['refusals']));
@@ -240,7 +240,7 @@ final class ViewCreatorTest extends KernelTestBase {
     NodeType::create(['type' => 'apex_faq', 'name' => 'One'])->save();
     NodeType::create(['type' => 'legacy_faq', 'name' => 'Two'])->save();
 
-    $result = $this->creator->create('node', 'faq', 'vvja', ['title'], 'Faqs');
+    $result = $this->creator->create('node', 'faq', 'vvjtest', ['title'], 'Faqs');
 
     self::assertFalse($result['created']);
     self::assertStringNotContainsString('Did you mean', implode(' ', $result['refusals']));

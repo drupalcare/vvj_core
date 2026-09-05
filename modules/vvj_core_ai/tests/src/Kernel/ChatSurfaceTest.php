@@ -48,10 +48,8 @@ final class ChatSurfaceTest extends KernelTestBase {
     'node',
     'views',
     'views_ui',
-    'key',
-    'ai',
     'vvj_core',
-    'vvja',
+    'vvjtest',
     'vvj_core_ai',
   ];
 

@@ -6,6 +6,7 @@ namespace Drupal\Tests\vvj_core_ai\Kernel;
 
 use Drupal\ai\Service\FunctionCalling\ExecutableFunctionCallInterface;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\vvj_core_ai\Traits\VvjOptionalModulesTrait;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\views\Entity\View;
@@ -34,6 +35,7 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 final class ToolDiscoveryTest extends KernelTestBase {
 
   use UserCreationTrait;
+  use VvjOptionalModulesTrait;
 
   /**
    * Every tool this module ships, by function name.
@@ -67,7 +69,7 @@ final class ToolDiscoveryTest extends KernelTestBase {
     'key',
     'ai',
     'vvj_core',
-    'vvja',
+    'vvjtest',
     'vvj_core_ai',
   ];
 
@@ -75,6 +77,12 @@ final class ToolDiscoveryTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
+    $this->skipUnlessModuleAvailable(
+      'ai',
+      'The function-call plugin manager does not exist without it, so tool discovery '
+      . 'cannot be checked here. Run this where drupal/ai is present.',
+    );
+
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
@@ -148,7 +156,7 @@ final class ToolDiscoveryTest extends KernelTestBase {
     $tool = $this->tool('vvj_formats:create_view');
     $tool->setContextValue('entity_type', 'node');
     $tool->setContextValue('bundle', 'article');
-    $tool->setContextValue('format', 'vvja');
+    $tool->setContextValue('format', 'vvjtest');
     $tool->setContextValue('fields', ['title']);
     $tool->setContextValue('label', 'Tool made this');
     $tool->execute();
@@ -156,7 +164,7 @@ final class ToolDiscoveryTest extends KernelTestBase {
     $view = View::load('tool_made_this');
     self::assertNotNull($view, 'Output was: ' . $tool->getReadableOutput());
     self::assertFalse($view->status());
-    self::assertSame('views_vvja', $this->arr($this->displayOf($view)['style'] ?? NULL)['type'] ?? NULL);
+    self::assertSame('views_vvjtest', $this->arr($this->displayOf($view)['style'] ?? NULL)['type'] ?? NULL);
   }
 
   /**
@@ -172,7 +180,7 @@ final class ToolDiscoveryTest extends KernelTestBase {
     $tool = $this->tool('vvj_formats:create_view');
     $tool->setContextValue('entity_type', 'node');
     $tool->setContextValue('bundle', 'article');
-    $tool->setContextValue('format', 'vvja');
+    $tool->setContextValue('format', 'vvjtest');
     $tool->setContextValue('fields', 'title, created');
     $tool->setContextValue('label', 'Csv fields');
     $tool->execute();
@@ -198,12 +206,12 @@ final class ToolDiscoveryTest extends KernelTestBase {
     $tool = $this->tool('vvj_formats:resolve_view');
     $tool->setContextValue('entity_type', 'node');
     $tool->setContextValue('bundle', 'article');
-    $tool->setContextValue('format', 'vvja');
+    $tool->setContextValue('format', 'vvjtest');
     $tool->setContextValue('fields', ['title']);
     $tool->setContextValue('label', 'Echo check');
     $output = $this->executeTool($tool);
 
-    foreach (['node', 'article', 'views_vvja', 'title', 'Echo check'] as $value) {
+    foreach (['node', 'article', 'views_vvjtest', 'title', 'Echo check'] as $value) {
       self::assertStringContainsString($value, $output, sprintf(
         'resolve_view did not echo "%s", so the model must supply it from memory.',
         $value,

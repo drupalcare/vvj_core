@@ -45,7 +45,7 @@ final class ViewDoctorTest extends KernelTestBase {
     'views',
     'views_ui',
     'vvj_core',
-    'vvja',
+    'vvjtest',
     'vvj_core_ai',
   ];
 
@@ -200,7 +200,7 @@ final class ViewDoctorTest extends KernelTestBase {
   }
 
   /**
-   * Builds a view whose default display uses the vvja format.
+   * Builds a view whose default display uses the test VVJ format.
    *
    * @param string $id
    *   View machine name.
@@ -209,8 +209,8 @@ final class ViewDoctorTest extends KernelTestBase {
    */
   private function makeView(string $id, bool $fields): void {
     $options = [
-      // Views stores the FULL plugin id, `views_vvja` — not the module name.
-      'style' => ['type' => 'views_vvja', 'options' => []],
+      // Views stores the FULL plugin id, `views_vvjtest` — not the module name.
+      'style' => ['type' => 'views_vvjtest', 'options' => []],
       'row' => ['type' => 'fields'],
     ];
 

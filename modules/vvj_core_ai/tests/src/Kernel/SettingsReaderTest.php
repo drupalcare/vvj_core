@@ -48,7 +48,7 @@ final class SettingsReaderTest extends KernelTestBase {
     // the distinction that limitation creates.
     'views_ui',
     'vvj_core',
-    'vvja',
+    'vvjtest',
     'vvj_core_ai',
   ];
 
@@ -78,7 +78,7 @@ final class SettingsReaderTest extends KernelTestBase {
    * and that is the regression worth catching.
    */
   public function testNestedSettingsAreFound(): void {
-    $settings = $this->reader->read('vvja');
+    $settings = $this->reader->read('vvjtest');
 
     self::assertIsArray($settings);
     self::assertGreaterThan(5, count($settings),
@@ -92,7 +92,7 @@ final class SettingsReaderTest extends KernelTestBase {
    * one, because the form itself is grouped and that is how a person looks.
    */
   public function testSettingsCarryTheirFormSection(): void {
-    $settings = $this->reader->read('vvja') ?? [];
+    $settings = $this->reader->read('vvjtest') ?? [];
     $sections = [];
 
     foreach ($settings as $setting) {
@@ -113,7 +113,7 @@ final class SettingsReaderTest extends KernelTestBase {
    * form, saved, and silently does nothing.
    */
   public function testSelectSettingsCarryTheirAllowedValues(): void {
-    $settings = $this->reader->read('vvja') ?? [];
+    $settings = $this->reader->read('vvjtest') ?? [];
     $withChoices = array_filter($settings, static fn($s) => $s->choices !== []);
 
     self::assertNotEmpty($withChoices, 'At least one setting is a select with fixed values.');
@@ -134,7 +134,7 @@ final class SettingsReaderTest extends KernelTestBase {
    * would tell a person to set a value on something that holds none.
    */
   public function testFormContainersAreNotReportedAsSettings(): void {
-    foreach ($this->reader->read('vvja') ?? [] as $setting) {
+    foreach ($this->reader->read('vvjtest') ?? [] as $setting) {
       self::assertNotContains($setting->type, ['details', 'fieldset', 'container', 'actions'],
         $setting->name . ' is a container, not a setting.');
     }
@@ -163,10 +163,10 @@ final class SettingsReaderTest extends KernelTestBase {
    * which is a normal production configuration.
    */
   public function testInstalledButUnreadableIsNotTheSameAsNoSettings(): void {
-    $installed = $this->reader->read('vvja');
+    $installed = $this->reader->read('vvjtest');
     $absent = $this->reader->read('vvjs');
 
-    self::assertIsArray($installed, 'vvja is installed, so never NULL.');
+    self::assertIsArray($installed, 'vvjtest is installed, so never NULL.');
     self::assertNull($absent, 'vvjs is not installed, so never [].');
     // Not assertNotSame($installed, $absent): an array is never identical to
     // null, so that assertion could not fail and tested nothing. The real
@@ -185,8 +185,8 @@ final class SettingsReaderTest extends KernelTestBase {
     $storage = $this->container->get('entity_type.manager')->getStorage('view');
     $before = count($storage->loadMultiple());
 
-    $this->reader->read('vvja');
-    $this->reader->read('vvja');
+    $this->reader->read('vvjtest');
+    $this->reader->read('vvjtest');
 
     $storage->resetCache();
     self::assertCount($before, $storage->loadMultiple(),
