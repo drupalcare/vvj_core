@@ -22,8 +22,6 @@
 // phpcs:disable Squiz.WhiteSpace.OperatorSpacing
 
 ((Drupal) => {
-  'use strict';
-
   Drupal.Vvj = Drupal.Vvj || {};
 
   const FOCUSABLE_SELECTOR = [
@@ -45,11 +43,13 @@
    *   The element to trap focus within.
    * @param {AbortSignal} signal
    *   Aborting this signal removes the keydown listener.
-   * @returns {() => void}
+   * @return {() => void}
    *   Call to release the trap explicitly (in addition to aborting the signal).
    */
   Drupal.Vvj.trapFocus = (container, signal) => {
-    const previouslyFocused = /** @type {HTMLElement|null} */ (document.activeElement);
+    const previouslyFocused = /** @type {HTMLElement|null} */ (
+      document.activeElement
+    );
 
     const focusables = container.querySelectorAll(FOCUSABLE_SELECTOR);
     const first = focusables[0];
@@ -59,7 +59,8 @@
     first?.focus();
 
     const onKeyDown = (event) => {
-      if (event.key !== 'Tab') { return;
+      if (event.key !== 'Tab') {
+        return;
       }
       if (focusables.length === 0) {
         event.preventDefault();
@@ -80,5 +81,4 @@
       previouslyFocused?.focus();
     };
   };
-
 })(Drupal);

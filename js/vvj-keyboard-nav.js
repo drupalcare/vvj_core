@@ -20,8 +20,6 @@
 // phpcs:disable Squiz.WhiteSpace.OperatorSpacing
 
 ((Drupal) => {
-  'use strict';
-
   Drupal.Vvj = Drupal.Vvj || {};
 
   /**
@@ -70,5 +68,4 @@
     target.focus();
     event.preventDefault();
   };
-
 })(Drupal);

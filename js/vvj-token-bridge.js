@@ -22,8 +22,6 @@
 // phpcs:disable Squiz.WhiteSpace.OperatorSpacing
 
 ((Drupal, once) => {
-  'use strict';
-
   Drupal.Vvj = Drupal.Vvj || {};
 
   /**
@@ -55,5 +53,4 @@
       },
     };
   };
-
 })(Drupal, once);

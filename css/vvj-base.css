@@ -21,29 +21,48 @@
  * Developer:    Alaa Haddad https://www.alaahaddad.com.
  */
 
+/* stylelint-disable layer-name-pattern -- These are NESTED cascade layer
+   names. `vvj.base` is a sublayer of `vvj`, which is valid CSS and is the
+   point: a site theme can order every VVJ layer as a group by writing
+   `@layer vvj, theme;`. stylelint's kebab-case pattern for this rule does not
+   allow the dot, so satisfying it would mean flattening the hierarchy to
+   `vvj-base` and taking that capability away for a naming preference. */
 @layer vvj.foundation, vvj.tokens, vvj.base, vvj.pattern, vvj.theme;
 
 @layer vvj.foundation {
-
   /* Container-query setup for every VVJ custom element.
      Pattern stylesheets can use @container queries against `vvj-region`
      to respond to their parent's size, not the viewport. */
   .vvj-component,
-  vvja-accordion, vvjb-carousel, vvjc-carousel-3d, vvjf-flipbox,
-  vvjh-hero, vvjl-lightbox, vvjp-parallax, vvjr-reveal,
-  vvjs-slideshow, vvjt-tabs {
+  vvja-accordion,
+  vvjb-carousel,
+  vvjc-carousel-3d,
+  vvjf-flipbox,
+  vvjh-hero,
+  vvjl-lightbox,
+  vvjp-parallax,
+  vvjr-reveal,
+  vvjs-slideshow,
+  vvjt-tabs {
+    display: block;
+    box-sizing: border-box;
     container-name: vvj-region;
     container-type: inline-size;
-    box-sizing: border-box;
-    display: block;
   }
 
   .vvj-component *,
   .vvj-component *::before,
   .vvj-component *::after,
-  vvja-accordion *, vvjb-carousel *, vvjc-carousel-3d *, vvjf-flipbox *,
-  vvjh-hero *, vvjl-lightbox *, vvjp-parallax *, vvjr-reveal *,
-  vvjs-slideshow *, vvjt-tabs * {
+  vvja-accordion *,
+  vvjb-carousel *,
+  vvjc-carousel-3d *,
+  vvjf-flipbox *,
+  vvjh-hero *,
+  vvjl-lightbox *,
+  vvjp-parallax *,
+  vvjr-reveal *,
+  vvjs-slideshow *,
+  vvjt-tabs * {
     box-sizing: inherit;
   }
 
@@ -66,9 +85,9 @@
     .vvj-component *,
     .vvj-component *::before,
     .vvj-component *::after {
+      transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
   }

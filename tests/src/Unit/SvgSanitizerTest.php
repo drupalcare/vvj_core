@@ -102,10 +102,10 @@ final class SvgSanitizerTest extends UnitTestCase {
   }
 
   /**
-   * Sanitize strips non-whitelisted attributes while keeping safe elements.
+   * Sanitize strips non-allowlisted attributes while keeping safe elements.
    */
   public function testSanitizeStripsDisallowedAttributes(): void {
-    // A non-whitelisted but benign attribute (data-foo) is stripped while the
+    // A non-allowlisted but benign attribute (data-foo) is stripped while the
     // path element is preserved. Dangerous markup (on* handlers, scripts) is
     // rejected outright instead — see testSanitizeRejectsDangerousMarkup().
     $input = '<svg xmlns="http://www.w3.org/2000/svg" data-foo="bar"><path d="M0 0"/></svg>';

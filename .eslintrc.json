@@ -1,0 +1,35 @@
+{
+  // ESLint configuration. drupal.org CI links core's .eslintrc.passing.json as
+  // the PARENT config, so this file adds to core's rules rather than replacing
+  // them. Everything here is an addition with a reason.
+  //
+  // WHY ecmaVersion IS RAISED. Core pins parserOptions.ecmaVersion to 2020.
+  // These custom elements use CLASS FIELDS — `_onClick = (event) => …` — which
+  // are ES2022. Under core's setting eslint cannot PARSE such a file at all:
+  // it reports "Parsing error: Unexpected token =" and checks NOTHING in it.
+  // MEASURED 2026-09-05: three files across the VVJ set were in that state and
+  // had therefore never been linted.
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  "rules": {
+    // WHY THESE METHODS ARE EXEMPT. class-methods-use-this exists to find
+    // methods that should have been static or standalone. These are neither:
+    // they are custom-element override points and private instance helpers
+    // that belong to the element's API. Making them static would break
+    // subclass overriding, because `this._x()` respects an override and
+    // `Class._x()` does not — and for the base class hooks below, being
+    // overridable IS the whole purpose. exceptMethods is the rule's own
+    // mechanism for exactly this case.
+    "class-methods-use-this": [
+      "error",
+      {
+        "exceptMethods": [
+          "onDisconnect",
+          "onHydrate",
+          "reducedMotion"
+        ]
+      }
+    ]
+  }
+}

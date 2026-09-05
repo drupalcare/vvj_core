@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\vvj_core\Service;
 
 /**
- * Sanitizes SVG markup by whitelisting safe elements + attributes.
+ * Sanitizes SVG markup by allowlisting safe elements + attributes.
  *
  * Pattern modules that accept admin-pasted SVG icons (vvja for the
  * accordion +/- icons; vvjs/vvjb for navigation arrows; etc.) consume
@@ -16,7 +16,7 @@ namespace Drupal\vvj_core\Service;
  *   1. Reject markup whose root element isn't `<svg>`.
  *   2. Pattern-block dangerous tags (`<script>`, `<foreignObject>`, etc.)
  *      and dangerous URI schemes (`javascript:`, `data:`, `vbscript:`).
- *   3. Parse via DOMDocument; recursively strip non-whitelisted elements
+ *   3. Parse via DOMDocument; recursively strip non-allowlisted elements
  *      and attributes; preserve only fragment-reference hrefs.
  */
 final class SvgSanitizer {
@@ -181,7 +181,7 @@ final class SvgSanitizer {
   }
 
   /**
-   * Recursively sanitize a DOM node — strip non-whitelisted children.
+   * Recursively sanitize a DOM node — strip non-allowlisted children.
    */
   private function sanitizeNode(\DOMNode $node): void {
     /** @var array<\DOMNode> $remove */
@@ -212,7 +212,7 @@ final class SvgSanitizer {
   }
 
   /**
-   * Strip non-whitelisted attributes + validate href values.
+   * Strip non-allowlisted attributes + validate href values.
    */
   private function sanitizeAttributes(\DOMElement $element): void {
     /** @var list<string> $remove */

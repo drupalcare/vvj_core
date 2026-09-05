@@ -180,9 +180,9 @@ After `drush cr`, confirm:
 |---------|-----|
 | `Class "Drupal\vvja\Twig\VVJATwigExtension… | Stale cache after v2 code deploy
 | Pattern enabled but format missing | Install and enable `vvj_core` |
-| JS error loading `vvj-element-base.js` | Confirm `vvj_core` exists at `modules
-| Composer did not install vvj_core | Pattern `composer.json` must require `drup
-| `updb` errors before `vvj_core` is enabled | Enable it first: `drush en vvj_co
+| JS error loading `vvj-element-base.js` | Confirm `vvj_core` exists at `modules/contrib/vvj_core` |
+| Composer did not install vvj_core | Pattern `composer.json` must require `drupal/vvj_core:^2.0` |
+| `updb` errors before `vvj_core` is enabled | Enable it first: `drush en vvj_core -y`, then `drush updb -y && drush cr` |
 | Dependency error: pattern needs `vvj_core` | Manual install |
 
 ---
@@ -194,22 +194,22 @@ After `drush cr`, confirm:
 | Class / service | Purpose |
 |---|---|
 | `Drupal\vvj_core\Plugin\views\style\VvjSty… | Abstract Views Style plugin base
-| `vvj_core.svg_sanitizer` | Whitelist-driven SVG sanitizer for admin-p… |
-| `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` to… |
-| `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable… |
+| `vvj_core.svg_sanitizer` | Allowlist-driven SVG sanitizer for admin-p… |
+| `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` token resolution. Pattern modules call `$this->tokenResolver->resolve($namespace, $tokens, $data, $bubbleable, $expectedClass)` from their `hook_tokens()` implementation. |
+| `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable labels. |
 | `vvj_core.unique_id_generator` | `random_int`-based 8-digit unique IDs. |
 | `vvj_core.twig_extension` | Registers the `safe_html` Twig filter . |
-| `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`:
+| `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`: adds `.vvj-component` and `.vvj-{slug}` on the view wrapper for every display using `VvjStylePluginBase`, so global CSS/a11y in `vvj-a11y.css` applies to all patterns. |
 | `Drupal\vvj_core\Hook\VvjCoreHelpHook` | `hook_help` implementation |
 
 ### Constants enums (typed PHP 8.3 const classes)
 
 | Class | Purpose |
 |---|---|
-| `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint valu
-| `Drupal\vvj_core\Constants\Easing` | CSS easing keywords . |
-| `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets . |
-| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds, token pattern, 
+| `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint values and labels for every VVJ pattern. |
+| `Drupal\vvj_core\Constants\Easing` | CSS easing keywords. |
+| `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets. |
+| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds shared across pattern modules — transition speed, slide timing and the rest. |
 
 ### JS
 
@@ -225,9 +225,9 @@ After `drush cr`, confirm:
 
 | File | Purpose |
 |---|---|
-| `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge.… |
+| `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge. Aliases them as `--vvj-*` with system-color-keyword fallbacks for non-APEX sites. |
 | `css/vvj-base.css` | Cascade-layer ladder , container-query set… |
-| `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidd… |
+| `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidden utility, with forced-colors-mode fallbacks. |
 
 ---
 
@@ -239,7 +239,7 @@ module’s `README.md` for specifics):
 | Surface | Typical contents |
 |--------|------------------|
 | `src/Hook/*ThemeHook.php` | `hook_theme` |
-| `src/Hook/*PreprocessHooks.php` | Style preprocess + row/field preprocess vi… 
+| `src/Hook/*PreprocessHooks.php` | Style preprocess + row/field preprocess via core `ViewsThemeHooks` (Drupal 12-safe). |
 | `src/Hook/*TokenHooks.php` | `hook_token_info` / `hook_tokens` |
 | `src/Hook/*HelpHook.php` | `hook_help` |
 | `config/optional/views.view.*_example.yml` | Optional starter View . |

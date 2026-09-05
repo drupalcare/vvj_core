@@ -20,51 +20,56 @@
  * Developer:    Alaa Haddad https://www.alaahaddad.com.
  */
 
+/* stylelint-disable layer-name-pattern -- These are NESTED cascade layer
+   names. `vvj.base` is a sublayer of `vvj`, which is valid CSS and is the
+   point: a site theme can order every VVJ layer as a group by writing
+   `@layer vvj, theme;`. stylelint's kebab-case pattern for this rule does not
+   allow the dot, so satisfying it would mean flattening the hierarchy to
+   `vvj-base` and taking that capability away for a naming preference. */
 @layer vvj.foundation, vvj.tokens, vvj.base, vvj.pattern, vvj.theme;
 
 @layer vvj.base {
-
   /* Universal focus ring for every VVJ component's focusable descendants.
      Pattern stylesheets can override per-element, but the default ring
      here is sufficient for AAA without any pattern-specific work. */
   .vvj-component :focus-visible,
   vvja-accordion :focus-visible,
-  vvjb-carousel  :focus-visible,
+  vvjb-carousel :focus-visible,
   vvjc-carousel-3d :focus-visible,
-  vvjf-flipbox   :focus-visible,
-  vvjh-hero      :focus-visible,
-  vvjl-lightbox  :focus-visible,
-  vvjp-parallax  :focus-visible,
-  vvjr-reveal    :focus-visible,
+  vvjf-flipbox :focus-visible,
+  vvjh-hero :focus-visible,
+  vvjl-lightbox :focus-visible,
+  vvjp-parallax :focus-visible,
+  vvjr-reveal :focus-visible,
   vvjs-slideshow :focus-visible,
-  vvjt-tabs      :focus-visible {
+  vvjt-tabs :focus-visible {
+    border-radius: var(--vvj-radius, 0.25rem);
     outline: var(--vvj-focus-width, 2px) solid var(--vvj-focus-color, Highlight);
     outline-offset: var(--vvj-focus-offset, 2px);
-    border-radius: var(--vvj-radius, 0.25rem);
   }
 
   /* Visually-hidden utility shared by every pattern.
      Use for skip links, accessible labels of decorative spans, etc. */
   .vvj-component .visually-hidden,
   vvja-accordion .visually-hidden,
-  vvjb-carousel  .visually-hidden,
+  vvjb-carousel .visually-hidden,
   vvjc-carousel-3d .visually-hidden,
-  vvjf-flipbox   .visually-hidden,
-  vvjh-hero      .visually-hidden,
-  vvjl-lightbox  .visually-hidden,
-  vvjp-parallax  .visually-hidden,
-  vvjr-reveal    .visually-hidden,
+  vvjf-flipbox .visually-hidden,
+  vvjh-hero .visually-hidden,
+  vvjl-lightbox .visually-hidden,
+  vvjp-parallax .visually-hidden,
+  vvjr-reveal .visually-hidden,
   vvjs-slideshow .visually-hidden,
-  vvjt-tabs      .visually-hidden {
+  vvjt-tabs .visually-hidden {
     position: absolute;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
     width: 1px;
     height: 1px;
     margin: -1px;
     padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
     white-space: nowrap;
+    border: 0;
   }
 }
 
@@ -72,15 +77,15 @@
   @layer vvj.base {
     .vvj-component :focus-visible,
     vvja-accordion :focus-visible,
-    vvjb-carousel  :focus-visible,
+    vvjb-carousel :focus-visible,
     vvjc-carousel-3d :focus-visible,
-    vvjf-flipbox   :focus-visible,
-    vvjh-hero      :focus-visible,
-    vvjl-lightbox  :focus-visible,
-    vvjp-parallax  :focus-visible,
-    vvjr-reveal    :focus-visible,
+    vvjf-flipbox :focus-visible,
+    vvjh-hero :focus-visible,
+    vvjl-lightbox :focus-visible,
+    vvjp-parallax :focus-visible,
+    vvjr-reveal :focus-visible,
     vvjs-slideshow :focus-visible,
-    vvjt-tabs      :focus-visible {
+    vvjt-tabs :focus-visible {
       outline-color: Highlight;
     }
   }

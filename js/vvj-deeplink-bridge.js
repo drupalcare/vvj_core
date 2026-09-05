@@ -19,8 +19,6 @@
 // phpcs:disable Squiz.WhiteSpace.OperatorSpacing
 
 ((Drupal) => {
-  'use strict';
-
   Drupal.Vvj = Drupal.Vvj || {};
 
   /**
@@ -36,16 +34,19 @@
    *   Callback invoked with the 1-based panel index when the hash matches.
    */
   Drupal.Vvj.wireDeeplink = (element, prefix, identifier, signal, onMatch) => {
-    if (!identifier) { return;
+    if (!identifier) {
+      return;
     }
     const hashPrefix = `#${prefix}-${identifier}-`;
 
     const tryOpenFromHash = () => {
       const hash = window.location.hash;
-      if (!hash || !hash.startsWith(hashPrefix)) { return;
+      if (!hash || !hash.startsWith(hashPrefix)) {
+        return;
       }
       const panelNumber = Number.parseInt(hash.slice(hashPrefix.length), 10);
-      if (Number.isNaN(panelNumber) || panelNumber < 1) { return;
+      if (Number.isNaN(panelNumber) || panelNumber < 1) {
+        return;
       }
       onMatch(panelNumber);
     };
@@ -65,12 +66,12 @@
    *   1-based.
    */
   Drupal.Vvj.writeDeeplinkHash = (prefix, identifier, panelIndex) => {
-    if (!identifier) { return;
+    if (!identifier) {
+      return;
     }
     const newHash = `#${prefix}-${identifier}-${panelIndex}`;
     if (window.location.hash !== newHash) {
       window.history.replaceState(null, '', newHash);
     }
   };
-
 })(Drupal);

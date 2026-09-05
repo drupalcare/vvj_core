@@ -47,27 +47,26 @@
 // phpcs:disable Squiz.WhiteSpace.OperatorSpacing
 
 ((Drupal) => {
-  'use strict';
-
   Drupal.Vvj = Drupal.Vvj || {};
 
   Drupal.Vvj.ElementBase = class VvjElementBase extends HTMLElement {
-
     /**
      * The pattern's slug — must be declared by every subclass.
      * Examples: 'vvja', 'vvjb', 'vvjs', 'vvjt'.
      *
-     * @returns {string}
+     * @return {string}
      */
     static get patternSlug() {
-      throw new Error('VvjElementBase subclass must declare static patternSlug.');
+      throw new Error(
+        'VvjElementBase subclass must declare static patternSlug.',
+      );
     }
 
     /**
      * Subclasses can extend this list with attributes that should
      * trigger reactive behavior. Default is empty.
      *
-     * @returns {string[]}
+     * @return {string[]}
      */
     static get observedAttributes() {
       return [];
@@ -99,13 +98,16 @@
 
       // Lazy: wait until the element is visible (or close to) before
       // doing any work. Saves render budget on long Views pages.
-      this._observer = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          this._hydrate();
-          this._observer?.disconnect();
-          this._observer = null;
-        }
-      }, { rootMargin: '200px' });
+      this._observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            this._hydrate();
+            this._observer?.disconnect();
+            this._observer = null;
+          }
+        },
+        { rootMargin: '200px' },
+      );
       this._observer.observe(this);
     }
 
@@ -150,7 +152,7 @@
      * AbortSignal that will fire on `disconnectedCallback()`.
      * Pass to every `addEventListener` as `{ signal: this.signal }`.
      *
-     * @returns {AbortSignal}
+     * @return {AbortSignal}
      */
     get signal() {
       if (!this._abortController) {
@@ -163,7 +165,7 @@
      * `true` when `prefers-reduced-motion: reduce` is set.
      * Subclasses check this before triggering any animation/transition.
      *
-     * @returns {boolean}
+     * @return {boolean}
      */
     get reducedMotion() {
       return matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -176,13 +178,13 @@
      *
      * @param {() => void|Promise<void>} cb
      *   The state mutation to perform.
-     * @returns {ViewTransition|null}
+     * @return {ViewTransition|null}
      *   The ViewTransition if one was started, null otherwise.
      */
     withTransition(cb) {
       if (
-        typeof document.startViewTransition === 'function'
-        && !this.reducedMotion
+        typeof document.startViewTransition === 'function' &&
+        !this.reducedMotion
       ) {
         return document.startViewTransition(cb);
       }
@@ -201,10 +203,12 @@
      *   Additional payload.
      */
     emit(name, detail = {}) {
-      document.dispatchEvent(new CustomEvent(`vvj:${name}`, {
-        bubbles: true,
-        detail: { source: this, ...detail },
-      }));
+      document.dispatchEvent(
+        new CustomEvent(`vvj:${name}`, {
+          bubbles: true,
+          detail: { source: this, ...detail },
+        }),
+      );
     }
 
     // ---------------------------------------------------------------
@@ -220,13 +224,10 @@
       try {
         this.onHydrate();
         this.emit('ready');
-      }
-      catch (err) {
+      } catch (err) {
         const tag = this.tagName.toLowerCase();
-        console.error('[vvj] hydration failed for <' + tag + '>', err);
+        console.error(`[vvj] hydration failed for <${tag}>`, err);
       }
     }
-
   };
-
 })(Drupal);

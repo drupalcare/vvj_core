@@ -27,7 +27,7 @@ renderer family — required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
   Fields-row requirement/enforcement) — pattern modules subclass and only
   implement pattern-specific concerns.
 - **Shared services**:
-  - `vvj_core.svg_sanitizer` — whitelist-driven SVG sanitizer (defense in depth)
+  - `vvj_core.svg_sanitizer` — allowlist-driven SVG sanitizer (defense in depth)
   - `vvj_core.token_resolver` — `[vvjX:field]` and `[vvjX:field:plain]` token
     replacement
   - `vvj_core.breakpoint_registry` — canonical responsive-breakpoint values +
