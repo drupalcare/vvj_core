@@ -51,6 +51,20 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
       'name' => 'Article',
     ]);
 
+    // WITHOUT THIS THE EXAMPLE VIEW DOES NOT EXIST, and every subclass fails on
+    // `assert($view !== NULL)` below rather than on anything it was written to
+    // check. Each pattern ships its example view as OPTIONAL config, and
+    // optional config installs only once its dependencies already exist. The
+    // view depends on `node.type.article`, which nothing supplies at module
+    // install time: it left the standard profile for a recipe, and the testing
+    // profile never had it. So the type has to be created first — the lines
+    // above — and the optional config installed again now that it can be.
+    //
+    // The Functional install tests already carry this fix and pass; this base
+    // class did not, so 20 FunctionalJavascript tests across ten pattern
+    // modules were failing on modules that are themselves correct.
+    $this->container->get('config.installer')->installOptionalConfig();
+
     if ($this->vvjRequiresArticleImageField()) {
       $this->vvjEnsureArticleFieldImage();
       $this->vvjCreateArticleNodesWithImages(2);
