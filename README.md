@@ -178,7 +178,7 @@ After `drush cr`, confirm:
 
 | Symptom | Fix |
 |---------|-----|
-| `Class "Drupal\vvja\Twig\VVJATwigExtension… | Stale cache after v2 code deploy
+| `Class "Drupal\vvja\Twig\VVJATwigExtension" not found` | Stale cache after v2 code deploy — `drush cr`; if Drush won't bootstrap, clear `cache_container` in the database, then retry |
 | Pattern enabled but format missing | Install and enable `vvj_core` |
 | JS error loading `vvj-element-base.js` | Confirm `vvj_core` exists at `modules/contrib/vvj_core` |
 | Composer did not install vvj_core | Pattern `composer.json` must require `drupal/vvj_core:^2.0` |
@@ -193,8 +193,8 @@ After `drush cr`, confirm:
 
 | Class / service | Purpose |
 |---|---|
-| `Drupal\vvj_core\Plugin\views\style\VvjSty… | Abstract Views Style plugin base
-| `vvj_core.svg_sanitizer` | Allowlist-driven SVG sanitizer for admin-p… |
+| `Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase` | Abstract Views Style plugin base. Pattern modules subclass and implement four small hooks (`getModuleSlug()`, `getCustomElementTag()`, `definePatternOptions()`, `buildPatternSections()`) — everything else (form weights, warning, advanced/deeplinking/token-doc sections, library list, render(), validate()) is inherited. |
+| `vvj_core.svg_sanitizer` | Allowlist-driven SVG sanitizer for admin-pasted icons. |
 | `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` token resolution. Pattern modules call `$this->tokenResolver->resolve($namespace, $tokens, $data, $bubbleable, $expectedClass)` from their `hook_tokens()` implementation. |
 | `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable labels. |
 | `vvj_core.unique_id_generator` | `random_int`-based 8-digit unique IDs. |
@@ -226,7 +226,7 @@ After `drush cr`, confirm:
 | File | Purpose |
 |---|---|
 | `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge. Aliases them as `--vvj-*` with system-color-keyword fallbacks for non-APEX sites. |
-| `css/vvj-base.css` | Cascade-layer ladder , container-query set… |
+| `css/vvj-base.css` | Cascade-layer ladder (`vvj.foundation, .tokens, .base, .pattern, .theme`), container-query setup, reduced-motion baseline, FOUC-prevention for unupgraded custom elements. |
 | `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidden utility, with forced-colors-mode fallbacks. |
 
 ---
