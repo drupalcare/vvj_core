@@ -7,11 +7,24 @@
 # someone who has installed the module, which is the test for whether a file
 # belongs in the tarball.
 # Test suite: wanted in the repo and by CI, not by a running site.
-/tests export-ignore
-
 # Tooling config: consumed by CI and local development, not by a site.
 /.gitattributes export-ignore
 /.gitignore export-ignore
-/.gitlab-ci.yml export-ignore
-/phpcs.xml.dist export-ignore
-/phpstan.neon export-ignore
+
+# WHAT STAYS IN THE TARBALL, and why these four lines were removed.
+#
+# Measured 2026-09-06 against the packaged releases installed on this machine —
+# ai, paragraphs, entity_reference_revisions, field_group, webform, token,
+# pathauto:
+#
+#   tests/            7 of 7 ship them. Excluding them means nobody can run
+#                     this module's tests from a release, and webform's own
+#                     attempt to exclude tests was closed `won't fix` upstream.
+#   .gitlab-ci.yml    7 of 7 ship it.
+#   phpcs.xml.dist    the ruleset is self-contained, and shipping it is what
+#   phpstan.neon      makes `composer phpcs` / `composer phpstan` work INSIDE
+#                     an extracted package — the check apex's S4-I calls for
+#                     and the one thing a symlinked test can never prove.
+#
+# `export-ignore` only affects the archive; every local run and CI job sees
+# these files either way.
