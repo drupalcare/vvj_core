@@ -8,7 +8,50 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [2.0.0] — UNRELEASED
+## [2.0.1] — UNRELEASED
+
+### Added
+
+- **`vvj_core_ai`** — optional AI sub-module. Five read/act tools for building
+  and troubleshooting VVJ views: `vvj_recommend_format`, `vvj_explain_settings`,
+  `vvj_resolve_view`, `vvj_create_view`, `vvj_diagnose_view`. It reads what is
+  installed on the site rather than assuming, refuses with the exact question to
+  ask when it cannot proceed, and a created view is always **disabled**.
+  Requires `drupal/ai`; the parent module does not.
+- **`ai_agents.ai_agent.vvj_core_agent`** in `config/optional/`. A FunctionCall
+  plugin reaches an assistant only through `ai_agents`, so without this the
+  tools were unreachable by anything on the site. It installs the moment
+  `ai_agents` is present and stays absent otherwise.
+
+### Fixed
+
+- **Twenty FunctionalJavascript failures across ten pattern modules**, all on
+  `assert($view !== NULL)` in the shared `VvjPatternJavascriptTestBase`. Each
+  pattern ships its example view as *optional* config, which installs only once
+  its dependencies exist; the view depends on `node.type.article`, which nothing
+  supplies at module-install time. The base class created the type afterwards —
+  too late — so the view was never there. It now re-runs
+  `installOptionalConfig()` once the type exists.
+- **`statusCodeEquals()` in JavaScript tests.** A WebDriver test drives a real
+  browser through Selenium, which cannot report an HTTP status code, so the
+  assertion threw rather than failed. Replaced with a check that works there.
+- **Kernel tests on Drupal 12.** `text_with_summary` was removed from core's
+  text module; the `body` field these tests create for a config dependency now
+  uses `text_long`.
+- Four README table rows that had been truncated mid-sentence at exactly 80
+  characters, restored from git history.
+
+### Changed
+
+- Lint backlog cleared: stylelint, eslint and cspell all pass. `@media
+  (prefers-contrast: high)` was corrected to `more` — `high` is not a value the
+  spec defines, so those accessibility rules had never applied in any current
+  browser.
+- `composer.json` now suggests `drupal/ai`, naming the sub-module that needs it.
+
+---
+
+## [2.0.0] — 2026-08-30
 
 **Initial release.** VVJ Core is the foundation module for the VVJ Views
 renderer family — required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
