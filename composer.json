@@ -1,6 +1,6 @@
 {
     "name": "drupal/vvj_core",
-    "description": "Foundation module for the VVJ Views renderer family — abstract Style plugin base, shared services, custom-element JS base, cascade-layer CSS contract. Required by every drupal/vvjX module.",
+    "description": "Foundation module for the VVJ Views renderer family \u2014 abstract Style plugin base, shared services, custom-element JS base, cascade-layer CSS contract. Required by every drupal/vvjX module.",
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "stable",
@@ -22,14 +22,7 @@
         "source": "https://git.drupalcode.org/project/vvj_core"
     },
     "suggest": {
-        "drupal/ai": "^1.2 — required by the vvj_core_ai sub-module, which is optional. vvj_core itself does not need it."
-    },
-    "require-dev": {
-        "drupal/coder": "^8.3",
-        "mglaman/phpstan-drupal": "^2.0",
-        "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan": "^2.0",
-        "squizlabs/php_codesniffer": "^3.7"
+        "drupal/ai": "^1.2 \u2014 required by the vvj_core_ai sub-module, which is optional. vvj_core itself does not need it."
     },
     "scripts": {
         "phpcs": "phpcs --standard=phpcs.xml.dist",
