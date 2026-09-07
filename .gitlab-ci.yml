@@ -41,9 +41,14 @@ include:
 #
 # NEXT MAJOR is on because `^12` is a real claim too. The template marks these
 # jobs `allow_failure: true`, so this does not gate a merge — it makes a D12
-# break visible instead of leaving it to a site owner to find. cloudflare_purge
-# deliberately leaves this off precisely because its branch does NOT claim ^12;
-# here the constraint has landed, so the job belongs.
+# break visible instead of leaving it to a site owner to find.
+#
+# (An earlier version of this paragraph cited cloudflare_purge as the
+# counter-example, "deliberately leaves this off because its branch does NOT
+# claim ^12". That stopped being true on 2026-09-07: cloudflare_purge was
+# ported to Drupal 12, the claim landed in its info.yml, and its next-major
+# jobs were switched on. Corrected rather than left as a confident aside that
+# has quietly gone stale.)
 #
 # PREVIOUS MAJOR is deliberately absent: this module does not claim Drupal 10,
 # so testing it there would assert support that info.yml does not offer.
