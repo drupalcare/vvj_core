@@ -215,7 +215,17 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
    *   Number of published article nodes to create.
    */
   private function vvjCreateArticleNodesWithImages(int $count): void {
-    $path = \Drupal::root() . '/core/tests/fixtures/files/image-test-transparent.png';
+    // image-test.png, NOT image-test-transparent.png. The latter does not exist
+    // in core and, as far as this repository is concerned, never did — it is
+    // absent from both the Drupal 11 and Drupal 12 checkouts on this machine.
+    // The assertFileExists() below was therefore failing every time this method
+    // ran, and nobody saw it because these FunctionalJavascript tests have never
+    // executed here: with no WebDriver listening on :4444 the whole suite errored
+    // at setUp with "Could not connect", long before reaching this line.
+    //
+    // Nothing here asserts transparency; the pattern smoke tests only need a
+    // real PNG to attach to an article. image-test.png ships in 10, 11 and 12.
+    $path = \Drupal::root() . '/core/tests/fixtures/files/image-test.png';
     $this->assertFileExists($path);
     $binary = (string) file_get_contents($path);
     $file = \Drupal::service('file.repository')->writeData(
