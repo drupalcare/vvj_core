@@ -63,10 +63,22 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
     // The Functional install tests already carry this fix and pass; this base
     // class did not, so 20 FunctionalJavascript tests across ten pattern
     // modules were failing on modules that are themselves correct.
+    // AND THE IMAGE FIELD HAS TO EXIST BEFORE THAT CALL TOO, for exactly the
+    // reason the paragraph above gives about the content type. The four
+    // image-based patterns — hero, lightbox, parallax, reveal — ship example
+    // views that depend on `field.storage.node.field_image` and an image style.
+    // This method used to run AFTER installOptionalConfig(), so at the moment
+    // the installer looked, the field did not exist, the view was skipped as
+    // having unmet dependencies, and those four subclasses then failed on
+    // `assert($view !== NULL)` — never reaching the behaviour they were written
+    // to test. The other six patterns pass because their views need no image.
+    if ($this->vvjRequiresArticleImageField()) {
+      $this->vvjEnsureArticleFieldImage();
+    }
+
     $this->container->get('config.installer')->installOptionalConfig();
 
     if ($this->vvjRequiresArticleImageField()) {
-      $this->vvjEnsureArticleFieldImage();
       $this->vvjCreateArticleNodesWithImages(2);
     }
     else {
