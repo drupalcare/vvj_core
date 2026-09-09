@@ -569,9 +569,9 @@ abstract class VvjStylePluginBase extends StylePluginBase {
           <li><code>{{ body }}</code> ➜ <code>[@slug:body:plain]</code></li>
         </ul>
         <p>These tokens offer safe and flexible field output for dynamic headings, summaries, and fallback messages in @upper-enabled Views.</p>', [
-          '@slug' => $slug,
-          '@upper' => strtoupper($slug),
-        ]),
+        '@slug' => $slug,
+        '@upper' => strtoupper($slug),
+      ]),
     ];
   }
 
@@ -597,8 +597,8 @@ abstract class VvjStylePluginBase extends StylePluginBase {
       '#title' => $this->t('Active Breakpoint'),
       '#options' => $this->breakpointRegistry->getOptions(),
       '#default_value' => $this->options[$option_key]
-      ?? $default
-      ?? $this->breakpointRegistry->getDefault(),
+        ?? $default
+        ?? $this->breakpointRegistry->getDefault(),
       '#description' => $this->t('Switch responsive behavior at this viewport width.'),
     ];
   }
