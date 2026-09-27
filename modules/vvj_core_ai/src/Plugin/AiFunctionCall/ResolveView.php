@@ -118,7 +118,7 @@ final class ResolveView extends FunctionCallBase implements ExecutableFunctionCa
   /**
    * {@inheritdoc}
    */
-  public function execute(): void {
+  public function execute(?object $object = NULL): void {
     $plan = $this->planner->plan(
       $this->stringArgument('entity_type'),
       $this->stringArgument('bundle'),

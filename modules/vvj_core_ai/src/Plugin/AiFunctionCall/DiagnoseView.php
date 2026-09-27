@@ -93,7 +93,7 @@ final class DiagnoseView extends FunctionCallBase implements ExecutableFunctionC
   /**
    * {@inheritdoc}
    */
-  public function execute(): void {
+  public function execute(?object $object = NULL): void {
     $viewId = $this->string('view');
 
     if ($viewId === '') {

@@ -89,7 +89,7 @@ final class RecommendFormat extends FunctionCallBase implements ExecutableFuncti
   /**
    * {@inheritdoc}
    */
-  public function execute(): void {
+  public function execute(?object $object = NULL): void {
     $formats = $this->registry->all();
 
     if ($formats === []) {

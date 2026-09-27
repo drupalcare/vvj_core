@@ -14,9 +14,10 @@ use Drush\Commands\DrushCommands;
  * `drush vvj:upgrade` audits every View that uses a VVJ style plugin and
  * reports option-key drift between the installed configuration and the
  * current schema. Run it after updating a site from v1 to v2 to confirm
- * every VVJ view is recognized and on the current schema. The v2.0 drop-in
- * upgrade has NO breaking renames, so it reports "no migration needed" for
- * every v1 view.
+ * every VVJ view is recognized and on the current schema. Drift it finds —
+ * v1 value types, and the few renamed options (vvja first_toggle, vvjh
+ * min_height) — is converted by the apply step, the same code the modules'
+ * update hooks run.
  *
  * All scan/drift logic lives in the Drush-independent
  * \Drupal\vvj_core\Service\VvjUpgradeAuditor (unit-tested); this class is a
@@ -54,7 +55,11 @@ final class VvjUpgradeCommands extends DrushCommands {
   )]
   #[CLI\Option(
     name: 'module',
-    description: 'Comma-separated pattern slugs to limit the scan (e.g. vvja,vvjs). Default: all.',
+    // ⚠ Never write "Default: …" in this text. Drush lifts the word after
+    // it into the option's default value: "Default: all." made every run
+    // search for a pattern called "all." and report "No VVJ views found"
+    // on sites full of them (measured 2026-09-26, solo.local).
+    description: 'Comma-separated pattern slugs to limit the scan (e.g. vvja,vvjs). Leave it out to scan every pattern.',
   )]
   #[CLI\Usage(
     name: 'drush vvj:upgrade --dry-run',
@@ -116,7 +121,17 @@ final class VvjUpgradeCommands extends DrushCommands {
       return self::EXIT_SUCCESS;
     }
 
-    $this->io()->success('Migration complete.');
+    // This step used to print "Migration complete." without changing
+    // anything. It now converts each drifted view with the same code the
+    // pattern modules' update hooks run.
+    $converted = 0;
+    foreach (array_keys($drift) as $viewId) {
+      if ($this->auditor->normalize((string) $viewId, $views[$viewId] ?? [])) {
+        $converted++;
+      }
+    }
+
+    $this->io()->success(sprintf('Converted %d view(s) to the v2 option shape.', $converted));
     return self::EXIT_SUCCESS;
   }
 

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\vvj_core\Unit;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Tests\UnitTestCase;
@@ -72,17 +75,6 @@ final class VvjUpgradeAuditorTest extends UnitTestCase {
   }
 
   /**
-   * V2.0 has no breaking renames, so no view reports drift.
-   */
-  public function testNoDriftForV2Release(): void {
-    $auditor = $this->auditorWithViews([]);
-    $this->assertSame(
-      [],
-      $auditor->detectDrift('accordion_view', ['views_vvja']),
-    );
-  }
-
-  /**
    * Build an auditor whose view storage returns the given entities.
    *
    * @param array<string, \Drupal\views\ViewEntityInterface> $views
@@ -104,7 +96,12 @@ final class VvjUpgradeAuditorTest extends UnitTestCase {
       ->with('view')
       ->willReturn($storage);
 
-    return new VvjUpgradeAuditor($entityTypeManager);
+    return new VvjUpgradeAuditor(
+      $entityTypeManager,
+      $this->createStub(ConfigFactoryInterface::class),
+      $this->createStub(TypedConfigManagerInterface::class),
+      $this->createStub(PluginManagerInterface::class),
+    );
   }
 
   /**

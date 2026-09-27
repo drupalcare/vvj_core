@@ -25,6 +25,23 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **v1 → v2 conversion, and an upgrade audit that tells the truth.** A real v1
+  database showed VVJ views keeping their v1 option shapes: numbers stored as
+  strings, booleans as integers, and options renamed during 1.x. The views
+  failed schema validation, and two renamed options silently stopped working.
+  `VvjUpgradeAuditor` gains `normalize()`/`normalizeAll()`, which each
+  pattern's update hook now calls, and a real `detectDrift()`. It used to be a
+  stub that always answered "no drift". `VvjStylePluginBase` gains
+  `upgradeLegacyOptions()` for per-pattern conversions.
+- `drush vvj:upgrade` found no views on any site unless `--module` was given:
+  Drush lifted "all." out of the option description as its default. Its
+  apply step also printed "Migration complete." without changing anything.
+  Both fixed.
+- **vvj_core_ai: the five AI tools were set to break on Drupal 12.** Core's
+  `ExecutableInterface::execute()` is marked to gain an optional
+  `?object $object` parameter before 12.0; the tools declared `execute()` with
+  none, which is then an incompatible declaration. They now accept it (unused), which Drupal 11
+  also allows. `ToolDiscoveryTest` checks each signature.
 - **Twenty FunctionalJavascript failures across ten pattern modules**, all on
   `assert($view !== NULL)` in the shared `VvjPatternJavascriptTestBase`. Each
   pattern ships its example view as *optional* config, which installs only once

@@ -28,6 +28,9 @@ services:
     class: Drupal\vvj_core\Service\VvjUpgradeAuditor
     arguments:
       - '@entity_type.manager'
+      - '@config.factory'
+      - '@config.typed'
+      - '@plugin.manager.views.style'
 
   # OOP hook classes — Drupal 11.1+ pattern: register FQCN as the
   # primary service ID so the OOP-hook dispatcher can resolve each

@@ -110,6 +110,25 @@ final class ToolDiscoveryTest extends KernelTestBase {
   }
 
   /**
+   * Every tool's execute() takes the optional $object Drupal 12 requires.
+   *
+   * Core's ExecutableInterface carries the parameter commented out, to be
+   * made real before drupal:12.0.0. A plugin whose execute() takes no
+   * parameter is then an incompatible declaration: a fatal when the class
+   * loads, on every page that lists the tools. On Drupal 11 it is only a
+   * deprecation, which nothing fails on.
+   */
+  public function testEveryToolAcceptsTheDrupal12ObjectArgument(): void {
+    foreach (self::TOOLS as $pluginId) {
+      $parameters = (new \ReflectionMethod($this->tool($pluginId), 'execute'))->getParameters();
+
+      self::assertCount(1, $parameters, $pluginId . '::execute() must take exactly the optional $object.');
+      self::assertSame('object', $parameters[0]->getName(), $pluginId);
+      self::assertTrue($parameters[0]->isOptional(), $pluginId . ': $object must be optional.');
+    }
+  }
+
+  /**
    * A tool called with no arguments at all answers in words.
    *
    * This is the SafeContextTrait guarantee. Without it, reading an absent

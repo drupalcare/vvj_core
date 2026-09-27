@@ -116,7 +116,7 @@ final class CreateView extends FunctionCallBase implements ExecutableFunctionCal
   /**
    * {@inheritdoc}
    */
-  public function execute(): void {
+  public function execute(?object $object = NULL): void {
     $result = $this->creator->create(
       $this->stringArgument('entity_type'),
       $this->stringArgument('bundle'),

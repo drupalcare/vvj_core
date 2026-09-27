@@ -44,6 +44,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class VvjStylePluginBase extends StylePluginBase {
 
   /**
+   * Brings style options saved by an earlier release to the current shape.
+   *
+   * The default changes nothing. A pattern overrides it when a release
+   * renamed or restructured an option, so the conversion lives with the
+   * plugin that knows what the option meant. VvjUpgradeAuditor::normalize()
+   * calls it for every VVJ display, which is how both `drush updb` (through
+   * each module's update hook) and `drush vvj:upgrade` convert a view — once,
+   * in one place.
+   *
+   * Types are NOT converted here: saving the view through the config API
+   * casts every value to the type the schema declares.
+   *
+   * @param array<string, mixed> $options
+   *   The stored style options.
+   *
+   * @return array<string, mixed>
+   *   The options in the current shape.
+   */
+  public static function upgradeLegacyOptions(array $options): array {
+    return $options;
+  }
+
+  /**
    * SVG markup sanitizer for admin-pasted icons.
    */
   protected SvgSanitizer $svgSanitizer;
