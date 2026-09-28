@@ -1,0 +1,4 @@
+services:
+  vvj_core_ai_stub.provider_manager:
+    class: Drupal\vvj_core_ai_stub\StubProviderManager
+    arguments: ['@state']

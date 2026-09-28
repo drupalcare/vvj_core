@@ -12,16 +12,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **`vvj_core_ai`** — optional AI sub-module. Five read/act tools for building
-  and troubleshooting VVJ views: `vvj_recommend_format`, `vvj_explain_settings`,
-  `vvj_resolve_view`, `vvj_create_view`, `vvj_diagnose_view`. It reads what is
-  installed on the site rather than assuming, refuses with the exact question to
-  ask when it cannot proceed, and a created view is always **disabled**.
-  Requires `drupal/ai`; the parent module does not.
-- **`ai_agents.ai_agent.vvj_core_agent`** in `config/optional/`. A FunctionCall
-  plugin reaches an assistant only through `ai_agents`, so without this the
-  tools were unreachable by anything on the site. It installs the moment
-  `ai_agents` is present and stays absent otherwise.
+- **`vvj_core_ai`** — optional AI sub-module: **Build a VVJ view with AI** on the
+  Views admin page. Choose a format, a content type, fields or a view mode (only
+  where the format keeps one — asked of the format, not a list) and how many;
+  describe it; the model names the view and picks its fields and sort from this
+  site's own fields. The view is created **disabled**, as a **block** (a page on
+  request), with no pager, its features switched on and named, and it goes
+  through Views' own validation before it is saved. Per-format briefs in
+  `vvj_core_ai.briefs`. Requires `drupal/ai`; the parent module does not.
+  Replaces the chat tools and agent of the first draft (unreleased), removed on
+  2026-09-27.
 
 ### Fixed
 
@@ -37,11 +37,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   Drush lifted "all." out of the option description as its default. Its
   apply step also printed "Migration complete." without changing anything.
   Both fixed.
-- **vvj_core_ai: the five AI tools were set to break on Drupal 12.** Core's
-  `ExecutableInterface::execute()` is marked to gain an optional
-  `?object $object` parameter before 12.0; the tools declared `execute()` with
-  none, which is then an incompatible declaration. They now accept it (unused), which Drupal 11
-  also allows. `ToolDiscoveryTest` checks each signature.
 - **Twenty FunctionalJavascript failures across ten pattern modules**, all on
   `assert($view !== NULL)` in the shared `VvjPatternJavascriptTestBase`. Each
   pattern ships its example view as *optional* config, which installs only once

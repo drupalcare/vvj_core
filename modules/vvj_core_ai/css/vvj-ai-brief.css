@@ -1,0 +1,409 @@
+/**
+ * @file
+ * The brief panel and switches on the "Build a view with AI" page.
+ *
+ * Copied from paragraphs_bundles_ai and renamed — the same panel, on the
+ * maintainer's instruction of 2026-09-27; the projects share no code.
+ */
+
+/* The two switches — Prompts and Best practices — beside the button. */
+.vvj-ai-switch {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.vvj-ai-switch label {
+  margin: 0;
+}
+
+.vvj-ai-panel .form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/**
+ * THE BEST-PRACTICE BRIEF.
+ *
+ * It sits in the form under the format select (PB's floats at the top; here
+ * that covered the select driving it).
+ *
+ * `all: initial` first, then only what this needs — the same treatment the
+ * toggle and the id tooltip get, for the same reason: this is injected into
+ * somebody else's page, and a theme that styles `div`, `h2`, `p` or `button`
+ * would otherwise reach inside it.
+ */
+.vvj-ai-brief {
+  all: initial;
+  font-family: inherit;
+  display: none;
+  margin: 0.5rem 0 1rem;
+}
+
+.vvj-ai-brief--open {
+  display: flex;
+}
+
+.vvj-ai-brief__card {
+  all: initial;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 72rem;
+  /* RAISED WHEN THE PRACTICES WENT INTO TWO COLUMNS. At 42vh/20rem a brief in
+     one narrow column scrolled; two columns roughly halve the height, and the
+     point of the change was that "the user will see all data and they will not
+     scroll". The BODY still scrolls as a safety net for the longest brief
+     (Carousel, 13 lines) and for a short viewport. */
+  max-height: min(62vh, 28rem);
+  display: flex;
+  flex-direction: column;
+  padding: 0.85rem 1rem;
+  border: 1px solid #cfe0db;
+  border-left: 4px solid #0e5e54;
+  border-radius: 10px;
+  background: #f7fbfa;
+  color: #14201d;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  box-shadow: 0 10px 30px rgb(12 32 28 / 22%);
+  pointer-events: auto;
+}
+
+/* ROW ONE: category, name and what the section is for, on one line, with the
+   close button at the right end of that same line. There is no head bar any
+   more — the name used to live in one, and row one carries it now, so a head
+   would have shown it twice.
+
+   `align-items: flex-start` is what keeps the button in the top right when the
+   About text wraps to a second line. */
+.vvj-ai-brief__meta {
+  all: initial;
+  font-family: inherit;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+/* SELECTED THROUGH __body, like everything else here that is a <p>:
+   `.vvj-ai-brief__body p` is (0,1,1) and a bare `.vvj-ai-brief__about` is
+   (0,1,0), so the bare class would lose and this would silently keep the
+   generic paragraph margin. */
+.vvj-ai-brief__body .vvj-ai-brief__about {
+  all: initial;
+  display: block;
+  flex: 1 1 auto;
+  margin: 0;
+  color: #14201d;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* "Category:", "Name:", "About:" — the labels, not their values. */
+.vvj-ai-brief__key {
+  all: initial;
+  color: #0e5e54;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* No padding: the separator carries a real space either side in the text
+   itself, so padding here would double the gap. */
+.vvj-ai-brief__sep {
+  all: initial;
+  color: #8aa79e;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.vvj-ai-brief__close {
+  all: initial;
+  font-family: inherit;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #486258;
+  cursor: pointer;
+}
+
+.vvj-ai-brief__close:hover {
+  background: #e2efec;
+  color: #0e5e54;
+}
+
+.vvj-ai-brief__close:focus-visible {
+  outline: 2px solid #0e5e54;
+  outline-offset: 1px;
+}
+
+.vvj-ai-brief__close svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  fill: currentcolor;
+}
+
+.vvj-ai-brief__body {
+  all: initial;
+  display: block;
+  overflow-y: auto;
+  color: #14201d;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* One line per practice, the way the text is written. */
+.vvj-ai-brief__body p {
+  all: initial;
+  display: block;
+  margin: 0 0 0.25rem;
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* ROW TWO: the heading line. Through __body for the specificity reason above. */
+.vvj-ai-brief__body .vvj-ai-brief__heading {
+  all: initial;
+  display: block;
+  margin: 0 0 0.4rem;
+  color: #0e5e54;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+/* ROW THREE: the practices, two across, so the card uses the width it already
+   has — about 60% of it sat empty while these were one narrow column. */
+.vvj-ai-brief__list {
+  all: initial;
+  font-family: inherit;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* `minmax(0, 1fr)` above, not `1fr`: a grid track's default minimum is
+   `auto`, so one long unbroken practice line would push its column wider than
+   half and knock the other one out of alignment. */
+.vvj-ai-brief__list li {
+  all: initial;
+  display: block;
+  margin: 0 0 0.22rem;
+  padding-left: 0.85rem;
+  color: #14201d;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  text-indent: -0.85rem;
+}
+
+/* The bullet is drawn, not inherited: `all: initial` strips the list marker
+   along with everything else, which is the price of not being reachable by the
+   host theme. The hanging indent keeps a wrapped line clear of it. */
+.vvj-ai-brief__list li::before {
+  content: "•";
+  margin-right: 0.35rem;
+  color: #0e5e54;
+}
+
+/* ROW FOUR: the example prompts. A person gets a sentence to edit instead of an
+   empty box and a placeholder that only names fields. */
+.vvj-ai-brief__prompts {
+  all: initial;
+  font-family: inherit;
+  display: block;
+  margin-top: 0.6rem;
+}
+
+/* THE VARIANT SWITCHES. Only built when a bundle has more than one example —
+   Slideshow reads differently as text, as images and as a hero, and showing
+   all three at once put 113px of the panel out of sight. Flex, so like the
+   grid below it the order follows the writing direction and RTL needs no rule
+   of its own. */
+.vvj-ai-brief__variants {
+  all: initial;
+  font-family: inherit;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--vvj-ai-rule, #d8e4e0);
+}
+
+.vvj-ai-brief__variant {
+  all: initial;
+  box-sizing: border-box;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid #cfe0db;
+  border-radius: 999px;
+  background: #eef4f2;
+  color: #486258;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.vvj-ai-brief__variant[aria-pressed="true"] {
+  border-color: #0e5e54;
+  background: #0e5e54;
+  color: #f2fbf8;
+}
+
+.vvj-ai-brief__variant:focus-visible {
+  outline: 2px solid #0e5e54;
+  outline-offset: 2px;
+}
+
+.vvj-ai-brief__prompt-holder {
+  all: initial;
+  font-family: inherit;
+  display: block;
+}
+
+/* The strip already draws the rule that separates the prompts from the
+   practices, so the block beneath it must not draw a second one. */
+.vvj-ai-brief__variants + .vvj-ai-brief__prompt-holder .vvj-ai-brief__prompt {
+  margin-top: 0.35rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* TWO ROWS, NOT THREE. The name and the button share row one; the prompt sits
+   beneath them spanning both columns. Stacked as three blocks it left a whole
+   empty line beside the button — "the prompt layout also has lots of white
+   space". Grid rather than flex so the text can span, and like flex its
+   columns follow the writing direction, so RTL needs no rule. */
+.vvj-ai-brief__prompt {
+  all: initial;
+  font-family: inherit;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.3rem 0.75rem;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--vvj-ai-rule, #d8e4e0);
+}
+
+/* SELECTED THROUGH __body, like every other <p> and <pre> in this card:
+   `.vvj-ai-brief__body p` is (0,1,1) and a bare class is (0,1,0), so the bare
+   form loses and the styling silently never applies. */
+.vvj-ai-brief__body .vvj-ai-brief__prompt-name {
+  all: initial;
+  display: block;
+  /* Row one, first column — the button takes the second. */
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  color: #0e5e54;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.vvj-ai-brief__body .vvj-ai-brief__prompt-text {
+  all: initial;
+  display: block;
+  /* Row two, spanning both columns — under the name AND the button. The grid
+     gap supplies the spacing the old bottom margin used to. */
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  background: #eef4f2;
+  color: #14201d;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  /* 14px — maintainer, 2026-09-27: the prompt is read and edited, not glanced at. */
+  font-size: 14px;
+  line-height: 1.55;
+  /* The prompt is a paragraph a person will edit, not code: it wraps rather
+     than scrolling sideways inside a card that is already height-capped. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.vvj-ai-brief__use {
+  all: initial;
+  display: inline-block;
+  /* Row one, second column — beside the name, not under the prompt. */
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #0e5e54;
+  border-radius: 999px;
+  color: #0e5e54;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.vvj-ai-brief__use:hover {
+  background: #0e5e54;
+  color: #f2fbf8;
+}
+
+.vvj-ai-brief__use:focus-visible {
+  outline: 2px solid #0e5e54;
+  outline-offset: 2px;
+}
+
+/* SMALL SCREENS: one column, as asked. Below this width two columns leave
+   about twenty characters a line, which wraps every item into three rows and
+   is worse than the scrolling it was meant to prevent. */
+@media (max-width: 992px) {
+  .vvj-ai-brief__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Phone. Row one keeps its shape — the close button must not drop under the
+   text, which is why __meta stays a flex ROW and never wraps — but the card
+   may use more of the screen, because one column is taller than two. */
+@media (max-width: 576px) {
+  .vvj-ai-brief__card {
+    max-height: min(72vh, 30rem);
+    padding: 0.7rem 0.8rem;
+  }
+
+  .vvj-ai-brief__meta {
+    gap: 0.5rem;
+  }
+}
+
+@media print {
+  .vvj-ai-brief {
+    display: none;
+  }
+}

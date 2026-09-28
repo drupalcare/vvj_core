@@ -31,6 +31,9 @@ interface ViewPlannerInterface {
    *   Field machine names to show, in the order they should appear.
    * @param string|null $label
    *   Human name for the view.
+   * @param bool $needsFields
+   *   FALSE for a view-mode row, which renders whole items and asks for no
+   *   fields. Fields that ARE given are still checked either way.
    *
    * @return \Drupal\vvj_core_ai\Model\ViewPlan
    *   A usable plan, or the questions blocking one.
@@ -41,6 +44,7 @@ interface ViewPlannerInterface {
     ?string $format,
     array $fields,
     ?string $label,
+    bool $needsFields = TRUE,
   ): ViewPlan;
 
   /**

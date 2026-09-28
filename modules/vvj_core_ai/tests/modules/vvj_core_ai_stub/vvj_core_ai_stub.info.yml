@@ -1,0 +1,7 @@
+name: 'VVJ Core AI stub provider'
+type: module
+description: 'Test only. Answers the views drafter with a fixed document from state, so a test can drive the whole form without calling an AI.'
+package: Testing
+hidden: true
+dependencies:
+  - vvj_core:vvj_core_ai

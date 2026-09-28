@@ -1,0 +1,223 @@
+# THE ONE PLACE THE VIEWS ASSISTANT'S BRIEFS LIVE — the same pattern as
+# paragraphs_bundles_ai, on the maintainer's instruction of 2026-09-27: "do the
+# same thing as you did with pb".
+#
+# ONE ENTRY PER FORMAT, keyed by its Views style plugin id:
+#
+#   good_for   one line: when you would reach for this format.
+#   practices  the advice shown beside the form.
+#   count      how many items a new view shows. There is no pager: page links
+#              under a carousel or a set of tabs break the effect.
+#   prompt(s)  example prompts. `Fields` for the fields row; `View mode` only
+#              for the formats that keep a view-mode row (Basic Carousel,
+#              3D Carousel, Slideshow) — the format decides, RowRules asks it.
+#   features   the format settings a new view is created with, then NAMED so
+#              the person learns what it can do — maintainer, 2026-09-27: "we
+#              must activate most of the features in each plugins and tell the
+#              user they can disable it". Real setting names and choice keys
+#              only, read from each format's own settings form; the contract
+#              test fails on a typo. Most equal the format's default and are
+#              listed so they are announced. No colours, no text, no sizes.
+
+briefs:
+
+  views_vvja:
+    good_for: 'Questions and answers, or any list whose details a reader opens one at a time.'
+    count: 6
+    prompts:
+      Fields: >-
+        Show the six newest articles as an accordion. Each heading is the
+        article title and it opens to the summary. Newest first.
+    practices: |
+      Best practices:
+      The first field is the heading a reader clicks; keep it short.
+      Keep what opens to two or three lines, or the next heading leaves the screen.
+      Best from 3 to 8 items.
+      Fields only: this format does not show whole items in a view mode.
+    features:
+      expand_default: first
+      single_toggle: '1'
+      global_toggle: '1'
+      exclusive_panel: '1'
+      animation: a-bottom
+
+  views_vvjb:
+    good_for: 'A row of items that scrolls on its own: products, team members, logos.'
+    count: 8
+    prompts:
+      Fields: >-
+        Show eight products as a carousel, image and title, newest first.
+      View mode: >-
+        Show the eight newest articles as a carousel, each one as its teaser.
+    practices: |
+      Best practices:
+      Three on a big screen and one on a small one reads best.
+      Best from 6 to 12 items: fewer than the number shown and it cannot scroll.
+      Keep every item the same height; use a view mode or image style for that.
+      Fields or a view mode: both work with this format.
+    features:
+      looping: '1'
+      navigation: both
+      dot_style: circle
+      show_play_pause: '1'
+      show_progress_bar: '1'
+      show_page_counter: '1'
+      enable_keyboard_nav: '1'
+      enable_touch_swipe: '1'
+      enable_pause_on_hover: '1'
+      pause_on_reduced_motion: '1'
+
+  views_vvjc:
+    good_for: 'A small, equal set of pictures turning in 3D: showy, for a front page.'
+    count: 7
+    prompts:
+      Fields: >-
+        Show seven featured images as a 3D carousel, image only, newest first.
+      View mode: >-
+        Show the seven newest articles as a 3D carousel, each one as its teaser.
+    practices: |
+      Best practices:
+      Best with 7 or 11 items of the same shape.
+      Pictures work better than text; keep any text to a short title.
+      Fields or a view mode: both work with this format.
+    features:
+      carousel_style: ring
+      time_in_seconds: '5000'
+      show_navigation_arrows: '1'
+      show_dots_navigation: '1'
+      show_play_pause: '1'
+      show_progress_bar: '1'
+      show_slide_counter: '1'
+      enable_keyboard_nav: '1'
+      enable_touch_swipe: '1'
+      enable_pause_on_hover: '1'
+      enable_screen_reader: '1'
+      pause_on_reduced_motion: '1'
+
+  views_vvjf:
+    good_for: 'Cards that flip over: a picture or a fact in front, the detail behind.'
+    count: 6
+    prompts:
+      Fields: >-
+        Show six services as flip boxes: the title on the front, the summary
+        on the back. Sorted by title.
+    practices: |
+      Best practices:
+      The first field is the front, the rest are the back.
+      Keep the back to two or three lines; it has a fixed height.
+      A multiple of three items fills the rows.
+      Fields only.
+    features:
+      flip_trigger: click
+      flip_direction: vertical
+      animation_easing: ease
+
+  views_vvjh:
+    good_for: 'The top of a page: a big picture with its title over it.'
+    # ONE. Three stacked three full-height heroes into 2268px of page on
+    # sts.local, 2026-09-27; several items one at a time is a slideshow.
+    count: 1
+    prompts:
+      Fields: >-
+        Show the newest article as a hero: image first, then the title.
+    practices: |
+      Best practices:
+      The first field must be an image; the assistant puts one first for you.
+      One item: a hero is the top of one page. For several, use the Slideshow.
+      Keep the text short: a title and one line.
+      Fields only.
+    features:
+      hero_style: a-fade
+      overlay_position: d-middle
+      animation_easing: ease
+
+  views_vvjl:
+    good_for: 'A gallery of pictures that open full size when clicked.'
+    count: 9
+    prompts:
+      Fields: >-
+        Show nine images as a lightbox gallery, image and title, newest first.
+    practices: |
+      Best practices:
+      Pictures of the same shape keep the grid even.
+      Best from 6 to 12 pictures; two or three looks unfinished.
+      Fields only.
+    features:
+      animation: a-zoom
+
+  views_vvjp:
+    good_for: 'Full-width bands whose picture drifts as the page scrolls.'
+    count: 3
+    prompts:
+      Fields: >-
+        Show three articles as a parallax: image first, then the title and
+        the summary.
+    practices: |
+      Best practices:
+      The first field must be an image; the assistant sets it to "URL to image".
+      One to three bands on a page; more feels seasick.
+      Keep the words short: a title and two lines.
+      Fields only.
+    features:
+      scroll_effect: fade
+      background_position: center
+      bg_animation_easing: ease
+
+  views_vvjr:
+    good_for: 'Boxes that reveal a second side when clicked or hovered.'
+    count: 6
+    prompts:
+      Fields: >-
+        Show six team members as reveal boxes: the name first, the role behind.
+    practices: |
+      Best practices:
+      The first field is what shows; the rest is revealed.
+      Keep the revealed side short; the box has a fixed height.
+      Fields only.
+    features:
+      reveal_method: click
+      reveal_style: a-fade
+      animation_easing: ease
+
+  views_vvjs:
+    good_for: 'One item at a time, moving on its own: news, stories, promotions.'
+    count: 5
+    prompts:
+      Fields: >-
+        Show the five newest articles as a slideshow, image and title, newest
+        first.
+      View mode: >-
+        Show the five newest articles as a slideshow, each one as its teaser.
+    practices: |
+      Best practices:
+      Best from 3 to 6 slides.
+      Keep the text on each slide about the same length.
+      Fields or a view mode, except in hero mode, which needs fields.
+    features:
+      arrows: arrows-sides
+      navigation: dots
+      transition_type: crossfade-classic
+      show_play_pause: '1'
+      show_slide_progress: '1'
+      show_total_slides: '1'
+      enable_looping: '1'
+      enable_keyboard: '1'
+      enable_swipe: '1'
+      pause_on_hover: '1'
+
+  views_vvjt:
+    good_for: 'One topic split into parts a reader chooses between.'
+    count: 4
+    prompts:
+      Fields: >-
+        Show four articles as tabs: the title is the tab, the summary is the
+        panel. Sorted by title.
+    practices: |
+      Best practices:
+      The first field is the tab name; keep it to one or two words.
+      Best from 2 to 5 tabs; more wrap on a phone.
+      Fields only.
+    features:
+      tabs_position: top
+      wrap_tabs: '1'
+      animation: a-opacity

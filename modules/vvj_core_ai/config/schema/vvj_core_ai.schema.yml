@@ -1,9 +1,36 @@
-vvj_core_ai.settings:
+vvj_core_ai.briefs:
   type: config_object
-  label: 'VVJ Core AI settings'
+  label: 'Views assistant briefs, per format'
   mapping:
-    assistant:
-      type: string
-      label: 'AI assistant used on the Views pages'
-      # '' means the surface is off, which is the installed default and a
-      # legitimate resting state — not a missing value.
+    briefs:
+      type: sequence
+      label: 'Briefs'
+      # Keyed by Views style plugin id, such as views_vvjs.
+      sequence:
+        type: mapping
+        label: 'Brief'
+        mapping:
+          good_for:
+            type: label
+            label: 'Good for'
+          count:
+            type: integer
+            label: 'Items a new view shows'
+          practices:
+            type: text
+            label: 'Best practices'
+          prompt:
+            type: text
+            label: 'Example prompt'
+          prompts:
+            type: sequence
+            label: 'Example prompts, by row'
+            sequence:
+              type: text
+              label: 'Example prompt'
+          features:
+            type: sequence
+            label: 'Format settings switched on, by setting name'
+            sequence:
+              type: string
+              label: 'Value'

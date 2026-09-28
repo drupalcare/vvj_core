@@ -1,0 +1,10 @@
+brief:
+  css:
+    component:
+      css/vvj-ai-brief.css: {}
+  js:
+    js/vvj-ai-brief.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once

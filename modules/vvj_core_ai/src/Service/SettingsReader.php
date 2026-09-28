@@ -6,9 +6,6 @@ namespace Drupal\vvj_core_ai\Service;
 
 use Drupal\Core\Form\FormState;
 use Psr\Log\LoggerInterface;
-use Drupal\views\Entity\View;
-use Drupal\views\Plugin\views\style\StylePluginBase;
-use Drupal\views\Plugin\ViewsPluginManager;
 use Drupal\vvj_core_ai\Model\FormatSetting;
 
 /**
@@ -47,8 +44,8 @@ final class SettingsReader implements SettingsReaderInterface {
   /**
    * Constructs the reader.
    *
-   * @param \Drupal\views\Plugin\ViewsPluginManager $styleManager
-   *   The Views style plugin manager.
+   * @param \Drupal\vvj_core_ai\Service\FormatProbeInterface $probe
+   *   Builds the format's plugin against a throwaway view.
    * @param \Drupal\vvj_core_ai\Service\FormatRegistryInterface $registry
    *   Confirms the format is installed before its form is built.
    * @param \Psr\Log\LoggerInterface $logger
@@ -57,7 +54,7 @@ final class SettingsReader implements SettingsReaderInterface {
    *   the cause goes here, because a swallowed error is worse than a loud one.
    */
   public function __construct(
-    private readonly ViewsPluginManager $styleManager,
+    private readonly FormatProbeInterface $probe,
     private readonly FormatRegistryInterface $registry,
     private readonly LoggerInterface $logger,
   ) {}
@@ -112,38 +109,9 @@ final class SettingsReader implements SettingsReaderInterface {
    *   machine-name keys with numeric ones, so the narrower type was wishful.
    */
   private function buildForm(string $pluginId): array {
-    $view = View::create([
-      'id' => 'vvj_core_ai_readonly_probe',
-      'label' => 'vvj_core_ai settings probe',
-      'base_table' => 'node_field_data',
-      'display' => [
-        'default' => [
-          'display_plugin' => 'default',
-          'id' => 'default',
-          'display_title' => 'Default',
-          'position' => 0,
-          'display_options' => [],
-        ],
-      ],
-    ]);
-
-    $executable = $view->getExecutable();
-    $executable->setDisplay('default');
-
-    $style = $this->styleManager->createInstance($pluginId);
-
-    // The manager's return is `object` to the type system. A style plugin that
-    // is not a StylePluginBase has no settings form to read, and calling into
-    // it would fatal rather than answer — so it is refused here, where the
-    // caller turns it into a sentence, instead of two lines further down.
-    if (!$style instanceof StylePluginBase) {
-      throw new \RuntimeException(sprintf(
-        'The "%s" style plugin is not a Views style plugin, so its settings cannot be read.',
-        $pluginId,
-      ));
-    }
-
-    $style->init($executable, $executable->display_handler);
+    // A style plugin that is not a StylePluginBase has no settings form to
+    // read; the probe refuses it, and read() turns that into a sentence.
+    $style = $this->probe->style($pluginId);
 
     $form = [];
     $state = new FormState();

@@ -4,47 +4,44 @@ declare(strict_types=1);
 
 namespace Drupal\vvj_core_ai\Service;
 
+use Drupal\vvj_core_ai\Model\ViewRequest;
+
 /**
- * Creates a view that uses a VVJ format.
+ * Creates a new view using a VVJ format. The only thing here that writes.
  *
- * The only thing in this module that writes, and it only ever CREATES. It
- * never edits an existing view and never changes a format's settings.
- *
- * @see \Drupal\vvj_core_ai\Service\ViewCreator
- * @see docs/VVJ-AI-BRIEF.md §5
+ * THREE RULES IT CANNOT BE CONFIGURED OUT OF:
+ * 1. A new view is created DISABLED; a person looks at it and enables it.
+ * 2. An existing view is never touched; a name in use is a refusal.
+ * 3. Every precondition is re-checked here, and the finished view goes
+ *    through Views' own validate() before it is saved — so a format's own
+ *    rules (Hero's image first, Parallax's image URL) decide, not a copy.
  */
 interface ViewCreatorInterface {
 
   /**
-   * Creates a disabled view, re-checking every precondition first.
+   * Refusals that are certain before anything is asked of the model.
    *
-   * Does not throw for ordinary refusals — an unknown bundle, a field that is
-   * not there, a name already taken are all results rather than exceptions,
-   * because each is something a person can act on.
+   * The form runs this before the AI call, so a request that can only be
+   * refused costs nothing; create() runs it again and never trusts the form.
    *
-   * @param string|null $entityType
-   *   Entity type to list; defaults to `node`.
-   * @param string|null $bundle
-   *   Bundle to filter to, or NULL/'' for all.
-   * @param string|null $format
-   *   VVJ format — plugin id or module name.
-   * @param list<string> $fields
-   *   Field machine names to show, in order.
-   * @param string|null $label
-   *   Human name for the view.
+   * @param \Drupal\vvj_core_ai\Model\ViewRequest $request
+   *   What to build. Label and fields are not needed yet.
    *
-   * @return array{created: TRUE, id: string, label: string, format: string, refusals: list<string>, notes: list<string>}|array{created: FALSE, refusals: list<string>, notes: list<string>}
-   *   What was created, or why nothing was. Two shapes rather than one with
-   *   optional keys: `created` being TRUE is exactly what guarantees `id`,
-   *   `label` and `format` are there, and saying so lets a caller that checks
-   *   `created` read them without a second existence test.
+   * @return array<'format'|'view_mode'|'path', string>
+   *   A plain sentence keyed by the part of the request it is about, or an
+   *   empty array when nothing is known to be wrong.
    */
-  public function create(
-    ?string $entityType,
-    ?string $bundle,
-    ?string $format,
-    array $fields,
-    ?string $label,
-  ): array;
+  public function precheck(ViewRequest $request): array;
+
+  /**
+   * Creates the view: a block by default, a page too when a path is given.
+   *
+   * @param \Drupal\vvj_core_ai\Model\ViewRequest $request
+   *   What to build.
+   *
+   * @return array{created: true, id: string, label: string, format: string, refusals: list<string>, notes: list<string>}|array{created: false, refusals: list<string>, notes: list<string>}
+   *   What was built, or why nothing was.
+   */
+  public function create(ViewRequest $request): array;
 
 }

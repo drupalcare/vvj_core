@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\vvj_core_ai\Kernel;
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\NodeType;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\views\Entity\View;
+use Drupal\vvj_core_ai\Model\ViewRequest;
 use Drupal\vvj_core_ai\Service\ViewCreatorInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
@@ -50,6 +53,10 @@ final class ViewCreatorTest extends KernelTestBase {
     'views_ui',
     'vvj_core',
     'vvjtest',
+    // The drafter takes drupal/ai's provider manager, and the module declares
+    // ai:ai, so the container cannot compile without it.
+    'key',
+    'ai',
     'vvj_core_ai',
   ];
 
@@ -81,7 +88,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * is the failure this guards against.
    */
   public function testItCreatesTheViewDisabled(): void {
-    $result = $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Featured work');
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Featured work', ['title']));
 
     self::assertTrue($result['created'], implode(' | ', $result['refusals']));
 
@@ -98,7 +105,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * outcome here: it reports success and produces the wrong thing.
    */
   public function testTheViewUsesTheFormatAndFieldsAsked(): void {
-    $result = $this->creator->create('node', 'article', 'vvjtest', ['title', 'created'], 'Case studies');
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Case studies', ['title', 'created']));
     $display = $this->displayOf($result);
 
     self::assertSame('views_vvjtest', $this->arr($display['style'] ?? NULL)['type'] ?? NULL);
@@ -113,11 +120,24 @@ final class ViewCreatorTest extends KernelTestBase {
    * not a display preference, so it is never the default.
    */
   public function testItFiltersToPublishedContent(): void {
-    $result = $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Published only');
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Published only', ['title']));
     $filters = $this->arr($this->displayOf($result)['filters'] ?? NULL);
 
     self::assertArrayHasKey('status', $filters);
     self::assertSame('1', $this->arr($filters['status'])['value'] ?? NULL);
+  }
+
+  /**
+   * Seeing the view needs "access content", as core's own wizard sets it.
+   *
+   * Left unset, Views falls back to no access check at all.
+   */
+  public function testItNeedsAccessContent(): void {
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Guarded', ['title']));
+    $access = $this->arr($this->displayOf($result)['access'] ?? NULL);
+
+    self::assertSame('perm', $access['type'] ?? NULL);
+    self::assertSame('access content', $this->arr($access['options'] ?? NULL)['perm'] ?? NULL);
   }
 
   /**
@@ -126,10 +146,10 @@ final class ViewCreatorTest extends KernelTestBase {
    * Rule 2. Someone's view is their work.
    */
   public function testItRefusesRatherThanOverwriteAnExistingView(): void {
-    $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Taken name');
+    $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Taken name', ['title']));
     $before = $this->load('taken_name')->toArray();
 
-    $second = $this->creator->create('node', 'article', 'vvjtest', ['title'], 'Taken name');
+    $second = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Taken name', ['title']));
 
     self::assertFalse($second['created']);
     self::assertStringContainsString('already exists', implode(' ', $second['refusals']));
@@ -147,7 +167,7 @@ final class ViewCreatorTest extends KernelTestBase {
   public function testItRevalidatesInsteadOfTrustingItsCaller(): void {
     $before = count(View::loadMultiple());
 
-    $result = $this->creator->create('node', 'no_such_bundle', 'vvjtest', ['title'], 'Bad bundle');
+    $result = $this->creator->create(new ViewRequest('node', 'no_such_bundle', 'vvjtest', 'Bad bundle', ['title']));
 
     self::assertFalse($result['created'], 'An unknown bundle must be refused.');
     self::assertStringContainsString('no "no_such_bundle" content type', implode(' ', $result['refusals']));
@@ -158,7 +178,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * A format this site does not have is refused, naming what it does have.
    */
   public function testAnUninstalledFormatIsRefusedByName(): void {
-    $result = $this->creator->create('node', 'article', 'vvjs', ['title'], 'Slideshow please');
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjs', 'Slideshow please', ['title']));
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('does not have', implode(' ', $result['refusals']));
@@ -170,7 +190,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * Fields that do not exist on the bundle are refused, with the real list.
    */
   public function testUnknownFieldsAreRefusedWithTheRealOnes(): void {
-    $result = $this->creator->create('node', 'article', 'vvjtest', ['not_a_field'], 'Bad fields');
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Bad fields', ['not_a_field']));
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('not fields on that content', implode(' ', $result['refusals']));
@@ -184,7 +204,7 @@ final class ViewCreatorTest extends KernelTestBase {
     $creator = \Drupal::service(ViewCreatorInterface::class);
     $before = count(View::loadMultiple());
 
-    $result = $creator->create('node', 'article', 'vvjtest', ['title'], 'Not allowed');
+    $result = $creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Not allowed', ['title']));
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('administer views', implode(' ', $result['refusals']));
@@ -202,7 +222,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * model a field list for a content type that does not exist.
    */
   public function testAnUnknownBundleIsNotThenDescribed(): void {
-    $result = $this->creator->create('node', 'no_such_bundle', 'vvjtest', [], 'Ghost');
+    $result = $this->creator->create(new ViewRequest('node', 'no_such_bundle', 'vvjtest', 'Ghost', []));
     $said = implode(' ', $result['refusals']);
 
     self::assertStringContainsString('no "no_such_bundle" content type', $said);
@@ -223,7 +243,7 @@ final class ViewCreatorTest extends KernelTestBase {
   public function testNearMissBundleIsSuggested(): void {
     NodeType::create(['type' => 'apex_faq', 'name' => 'FAQ'])->save();
 
-    $result = $this->creator->create('node', 'faq', 'vvjtest', ['title'], 'Faqs');
+    $result = $this->creator->create(new ViewRequest('node', 'faq', 'vvjtest', 'Faqs', ['title']));
 
     self::assertFalse($result['created']);
     self::assertStringContainsString('Did you mean "apex_faq"?', implode(' ', $result['refusals']));
@@ -240,7 +260,7 @@ final class ViewCreatorTest extends KernelTestBase {
     NodeType::create(['type' => 'apex_faq', 'name' => 'One'])->save();
     NodeType::create(['type' => 'legacy_faq', 'name' => 'Two'])->save();
 
-    $result = $this->creator->create('node', 'faq', 'vvjtest', ['title'], 'Faqs');
+    $result = $this->creator->create(new ViewRequest('node', 'faq', 'vvjtest', 'Faqs', ['title']));
 
     self::assertFalse($result['created']);
     self::assertStringNotContainsString('Did you mean', implode(' ', $result['refusals']));
@@ -250,7 +270,7 @@ final class ViewCreatorTest extends KernelTestBase {
    * Every refusal is a sentence a person can act on.
    */
   public function testEveryRefusalReadsAsPlainSentence(): void {
-    $result = $this->creator->create('node', '', '', [], '');
+    $result = $this->creator->create(new ViewRequest('node', '', '', '', []));
 
     self::assertFalse($result['created']);
     self::assertNotEmpty($result['refusals']);
@@ -259,6 +279,132 @@ final class ViewCreatorTest extends KernelTestBase {
       self::assertGreaterThan(25, strlen($refusal), 'Too terse to act on: ' . $refusal);
       self::assertMatchesRegularExpression('/[.?]$/', $refusal, 'Not a sentence: ' . $refusal);
     }
+  }
+
+  /**
+   * A block by default, a fixed count and no pager — the maintainer's call.
+   *
+   * 2026-09-27: "block by default". Before this the creator made only the
+   * default display, which cannot be placed anywhere.
+   */
+  public function testItMakesBlockWithFixedCountAndNoPage(): void {
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Block only', ['title'], count: 7));
+
+    self::assertTrue($result['created'], implode(' | ', $result['refusals']));
+    $displays = $this->arr($this->load((string) ($result['id'] ?? ''))->get('display'));
+    self::assertSame(['default', 'block_1'], array_keys($displays));
+    self::assertSame('block', $this->arr($displays['block_1'] ?? NULL)['display_plugin'] ?? NULL);
+    $pager = $this->arr($this->displayOf($result)['pager'] ?? NULL);
+    self::assertSame('some', $pager['type'] ?? NULL, 'A fixed number, no page links.');
+    self::assertSame(7, $this->arr($pager['options'] ?? NULL)['items_per_page'] ?? NULL);
+  }
+
+  /**
+   * A page only when a path is given, at that path.
+   */
+  public function testPageIsAddedOnlyWithPath(): void {
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'With a page', ['title'], pagePath: '/our-work/'));
+
+    self::assertTrue($result['created'], implode(' | ', $result['refusals']));
+    $displays = $this->arr($this->load((string) ($result['id'] ?? ''))->get('display'));
+    $page = $this->arr($displays['page_1'] ?? NULL);
+    self::assertSame('page', $page['display_plugin'] ?? NULL);
+    self::assertSame('our-work', $this->arr($page['display_options'] ?? NULL)['path'] ?? NULL);
+  }
+
+  /**
+   * The features arrive as the format's own options.
+   *
+   * `row_class` because the test format ships no schema of its own; a real
+   * format's options are held to its schema by FeaturesContractTest.
+   */
+  public function testFeaturesAreWrittenAsStyleOptions(): void {
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Featured', ['title'], styleOptions: ['row_class' => 'made-by-ai']));
+
+    self::assertTrue($result['created'], implode(' | ', $result['refusals']));
+    self::assertSame('made-by-ai', $this->arr($this->arr($this->displayOf($result)['style'] ?? NULL)['options'] ?? NULL)['row_class'] ?? NULL);
+  }
+
+  /**
+   * A fields-only format refuses a view mode instead of silently switching.
+   *
+   * VvjStylePluginBase forces fields for every format that does not opt out,
+   * and the test format does not.
+   */
+  public function testFieldsOnlyFormatRefusesViewMode(): void {
+    $before = count(View::loadMultiple());
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Teasers', [], viewMode: 'teaser'));
+
+    self::assertFalse($result['created']);
+    self::assertStringContainsString('shows fields, not whole items', implode(' ', $result['refusals']));
+    self::assertCount($before, View::loadMultiple());
+  }
+
+  /**
+   * An image-first format on a type with no image field is refused up front.
+   *
+   * Before the AI call, so the request costs nothing; Article here has no
+   * image field, and Hero needs one first.
+   */
+  public function testImageFirstWithoutImageIsRefusedBeforeDrafting(): void {
+    $refusals = $this->creator->precheck(new ViewRequest('node', 'article', 'views_vvjh', ''));
+
+    self::assertSame(['format'], array_keys($refusals));
+    self::assertStringContainsString('needs an image field', $refusals['format']);
+  }
+
+  /**
+   * A page path the site already answers is refused; a free one is not.
+   */
+  public function testPathInUseIsRefused(): void {
+    \Drupal::service('router.builder')->rebuild();
+
+    $taken = $this->creator->precheck(new ViewRequest('node', 'article', 'vvjtest', '', pagePath: '/user/login'));
+    self::assertSame(['path'], array_keys($taken));
+    self::assertStringContainsString('/user/login is already used', $taken['path']);
+
+    self::assertSame([], $this->creator->precheck(new ViewRequest('node', 'article', 'vvjtest', '', pagePath: 'vvj-free-path')));
+  }
+
+  /**
+   * The block title, when given, is the title shown; the label stays the name.
+   */
+  public function testBlockTitleIsTheTitleShown(): void {
+    $result = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Named', ['title'], blockTitle: 'Latest news'));
+
+    self::assertTrue($result['created'], implode(' | ', $result['refusals']));
+    self::assertSame('Latest news', $this->displayOf($result)['title'] ?? NULL);
+    self::assertSame('Named', $result['label']);
+  }
+
+  /**
+   * A configurable field is read from its own table, not the base one.
+   *
+   * Measured 2026-09-27 on sts.local: every field was given the base table,
+   * so an image field got a handler with no field behind it — Hero refused
+   * the view and Slideshow would have printed a broken field.
+   */
+  public function testConfigurableFieldUsesItsOwnTable(): void {
+    FieldStorageConfig::create([
+      'field_name' => 'field_subtitle',
+      'entity_type' => 'node',
+      'type' => 'string',
+    ])->save();
+    FieldConfig::create([
+      'field_name' => 'field_subtitle',
+      'entity_type' => 'node',
+      'bundle' => 'article',
+      'label' => 'Subtitle',
+    ])->save();
+
+    $result = $this->creator->create(
+      new ViewRequest('node', 'article', 'vvjtest', 'Subtitles', ['title', 'field_subtitle']),
+    );
+
+    self::assertTrue($result['created'], implode(' | ', $result['refusals']));
+    $fields = $this->arr($this->displayOf($result)['fields'] ?? NULL);
+    self::assertSame('node_field_data', $this->arr($fields['title'] ?? NULL)['table'] ?? NULL);
+    self::assertSame('node__field_subtitle', $this->arr($fields['field_subtitle'] ?? NULL)['table'] ?? NULL);
   }
 
   /**

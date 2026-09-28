@@ -1,0 +1,5 @@
+vvj_core_ai.build:
+  route_name: vvj_core_ai.build
+  title: 'Build a VVJ view with AI'
+  appears_on:
+    - entity.view.collection

@@ -43,6 +43,10 @@ final class FormatRegistryTest extends KernelTestBase {
     'filter',
     'views',
     'vvj_core',
+    // The drafter takes drupal/ai's provider manager, and the module declares
+    // ai:ai, so the container cannot compile without it.
+    'key',
+    'ai',
     'vvj_core_ai',
   ];
 

@@ -19,34 +19,22 @@ parameters:
     - modules
   excludePaths:
     - vendor (?)
-    # The AI tool plugins extend `Drupal\ai\Base\FunctionCallBase` and carry
-    # `Drupal\ai\Attribute\FunctionCall`. drupal/ai is a dependency of the
+    # THE TWO FILES THAT NAME drupal/ai TYPES. drupal/ai is a dependency of the
     # vvj_core_ai SUBMODULE, not of this project, so it is absent whenever
     # vvj_core is built from its own composer.json — which is exactly what
-    # drupal.org CI does. MEASURED 2026-09-05 by simulating that build: 46 of
-    # 66 findings were the cascade from one unresolvable base class, across
-    # eight different identifiers, and they buried the five that were real.
+    # drupal.org CI does. MEASURED 2026-09-05 by simulating that build: one
+    # unresolvable drupal/ai class cascades into dozens of class.notFound
+    # findings that bury the real ones.
     #
-    # Same reasoning as src/Commands above, and the same trade: these classes
-    # are thin. Every decision they make lives in the analysed, unit-tested
-    # services (ViewPlanner, ViewCreator, ViewDoctor, SettingsReader,
-    # FormatRegistry), and the plugins themselves are covered at RUNTIME by
-    # ToolDiscoveryTest, which executes each one and is skipped only where
-    # drupal/ai is absent.
-    - modules/vvj_core_ai/src/Plugin/AiFunctionCall
-    # SafeContextTrait reads a FunctionCallBase context and is meaningless
-    # without it, for the same reason.
-    - modules/vvj_core_ai/src/Tool
+    # Since 2026-09-27 (the chat tools removed, maintainer: "remove the chat
+    # tools like pb") only the drafter talks to drupal/ai. It is thin: every
+    # decision it makes is held to the analysed services — the planner's
+    # fields, ViewRequest::SORTS — and ViewDrafterTest runs it against a stub
+    # provider wherever drupal/ai is present.
+    - modules/vvj_core_ai/src/Service/ViewDrafter.php
+    - modules/vvj_core_ai/tests/src/Kernel/ViewDrafterTest.php
     # The test fixture module's style plugin is exercised by the kernel tests.
     - modules/vvj_core_ai/tests/modules
-    # The only TEST file that names a drupal/ai type: it type-hints
-    # ExecutableFunctionCallInterface because that is the contract it exists to
-    # check. Measured 2026-09-05 by simulating the CI build — 25 class.notFound
-    # errors from this one file, and none from any other test. It is skipped at
-    # runtime on the same sites for the same reason (see
-    # VvjOptionalModulesTrait), so nothing is being hidden that would otherwise
-    # have run.
-    - modules/vvj_core_ai/tests/src/Kernel/ToolDiscoveryTest.php
     # Drush is not a project dependency (installed on host sites), so the
     # DrushCommands base class is unresolvable at analysis time. The scan
     # logic lives in the analyzed, unit-tested VvjUpgradeAuditor service.

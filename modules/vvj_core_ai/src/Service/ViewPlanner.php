@@ -63,6 +63,7 @@ final class ViewPlanner implements ViewPlannerInterface {
     ?string $format,
     array $fields,
     ?string $label,
+    bool $needsFields = TRUE,
   ): ViewPlan {
     $questions = [];
 
@@ -134,7 +135,7 @@ final class ViewPlanner implements ViewPlannerInterface {
       // just said is not on this site — see the note above this block.
       $questions[] = 'Once the content type is settled, ask again and the fields available on it can be listed.';
     }
-    elseif ($fields === []) {
+    elseif ($fields === [] && $needsFields) {
       $questions[] = sprintf(
         'Which fields should each item show? %s',
         $this->fieldHint($entityType, $bundle ?: ($bundles[0] ?? '')),

@@ -1,7 +1,14 @@
-vvj_core_ai.settings:
-  path: '/admin/config/content/vvj-core-ai'
+# The views assistant: its own page under Views, reached from the "Build a VVJ
+# view with AI" button on the Views list. A page rather than a panel at the
+# foot of the list, because the admin sidebar covered a page_bottom panel
+# (seen on sts.local, 2026-09-27).
+vvj_core_ai.build:
+  path: '/admin/structure/views/vvj-ai'
   defaults:
-    _form: 'Drupal\vvj_core_ai\Form\VvjAiSettingsForm'
-    _title: 'VVJ Views AI'
+    _form: 'Drupal\vvj_core_ai\Form\VvjAiViewForm'
+    _title: 'Build a VVJ view with AI'
   requirements:
-    _permission: 'administer site configuration'
+    # BOTH, and the separator is what says so: in a route's _permission a
+    # comma means AND and a plus means OR. It read '+' until 2026-09-27, when
+    # BuildViewFormTest found a user with only "administer views" on the page.
+    _permission: 'use vvj views assistant,administer views'
