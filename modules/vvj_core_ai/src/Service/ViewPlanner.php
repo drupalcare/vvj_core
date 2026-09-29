@@ -162,13 +162,13 @@ final class ViewPlanner implements ViewPlannerInterface {
       $questions[] = 'What should the view be called? A short human name, such as "Featured case studies".';
     }
 
-    $machineName = $label === '' ? '' : $this->machineName($label);
+    // A NAME ALREADY TAKEN GETS THE NEXT FREE ONE — taken_name_2, _3 — and the
+    // existing view is never touched. It used to be a refusal, which after a
+    // paid AI call wasted the call over a name the person never chose.
+    $machineName = $label === '' ? '' : $this->freeMachineName($this->machineName($label));
 
-    if ($machineName !== '' && $this->entityTypeManager->getStorage('view')->load($machineName) !== NULL) {
-      $questions[] = sprintf(
-        'A view called "%s" already exists. Choose a different name — this tool never overwrites an existing view.',
-        $machineName,
-      );
+    if ($label !== '' && $machineName === '') {
+      $questions[] = 'Every name like that is taken. Say a different name for the view.';
     }
 
     if ($questions !== []) {
@@ -275,6 +275,34 @@ final class ViewPlanner implements ViewPlannerInterface {
     }
 
     return sprintf('Available on %s: %s.', $bundle, implode(', ', array_slice($available, 0, 25)));
+  }
+
+  /**
+   * The machine name, or the first free one with a number after it.
+   *
+   * @param string $base
+   *   The machine name derived from the label.
+   *
+   * @return string
+   *   A machine name no view uses, or '' when 99 are taken.
+   */
+  private function freeMachineName(string $base): string {
+    $storage = $this->entityTypeManager->getStorage('view');
+
+    if ($storage->load($base) === NULL) {
+      return $base;
+    }
+
+    for ($n = 2; $n <= 99; $n++) {
+      $suffix = '_' . $n;
+      $candidate = substr($base, 0, 32 - strlen($suffix)) . $suffix;
+
+      if ($storage->load($candidate) === NULL) {
+        return $candidate;
+      }
+    }
+
+    return '';
   }
 
   /**

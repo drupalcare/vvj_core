@@ -8,6 +8,7 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\ai\Dto\StructuredOutputSchema;
 use Drupal\ai\OperationType\Chat\ChatInput;
 use Drupal\ai\OperationType\Chat\ChatMessage;
@@ -78,7 +79,7 @@ final class ViewDrafter implements ViewDrafterInterface {
       'label' => [
         'type' => 'string',
         'maxLength' => self::LABEL_MAX,
-        'description' => 'A short human name for the view, such as "Latest articles".',
+        'description' => 'The heading a visitor sees above the block, two to four words, such as "Latest news" or "Our team". Never a description of the view.',
       ],
       'sort' => [
         'type' => 'string',
@@ -104,7 +105,7 @@ final class ViewDrafter implements ViewDrafterInterface {
     $lines = [
       sprintf('You are choosing the parts of one Drupal view shown as "%s".', $known?->label ?? $format),
       $goodFor === '' ? '' : 'That format is good for: ' . $goodFor,
-      'Answer only with the properties in the schema. Name the view in a few words.',
+      'Answer only with the properties in the schema. The label is the heading a visitor reads, not a description: "Latest news", not "Six latest articles accordion". No counts, no format names.',
       $withFields ? 'Choose only the fields the person asked for, or the few that suit the format. Never invent a field.' : '',
       'Pick the sort the person asked for; newest when they did not say.',
     ];
@@ -115,7 +116,7 @@ final class ViewDrafter implements ViewDrafterInterface {
       name: 'vvj_view',
       description: 'The parts of one view.',
       strict: FALSE,
-      json_schema: ['type' => 'object', 'properties' => $properties],
+      json_schema: ['type' => 'object', 'properties' => $properties, 'required' => ['label']],
     ));
 
     try {
@@ -124,9 +125,7 @@ final class ViewDrafter implements ViewDrafterInterface {
       $decoded = json_decode(method_exists($answer, 'getText') ? (string) $answer->getText() : '', TRUE);
     }
     catch (\Throwable $error) {
-      // The provider's own message is relayed: "rate limited" and "model not
-      // found" need different actions from the person.
-      return DraftedView::refused([(string) $this->t('The AI provider could not answer: @error', ['@error' => $error->getMessage()])]);
+      return DraftedView::refused([(string) $this->providerFailure($error)]);
     }
 
     if (!is_array($decoded)) {
@@ -145,8 +144,12 @@ final class ViewDrafter implements ViewDrafterInterface {
       }
     }
 
+    // NO NAME IS NOT A REASON TO THROW AWAY A PAID ANSWER. Measured live
+    // 2026-09-27: Slideshow came back with fields and a sort but no label, and
+    // was refused. The format's own short name stands in; the person renames
+    // it in one click, and the planner keeps the machine name free.
     if ($label === '') {
-      return DraftedView::refused([(string) $this->t('The model did not name the view. Try again, or say what it should be called.')]);
+      $label = $this->shortName($known?->label ?? $format);
     }
 
     if ($withFields && $chosen === []) {
@@ -191,6 +194,49 @@ final class ViewDrafter implements ViewDrafterInterface {
     }
 
     return $out;
+  }
+
+  /**
+   * A format's label without the product prefix: "Slideshow".
+   *
+   * @param string $label
+   *   The format label, e.g. "Views Vanilla JavaScript Slideshow".
+   *
+   * @return string
+   *   The short name, or the label itself when there is no prefix.
+   */
+  private function shortName(string $label): string {
+    $short = trim((string) preg_replace('/^Views Vanilla JavaScript\\s+/i', '', $label));
+
+    return mb_substr($short === '' ? $label : $short, 0, self::LABEL_MAX);
+  }
+
+  /**
+   * What to tell the person when the provider did not answer.
+   *
+   * A timeout gets its own sentence. Measured 2026-09-28: a 3D carousel of
+   * seven items took longer than the site's 60-second limit twice, and the
+   * person saw raw cURL text with nothing saying where the limit lives.
+   *
+   * @param \Throwable $error
+   *   What the provider threw.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   One plain sentence.
+   */
+  private function providerFailure(\Throwable $error): TranslatableMarkup {
+    if (preg_match('/cURL error 28|timed out/i', $error->getMessage())) {
+      $set = $this->configFactory->get('ai.settings')->get('request_timeout');
+      $limit = is_numeric($set) && (int) $set > 0 ? (int) $set : 60;
+
+      return $this->t('The AI took longer than this site allows (@seconds seconds) and the answer was lost. Ask for fewer items, or raise "Request timeout" at Configuration › AI › Settings, under Advanced.', [
+        '@seconds' => $limit,
+      ]);
+    }
+
+    // The provider's own message is relayed rather than replaced: "model not
+    // found" and "rate limited" need different actions from the person.
+    return $this->t('The AI provider could not answer: @error', ['@error' => $error->getMessage()]);
   }
 
 }

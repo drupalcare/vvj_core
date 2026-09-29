@@ -182,9 +182,14 @@
      *   The ViewTransition if one was started, null otherwise.
      */
     withTransition(cb) {
+      // NOT WHILE THE PAGE IS HIDDEN. The browser rejects a view transition
+      // in a hidden document ("Transition was aborted because of invalid
+      // state. Document hidden"), and nothing catches that rejection. The
+      // state change still happens; there is simply nobody to animate it for.
       if (
         typeof document.startViewTransition === 'function' &&
-        !this.reducedMotion
+        !this.reducedMotion &&
+        !document.hidden
       ) {
         return document.startViewTransition(cb);
       }

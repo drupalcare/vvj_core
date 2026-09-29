@@ -163,6 +163,35 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
   }
 
   /**
+   * No view transition is started while the page is hidden.
+   *
+   * Measured 2026-09-28: in a hidden tab `withTransition()` started one and
+   * the browser rejected it — "Transition was aborted because of invalid
+   * state. Document hidden" — uncaught, every autoplay tick. The state change
+   * must still happen; only the animation is skipped. The page is made to
+   * report itself hidden, because the test browser is visible.
+   */
+  public function testNoTransitionWhileThePageIsHidden(): void {
+    $this->drupalGet('<front>');
+    $tag = $this->vvjCustomElementTag();
+    $this->assertJsCondition("document.querySelector('" . $tag . "') instanceof Drupal.Vvj.ElementBase");
+
+    $result = $this->getSession()->evaluateScript(
+      "(function () {"
+      . " Object.defineProperty(document, 'hidden', {configurable: true, get: () => true});"
+      . " let ran = false;"
+      . " const t = document.querySelector('" . $tag . "').withTransition(() => { ran = true; });"
+      . " delete document.hidden;"
+      . " return {started: t !== null, ran: ran};"
+      . "})()"
+    );
+
+    self::assertIsArray($result);
+    self::assertFalse($result['started'] ?? NULL, 'No view transition while hidden.');
+    self::assertTrue($result['ran'] ?? NULL, 'The state change still happens.');
+  }
+
+  /**
    * Adds `field_image` to `article` like default Drupal / optional view deps.
    */
   private function vvjEnsureArticleFieldImage(): void {

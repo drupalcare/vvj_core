@@ -114,6 +114,36 @@ final class ViewDrafterTest extends KernelTestBase {
   }
 
   /**
+   * No name from the model is not a refusal: the format's name stands in.
+   *
+   * Measured live 2026-09-27: a paid answer with fields and a sort but no
+   * label was thrown away.
+   */
+  public function testMissingLabelFallsBackToTheFormatName(): void {
+    $draft = $this->drafter(['fields' => ['title'], 'sort' => 'newest'])
+      ->draft('views_vvjtest', 'node', 'article', TRUE, 'The newest articles.');
+
+    self::assertTrue($draft->usable, implode(' | ', $draft->refusals));
+    self::assertNotSame('', $draft->label);
+    self::assertSame(['label'], $this->sent?->getChatStructuredJsonSchema()['schema']['required'] ?? NULL);
+  }
+
+  /**
+   * A timeout says what happened and where the limit is, not raw cURL text.
+   */
+  public function testTimeoutSaysWhereTheLimitIs(): void {
+    $this->config('ai.settings')->set('request_timeout', 45)->save();
+    $draft = $this->drafter(['throw' => 'cURL error 28: Operation timed out after 45001 milliseconds'])
+      ->draft('views_vvjtest', 'node', 'article', TRUE, 'The newest articles.');
+
+    self::assertFalse($draft->usable);
+    $said = implode(' ', $draft->refusals);
+    self::assertStringContainsString('took longer than this site allows (45 seconds)', $said);
+    self::assertStringContainsString('Request timeout', $said);
+    self::assertStringNotContainsString('cURL', $said);
+  }
+
+  /**
    * No field that exists means nothing to build, said plainly.
    */
   public function testNoRealFieldIsRefused(): void {
@@ -146,6 +176,12 @@ final class ViewDrafterTest extends KernelTestBase {
        */
       public function chat(ChatInput $input, string $model, array $tags): object {
         $this->test->record($input);
+
+        // A test can make the provider fail the way a real one does.
+        if (is_string($this->answer['throw'] ?? NULL)) {
+          throw new \RuntimeException($this->answer['throw']);
+        }
+
         $message = new ChatMessage('assistant', (string) json_encode($this->answer));
 
         return new class($message) {

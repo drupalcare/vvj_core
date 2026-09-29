@@ -141,18 +141,19 @@ final class ViewCreatorTest extends KernelTestBase {
   }
 
   /**
-   * An existing machine name is refused, never overwritten.
+   * A name already taken gets the next free one; the original is untouched.
    *
-   * Rule 2. Someone's view is their work.
+   * It used to be a refusal — after a paid AI call, over a name the person
+   * never chose. Rule 2 still holds: someone's view is never overwritten.
    */
-  public function testItRefusesRatherThanOverwriteAnExistingView(): void {
+  public function testTakenNameGetsTheNextFreeOne(): void {
     $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Taken name', ['title']));
     $before = $this->load('taken_name')->toArray();
 
     $second = $this->creator->create(new ViewRequest('node', 'article', 'vvjtest', 'Taken name', ['title']));
 
-    self::assertFalse($second['created']);
-    self::assertStringContainsString('already exists', implode(' ', $second['refusals']));
+    self::assertTrue($second['created'], implode(' | ', $second['refusals']));
+    self::assertSame('taken_name_2', $second['id'] ?? NULL);
     self::assertSame($before, $this->load('taken_name')->toArray(), 'The original must be untouched.');
   }
 
