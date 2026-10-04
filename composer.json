@@ -17,6 +17,10 @@
         "php": ">=8.3",
         "drupal/core": "^11.3 || ^12"
     },
+    "require-dev": {
+        "drupal/ai": "^1.2",
+        "drupal/key": "^1.18"
+    },
     "support": {
         "issues": "https://drupal.org/project/issues/vvj_core",
         "source": "https://git.drupalcode.org/project/vvj_core"
