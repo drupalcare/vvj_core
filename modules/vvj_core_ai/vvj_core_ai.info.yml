@@ -1,6 +1,6 @@
 name: 'VVJ Core AI'
 type: module
-description: 'Optional. Answers questions about the VVJ Views display formats — which one to use, what its settings do, and why a view is not rendering. It can create a new view, always disabled for you to check; it never edits an existing view and never writes a format setting.'
+description: 'Optional. Adds "Build a VVJ view with AI" to the Views admin page: choose a VVJ format and a content type, describe what to show, and it creates the view for you — always disabled, as a block, for you to check. It never edits an existing view and never writes a format setting.'
 package: VVJ
 
 # NOT `^11.3 || ^12`, and the difference is deliberate.

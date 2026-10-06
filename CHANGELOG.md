@@ -56,9 +56,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Lint backlog cleared: stylelint, eslint and cspell all pass. `@media
-  (prefers-contrast: high)` was corrected to `more` — `high` is not a value the
-  spec defines, so those accessibility rules had never applied in any current
-  browser.
+  (prefers-contrast: high)` was corrected to `more` in the `vvjb` and `vvjc`
+  stylesheets (not in vvj_core, which has no such rule) — `high` is not a value
+  the spec defines, so those accessibility rules had never applied in any
+  current browser.
 - `composer.json` now suggests `drupal/ai`, naming the sub-module that needs it.
 
 ---
