@@ -9,6 +9,8 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 use Drupal\views\Entity\View;
 
 /**
@@ -91,7 +93,7 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
       }
     }
 
-    user_role_grant_permissions('anonymous', ['access content']);
+    Role::load(RoleInterface::ANONYMOUS_ID)->grantPermissions(['access content'])->save();
     $this->vvjAddBlockDisplayToView($this->vvjExampleViewId());
     $this->drupalPlaceBlock('views_block:' . $this->vvjExampleViewId() . '-block_1', [
       'region' => 'content',

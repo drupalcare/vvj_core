@@ -37,6 +37,7 @@ trait VvjArticleImageExampleKernelTrait {
       'filter',
       'image',
       'node',
+      'system',
       'text',
     ]);
 
