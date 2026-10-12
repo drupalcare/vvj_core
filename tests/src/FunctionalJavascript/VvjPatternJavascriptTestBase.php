@@ -93,7 +93,9 @@ abstract class VvjPatternJavascriptTestBase extends WebDriverTestBase {
       }
     }
 
-    Role::load(RoleInterface::ANONYMOUS_ID)->grantPermissions(['access content'])->save();
+    $anonymous = Role::load(RoleInterface::ANONYMOUS_ID);
+    $this->assertNotNull($anonymous);
+    $anonymous->grantPermission('access content')->save();
     $this->vvjAddBlockDisplayToView($this->vvjExampleViewId());
     $this->drupalPlaceBlock('views_block:' . $this->vvjExampleViewId() . '-block_1', [
       'region' => 'content',

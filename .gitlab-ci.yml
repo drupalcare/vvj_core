@@ -58,3 +58,13 @@ variables:
   _AUTORUN_PREVIOUS_MINOR: 'all'
   OPT_IN_TEST_NEXT_MAJOR: '1'
   _AUTORUN_NEXT_MAJOR: 'all'
+
+# drupal/ai ^1.2 is a dev dependency for the optional vvj_core_ai sub-module and
+# declares `^10.4 || ^11`, so Composer cannot resolve it against core main-dev
+# (job 12810793: "Root composer.json requires drupal/ai ^1.2 ... Problem 1").
+# The lenient plugin ignores its core constraint in THIS job only, as documented
+# at https://project.pages.drupalcode.org/gitlab_templates/jobs/composer/
+# ("Lenient support"). Same pattern as selectify (webform).
+composer (next major):
+  variables:
+    _LENIENT_ALLOW_LIST: 'ai'
