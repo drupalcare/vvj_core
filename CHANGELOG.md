@@ -8,13 +8,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [2.0.1] — UNRELEASED
+## [2.0.1] (UNRELEASED)
 
 ### Added
 
-- **`vvj_core_ai`** — optional AI sub-module: **Build a VVJ view with AI** on the
+- **`vvj_core_ai`**: optional AI sub-module: **Build a VVJ view with AI** on the
   Views admin page. Choose a format, a content type, fields or a view mode (only
-  where the format keeps one — asked of the format, not a list) and how many;
+  where the format keeps one, asked of the format, not a list) and how many;
   describe it; the model names the view and picks its fields and sort from this
   site's own fields. The view is created **disabled**, as a **block** (a page on
   request), with no pager, its features switched on and named, and it goes
@@ -42,7 +42,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   pattern ships its example view as *optional* config, which installs only once
   its dependencies exist; the view depends on `node.type.article`, which nothing
   supplies at module-install time. The base class created the type afterwards —
-  too late — so the view was never there. It now re-runs
+  too late, so the view was never there. It now re-runs
   `installOptionalConfig()` once the type exists.
 - **`statusCodeEquals()` in JavaScript tests.** A WebDriver test drives a real
   browser through Selenium, which cannot report an HTTP status code, so the
@@ -57,17 +57,17 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Lint backlog cleared: stylelint, eslint and cspell all pass. `@media
   (prefers-contrast: high)` was corrected to `more` in the `vvjb` and `vvjc`
-  stylesheets (not in vvj_core, which has no such rule) — `high` is not a value
+  stylesheets (not in vvj_core, which has no such rule): `high` is not a value
   the spec defines, so those accessibility rules had never applied in any
   current browser.
 - `composer.json` now suggests `drupal/ai`, naming the sub-module that needs it.
 
 ---
 
-## [2.0.0] — 2026-08-30
+## [2.0.0] (2026-08-30)
 
 **Initial release.** VVJ Core is the foundation module for the VVJ Views
-renderer family — required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
+renderer family: required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
 `drupal/vvjf`, `drupal/vvjh`, `drupal/vvjl`, `drupal/vvjp`, `drupal/vvjr`,
 `drupal/vvjs`, `drupal/vvjt`.
 
@@ -78,25 +78,25 @@ renderer family — required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
   `buildDeepLinkingSection`, `buildBreakpointSelect`, `buildAnimationSelect`,
   `buildTokenDocumentation`, `buildWarningMessage`, `setDefaultElementWeights`),
   unique-id generation, library list construction, validate(), render(), and a
-  `requiresFieldsRow()` hook (default TRUE — patterns that can render arbitrary
+  `requiresFieldsRow()` hook (default TRUE; patterns that can render arbitrary
   row plugins, like vvjs's regular slideshow, override it to relax the
-  Fields-row requirement/enforcement) — pattern modules subclass and only
+  Fields-row requirement/enforcement). Pattern modules subclass and only
   implement pattern-specific concerns.
 - **Shared services**:
-  - `vvj_core.svg_sanitizer` — allowlist-driven SVG sanitizer (defense in depth)
-  - `vvj_core.token_resolver` — `[vvjX:field]` and `[vvjX:field:plain]` token
+  - `vvj_core.svg_sanitizer`: allowlist-driven SVG sanitizer (defense in depth)
+  - `vvj_core.token_resolver`: `[vvjX:field]` and `[vvjX:field:plain]` token
     replacement
-  - `vvj_core.breakpoint_registry` — canonical responsive-breakpoint values +
+  - `vvj_core.breakpoint_registry`: canonical responsive-breakpoint values +
     labels
-  - `vvj_core.unique_id_generator` — random_int-based stable IDs
+  - `vvj_core.unique_id_generator`: random_int-based stable IDs
 - **Constants enums**: `Breakpoints`, `Easing`, `AnimationDirection`,
-  `ValidationBounds` — typed PHP 8.3 constants shared across all VVJ modules.
+  `ValidationBounds`: typed PHP 8.3 constants shared across all VVJ modules.
 - **OOP `#[Hook]` classes** under `src/Hook/`:
-  - `VvjCoreHelpHook` — README rendering on `help.page.vvj_core`
-  - `VvjCoreThemeHook` — placeholder for future shared theme hooks
-  - `VvjCorePreprocessHook` — base preprocess primitives consumable by pattern
+  - `VvjCoreHelpHook`: README rendering on `help.page.vvj_core`
+  - `VvjCoreThemeHook`: placeholder for future shared theme hooks
+  - `VvjCorePreprocessHook`: base preprocess primitives consumable by pattern
     modules
-- **`safe_html` Twig filter** via `VvjCoreTwigExtension` — replaces the
+- **`safe_html` Twig filter** via `VvjCoreTwigExtension`, replaces the
   per-module duplicates that previous v1 VVJ modules each shipped.
 - **`drush vvj:upgrade`** post-upgrade audit command (backed by the
   Drush-independent, unit-tested `vvj_core.upgrade_auditor` service): scans
@@ -113,18 +113,18 @@ renderer family — required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
     fallback
   - `emit()` helper for `vvj:*` CustomEvent dispatch on `document`
 - **JS helper modules**:
-  - `vvj-deeplink-bridge.js` — URL-hash sync + `history.replaceState` for any
+  - `vvj-deeplink-bridge.js`: URL-hash sync + `history.replaceState` for any
     pattern that supports deep-linking
-  - `vvj-keyboard-nav.js` — Up/Down/Home/End primitives shared by accordion /
+  - `vvj-keyboard-nav.js`: Up/Down/Home/End primitives shared by accordion /
     tabs / carousels
-  - `vvj-focus-trap.js` — modal focus trap for lightbox-style patterns
-  - `vvj-token-bridge.js` — Drupal.behaviors → custom-element handoff
+  - `vvj-focus-trap.js`: modal focus trap for lightbox-style patterns
+  - `vvj-token-bridge.js`: Drupal.behaviors → custom-element handoff
 - **CSS architecture**:
-  - `vvj-tokens.css` — APEX `--apex-*` and `--r-*` token bridge with
+  - `vvj-tokens.css`: APEX `--apex-*` and `--r-*` token bridge with
     system-color-keyword fallbacks for non-APEX sites
-  - `vvj-base.css` — cascade-layer ladder (`vvj.foundation, .tokens, .base,
+  - `vvj-base.css`: cascade-layer ladder (`vvj.foundation, .tokens, .base,
     .pattern, .theme`), container-query setup, reduced-motion baseline
-  - `vvj-a11y.css` — AAA-level focus indicators, forced-colors fallbacks
+  - `vvj-a11y.css`: AAA-level focus indicators, forced-colors fallbacks
 
 ### Drupal core / PHP
 
@@ -133,5 +133,5 @@ renderer family — required by `drupal/vvja`, `drupal/vvjb`, `drupal/vvjc`,
 
 ### Planned for a later 2.0.x release
 
-- `drush vvj:upgrade [--dry-run]` — audit helper for future option-key
+- `drush vvj:upgrade [--dry-run]`: audit helper for future option-key
   migrations (not in 2.0.0-alpha1).

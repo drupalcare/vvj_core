@@ -1,6 +1,6 @@
 # VVJ Core
 
-Foundation module for the **VVJ Views renderer family** — required by every
+Foundation module for the **VVJ Views renderer family**: required by every
 `drupal/vvj*` pattern module v2.x.
 
 | Module | Views format |
@@ -16,7 +16,7 @@ Foundation module for the **VVJ Views renderer family** — required by every
 | [VVJS](https://www.drupal.org/project/vvjs) | Slideshow |
 | [VVJT](https://www.drupal.org/project/vvjt) | Tabs |
 
-VVJ Core is **not useful on its own** — it provides the abstract base class,
+VVJ Core is **not useful on its own**. It provides the abstract base class,
 shared services, JS Custom Element base, and CSS contract that every VVJ pattern
 module consumes. Composer auto-installs it when you add any VVJ pattern module.
 
@@ -26,7 +26,7 @@ module consumes. Composer auto-installs it when you add any VVJ pattern module.
 
 ### Composer (recommended)
 
-Install any pattern module — `vvj_core` is pulled automatically:
+Install any pattern module. `vvj_core` is pulled automatically:
 
 ```bash
 composer require drupal/vvja:^2.0
@@ -46,14 +46,14 @@ drush cr
 
 1. Download and extract **`vvj_core`** to `modules/contrib/vvj_core`
 2. Download pattern module(s) to `modules/contrib/`
-3. Enable at `/admin/modules` — pattern modules require VVJ Core
+3. Enable at `/admin/modules`. Pattern modules require VVJ Core
 
 **Do not** enable a VVJ pattern v2.x module without `vvj_core` on disk.
 
 ### How the JavaScript is shared
 
 Pattern element JavaScript reaches `vvj_core`'s shared code through the
-**`Drupal.Vvj` namespace** — Drupal core's own cross-file sharing pattern
+**`Drupal.Vvj` namespace**: Drupal core's own cross-file sharing pattern
 (cf. `Drupal.Ajax`, `Drupal.Message`), **not** native ES module
 `import`/`export`. `vvj_core` attaches the base class and helpers to
 `Drupal.Vvj.*`; each pattern's `*.libraries.yml` lists the relevant
@@ -76,7 +76,7 @@ the source resolves a URL. It matches how Drupal core itself shares JS and is
 the pattern that has survived every Drupal version.
 
 > Why not native ES modules? Drupal has no first-class cross-module ES
-> `import` resolution yet — the core import-map API (issue
+> `import` resolution yet. The core import-map API (issue
 > [#3398525](https://www.drupal.org/project/drupal/issues/3398525)) is
 > unmerged, and core ships zero `type: module` / `import` in hand-authored JS.
 > Web Components (`customElements.define`, `class extends`) are still used —
@@ -97,25 +97,25 @@ drush cr
 
 - Composer installs `drupal/vvj_core`
 - Update hooks (`vvja_update_10001`, etc.) enable `vvj_core` automatically
-- **No view config migration** for v2.0 — existing Views keep working
+- **No view config migration** for v2.0: existing Views keep working
 
 Upgrade **all** installed VVJ modules to 2.x together. Mixed 1.x + 2.x on one
 site is not supported.
 
-**Stay on 1.x** if you are on Drupal 10, 11.0–11.2, or PHP 8.1/8.2 — v2
+**Stay on 1.x** if you are on Drupal 10, 11.0–11.2, or PHP 8.1/8.2: v2
 requires Drupal 11.3+ and PHP 8.3+.
 
 ### Manual / tarball upgrade (no Composer)
 
 Composer users get `vvj_core` automatically. If you install from drupal.org
-tarballs, **you must download `vvj_core` yourself** — the pattern modules
+tarballs, **you must download `vvj_core` yourself**. The pattern modules
 require it and will not enable without it.
 
 1. Download the new pattern tarball(s) **and** the `vvj_core` tarball.
 2. Extract `vvj_core` to `modules/contrib/vvj_core` (keep it under the same
-   parent as the pattern modules — see "How the JavaScript is shared" above).
+   parent as the pattern modules, see "How the JavaScript is shared" above).
 3. Overwrite each pattern module with its 2.x files.
-4. `drush updb -y` — the `*_update_10001()` hooks enable `vvj_core`.
+4. `drush updb -y`: the `*_update_10001()` hooks enable `vvj_core`.
 5. `drush cr`.
 
 If you cannot run `drush updb`, enable `vvj_core` manually first
@@ -138,7 +138,7 @@ code is on disk but `vvj_core` is not yet enabled:
 You therefore never have to enable `vvj_core` by hand on a Composer upgrade —
 but doing so early (before `updb`) is harmless.
 
-### `drush vvj:upgrade` — migration audit
+### `drush vvj:upgrade`: migration audit
 
 `vvj_core` ships a Drush command that scans every View using a VVJ style
 plugin and reports option-key drift between the installed configuration and
@@ -162,14 +162,14 @@ command is a thin wrapper.
 
 After `drush cr`, confirm:
 
-1. `drush pm:list --status=enabled | grep vvj` — `vvj_core` **and** every
+1. `drush pm:list --status=enabled | grep vvj`: `vvj_core` **and** every
    pattern module are enabled.
-2. `drush vvj:upgrade --dry-run` — reports *"No migration needed"*.
+2. `drush vvj:upgrade --dry-run`: reports *"No migration needed"*.
 3. Each existing VVJ view still renders on the front end (the wrapper element
    is now `<vvja-accordion>` etc.; every v1 CSS class is unchanged).
 4. Interactions work in the browser (open/close, next/prev, play/pause…).
 5. Turn **JS aggregation** on (`/admin/config/development/performance`) and
-   re-check — shared code loads via the `Drupal.Vvj` namespace + library
+   re-check. Shared code loads via the `Drupal.Vvj` namespace + library
    dependency order, so aggregation is safe.
 
 ---
@@ -178,7 +178,7 @@ After `drush cr`, confirm:
 
 | Symptom | Fix |
 |---------|-----|
-| `Class "Drupal\vvja\Twig\VVJATwigExtension" not found` | Stale cache after v2 code deploy — `drush cr`; if Drush won't bootstrap, clear `cache_container` in the database, then retry |
+| `Class "Drupal\vvja\Twig\VVJATwigExtension" not found` | Stale cache after v2 code deploy: `drush cr`; if Drush won't bootstrap, clear `cache_container` in the database, then retry |
 | Pattern enabled but format missing | Install and enable `vvj_core` |
 | JS error loading `vvj-element-base.js` | Confirm `vvj_core` exists at `modules/contrib/vvj_core` |
 | Composer did not install vvj_core | Pattern `composer.json` must require `drupal/vvj_core:^2.0` |
@@ -193,7 +193,7 @@ After `drush cr`, confirm:
 
 | Class / service | Purpose |
 |---|---|
-| `Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase` | Abstract Views Style plugin base. Pattern modules subclass and implement four small hooks (`getModuleSlug()`, `getCustomElementTag()`, `definePatternOptions()`, `buildPatternSections()`) — everything else (form weights, warning, advanced/deeplinking/token-doc sections, library list, render(), validate()) is inherited. |
+| `Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase` | Abstract Views Style plugin base. Pattern modules subclass and implement four small hooks (`getModuleSlug()`, `getCustomElementTag()`, `definePatternOptions()`, `buildPatternSections()`). Everything else (form weights, warning, advanced/deeplinking/token-doc sections, library list, render(), validate()) is inherited. |
 | `vvj_core.svg_sanitizer` | Allowlist-driven SVG sanitizer for admin-pasted icons. |
 | `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` token resolution. Pattern modules call `$this->tokenResolver->resolve($namespace, $tokens, $data, $bubbleable, $expectedClass)` from their `hook_tokens()` implementation. |
 | `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable labels. |
@@ -209,7 +209,7 @@ After `drush cr`, confirm:
 | `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint values and labels for every VVJ pattern. |
 | `Drupal\vvj_core\Constants\Easing` | CSS easing keywords. |
 | `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets. |
-| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds shared across pattern modules — transition speed, slide timing and the rest. |
+| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds shared across pattern modules: transition speed, slide timing and the rest. |
 
 ### JS
 
@@ -248,7 +248,7 @@ module’s `README.md` for specifics):
 
 ## How a pattern module consumes VVJ Core
 
-Sketch — `modules/v2/vvja/src/Plugin/views/style/Accordion.php`:
+Sketch: `modules/v2/vvja/src/Plugin/views/style/Accordion.php`:
 
 ```php
 namespace Drupal\vvja\Plugin\views\style;
@@ -287,7 +287,7 @@ class Accordion extends VvjStylePluginBase {
 
 That's typically ~250 LOC vs the ~760 LOC the v1 plugin needed.
 
-Sketch — `modules/v2/vvja/js/vvja-accordion-element.js`:
+Sketch: `modules/v2/vvja/js/vvja-accordion-element.js`:
 
 ```javascript
 // The vvja library declares:
@@ -342,7 +342,7 @@ Sketch — `modules/v2/vvja/js/vvja-accordion-element.js`:
 
 ## Drop-in upgrade contract
 
-Every VVJ v2 module — including this foundation module — preserves the v1
+Every VVJ v2 module, including this foundation module, preserves the v1
 contract surfaces:
 
 - Plugin IDs: `views_vvja`, `views_vvjb`, etc.
@@ -388,10 +388,10 @@ export SIMPLETEST_DB="mysql://user:pass@localhost/dbname"
 ../vendor/bin/phpunit -c core modules/contrib/vvj_core/tests/src/Kernel
 ```
 
-The **Functional** and **FunctionalJavascript** suites additionally need
+The **Functional** and **FunctionalJavascript** suites also need
 `SIMPLETEST_BASE_URL` pointing at a running web server, and the JavaScript ones
 need chromedriver. Without those they error rather than fail, and the errors
-name missing infrastructure rather than anything about this module — so don't
+name missing infrastructure rather than anything about this module, so don't
 read them as test failures. The drupal.org pipeline provides both.
 
 ## License

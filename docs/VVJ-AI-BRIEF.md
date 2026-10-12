@@ -1,4 +1,4 @@
-# VVJ — brief for `vvj_core_ai`
+# VVJ: brief for `vvj_core_ai`
 
 Written 2026-09-04, before any code, because nobody starts work unbriefed.
 This document and the agent description below are the two things that must
@@ -26,7 +26,7 @@ views. The two must be consistent.
 
 | | The AI should |
 |---|---|
-| Theme and module **settings** | help configure, and explain — as `apex_ai_bridge` does |
+| Theme and module **settings** | help configure, and explain, as `apex_ai_bridge` does |
 | **Content and views** | **create them** |
 
 `vvj_core_ai` is an optional sub-module. With it, a person building a view can
@@ -42,7 +42,7 @@ fields, or the format. If any of those is missing or ambiguous it asks, and it
 asks for everything it is missing at once rather than one question per turn.
 
 **It never overwrites a person's work.** A new view is created **disabled**, so
-nothing appears on the site until the person looks at it and enables it — the
+nothing appears on the site until the person looks at it and enables it. The
 same safety shape as `create_sections` leaving a new page unpublished. It never
 modifies an existing view's settings; that is the "user sets those" rule, and
 it still holds.
@@ -52,7 +52,7 @@ it still holds.
 **Build** an optional submodule, `vvj_core/modules/vvj_core_ai/`.
 
 **Why in `vvj_core` and not in each format.** `vvj_core` is already a hard
-dependency of all ten format modules — none of them functions without it — so
+dependency of all ten format modules. None of them functions without it, so
 one AI submodule there serves whichever formats a site has installed. Ten
 copies would be ten copies of one fact, which is the bug the owner's "one
 source of truth" prior names, and each copy would need to know about the other
@@ -67,11 +67,11 @@ dependencies, and every tool reports on whichever formats are actually present.
 
 | | Tool | Writes? |
 |---|---|---|
-| V1 | `recommend_format` — which VVJ formats this site has, and what each does | never |
-| V2 | `explain_settings` — a format's real settings and the values they accept | never |
-| V3 | `diagnose_view` — why an existing view is not showing what was expected | never |
-| V4 | `resolve_view` — negotiate content, fields and format; return every unmet precondition at once | never |
-| V5 | `create_view` — create the view, re-checking every precondition itself | **yes** |
+| V1 | `recommend_format`: which VVJ formats this site has, and what each does | never |
+| V2 | `explain_settings`: a format's real settings and the values they accept | never |
+| V3 | `diagnose_view`: why an existing view is not showing what was expected | never |
+| V4 | `resolve_view`: negotiate content, fields and format; return every unmet precondition at once | never |
+| V5 | `create_view`: create the view, re-checking every precondition itself | **yes** |
 
 **Exactly one tool writes, and only by creating.** `create_view` creates a new
 view. Nothing in this module edits an existing view, and nothing changes a
@@ -82,7 +82,7 @@ brief. Nothing else.
 
 **Must NOT touch:**
 
-- Any other file in `vvj_core`, and none of the ten format modules — not their
+- Any other file in `vvj_core`, and none of the ten format modules, not their
   plugins, `phpstan.neon`, `phpcs.xml.dist` or `.gitlab-ci.yml`.
 - `paragraphs_bundles` or `utilikit`. They are separate drupal.org projects and
   **must keep working with no knowledge of this module and no shared code.**
@@ -90,7 +90,7 @@ brief. Nothing else.
   read, never a dependency to import.
 - `sites/default`, the other sites in the `demo` multisite, or any vhost.
 
-**Test site: `sts.local`.** Resolved — see §7.
+**Test site: `sts.local`.** Resolved. See §7.
 
 **Never push to drupal.org.** Commits are for the owner to review; pushing is
 theirs alone.
@@ -100,7 +100,7 @@ theirs alone.
 ## 2 · Evidence standard
 
 **Measure with the project's own config, never an ad-hoc one.** Twice in the
-session that produced the PB brief, an ad-hoc analyser config produced
+session that produced the PB brief, an ad-hoc analyzer config produced
 confident nonsense: 32 phantom Drupal 12 failures (the real number was 1) and
 1200 phantom PHPCS errors (the real number was 0). Run each project's
 `phpstan.neon` and `phpcs.xml.dist` as they ship.
@@ -109,18 +109,18 @@ confident nonsense: 32 phantom Drupal 12 failures (the real number was 1) and
 hardcoded table of 143 settings is a second copy of a fact the plugins already
 own, and it will drift the first time a format gains an option.
 
-**The API to use, measured on sts.local 2026-09-04 — and the obvious choice was
+**The API to use, measured on sts.local 2026-09-04, and the obvious choice was
 wrong:**
 
 | | |
 |---|---|
-| `defineOptions()` | **protected** — cannot be called from outside |
-| `->options` | public, but **empty** until a view initialises the plugin |
-| `buildOptionsForm()` | **public** — this is the route |
+| `defineOptions()` | **protected**: cannot be called from outside |
+| `->options` | public, but **empty** until a view initializes the plugin |
+| `buildOptionsForm()` | **public**: this is the route |
 
 `buildOptionsForm()` is also the better source. `defineOptions()` yields machine
 names and defaults; the form yields the human **label**, the **description**,
-the field **type** and the **valid values** for each setting — which is what a
+the field **type** and the **valid values** for each setting, which is what a
 person asking "what does `deeplink_identifier` do?" actually needs. It requires
 a throwaway in-memory view to call.
 
@@ -146,7 +146,7 @@ A working submodule with kernel tests, not a proposal. Done means:
 
 - Three `FunctionCall` plugins, each with a service behind it that can be
   tested without the AI stack present.
-- Kernel tests asserting **the sentences**, not just booleans — the wording is
+- Kernel tests asserting **the sentences**, not just booleans. The wording is
   what a person reads, and a test that only checks a boolean lets the wording
   rot silently.
 - A `README.md` that tells a site builder how to turn it on, including the
@@ -155,7 +155,7 @@ A working submodule with kernel tests, not a proposal. Done means:
 
 ---
 
-## 4 · Refusal conditions — stop and ask, do not guess
+## 4 · Refusal conditions: stop and ask, do not guess
 
 - The test-site question in §7 is unresolved.
 - A tool would need to write anything to answer well. Report the limitation;
@@ -164,7 +164,7 @@ A working submodule with kernel tests, not a proposal. Done means:
   hardcoding them.
 - The work would require editing a format module, `vvj_core` itself, or
   another project.
-- Anything about `utilikit` — a different brief, not yet written.
+- Anything about `utilikit`. A different brief, not yet written.
 
 **Refusal is success, not failure.** An agent that stops here and asks has done
 its job correctly.
@@ -177,15 +177,15 @@ its job correctly.
 returns EVERY unmet one at once, so the bot asks a single combined question
 instead of interrogating turn by turn:
 
-1. What content — an entity type and bundle that exist on this site.
-2. Which VVJ format — installed here, named as absent if it is not.
-3. Which fields to show — they must exist on that bundle.
+1. What content: an entity type and bundle that exist on this site.
+2. Which VVJ format: installed here, named as absent if it is not.
+3. Which fields to show: they must exist on that bundle.
 4. A name for the view, and a machine name that is not already taken.
 5. The user may administer views.
 
 `create_view` **re-checks all five itself.** It must never trust that
 `resolve_view` was called, because the model may skip it. That redundancy is
-the safety model, not belt-and-braces — the same rule, for the same reason, as
+the safety model, not belt-and-braces: the same rule, for the same reason, as
 `create_sections` in `paragraphs_bundles_ai`.
 
 **A created view is DISABLED.** Not a preference: a view that appears on a live
@@ -199,13 +199,13 @@ builder's, and that is the owner's rule.
 **Rules the tools enforce, not the prompt.** A system prompt saying "ask which
 fields" fails intermittently; a tool that cannot proceed, and whose refusal
 names what is missing, forces the conversation. It is also what makes the
-behaviour testable — you cannot unit-test "the bot felt careful".
+behavior testable. You cannot unit-test "the bot felt careful".
 
 **Answer from the installed site, never from general knowledge.** "VVJS is the
 slideshow" is a fact about the project; "VVJS is installed here" is a fact about
 this site, and only the second is safe to act on.
 
-## 6 · How this will be verified — and it will be
+## 6 · How this will be verified: and it will be
 
 1. **Kernel tests**, asserting the exact sentence each refusal produces.
 2. **A read-only probe**: the whole module's services instantiated and every
@@ -224,7 +224,7 @@ Nothing is "done" on the strength of reasoning about the code.
 
 ---
 
-## 7 · The test site — resolved
+## 7 · The test site: resolved
 
 **Answered 2026-09-04.** This section recorded a blocker: `sts.local` carried
 composer copies of the VVJ modules dated 9 July and 1 August, behind the
@@ -253,14 +253,14 @@ was lost and nothing needed pushing.
 family and to `paragraphs_bundles_ai` as the reference implementation, and
 shell access to whichever site §7 resolves to.
 
-**The priors it is given, in full, every time** — these are not to be inferred
+**The priors it is given, in full, every time**. These are not to be inferred
 from the code:
 
 - **Better safe than sorry.** Aggressive on architecture, conservative on
   process. Verify before commit. Validate at trust boundaries. When uncertain,
   hold and ask rather than guess.
 - **One source of truth.** Every fact has exactly one owner and everything else
-  derives from it. Two copies of a fact IS the bug — which is why the settings
+  derives from it. Two copies of a fact IS the bug, which is why the settings
   are read from the plugins and why this module lives in `vvj_core` rather than
   ten times over.
 - **Build once and done.** No shortcuts, no "we will fix it in v2".
@@ -269,7 +269,7 @@ from the code:
   turns a design into a regression.
 - **Measure, do not assume.** Report what was measured and how. Say plainly
   when a number is a guess. A red result from your own tooling is as likely to
-  be a bad measurement as a bad module — check the tool before blaming the work.
+  be a bad measurement as a bad module. Check the tool before blaming the work.
 - **No leftovers.** A rule without a harness, a decision that lives only in a
   conversation, a pattern discussed but not written down: each one costs the
   next session the same work again.
