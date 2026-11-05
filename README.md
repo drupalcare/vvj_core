@@ -3,6 +3,22 @@
 Foundation module for the **VVJ Views renderer family**: required by every
 `drupal/vvj*` pattern module v2.x.
 
+## Table of contents
+
+- Overview
+- Requirements
+- Installation
+- Configuration
+- Usage
+- Patterns
+- Upgrading from VVJ 1.x
+- Troubleshooting
+- Changelog
+- Maintainers
+- License
+
+## Overview
+
 | Module | Views format |
 |--------|----------------|
 | [VVJA](https://www.drupal.org/project/vvja) | Accordion |
@@ -20,7 +36,12 @@ VVJ Core is **not useful on its own**. It provides the abstract base class,
 shared services, JS Custom Element base, and CSS contract that every VVJ pattern
 module consumes. Composer auto-installs it when you add any VVJ pattern module.
 
----
+## Requirements
+
+- Drupal core `^11.3 || ^12`.
+- PHP 8.3 or later.
+- Drupal core modules Views and Filter.
+- The optional `vvj_core_ai` sub-module also needs `drupal/ai` and supports Drupal `^11.3` only.
 
 ## Installation
 
@@ -82,7 +103,223 @@ the pattern that has survived every Drupal version.
 > Web Components (`customElements.define`, `class extends`) are still used —
 > they're authored in the `Drupal.Vvj` namespace instead of via ESM `import`.
 
----
+## Configuration
+
+VVJ Core has no settings page of its own. Each format's settings live in the Views UI format settings of the view. Pattern choices are made there (see Patterns).
+
+## Usage
+
+### What VVJ Core provides
+
+#### PHP
+
+| Class / service | Purpose |
+|---|---|
+| `Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase` | Abstract Views Style plugin base. Pattern modules subclass and implement four small hooks (`getModuleSlug()`, `getCustomElementTag()`, `definePatternOptions()`, `buildPatternSections()`). Everything else (form weights, warning, advanced/deeplinking/token-doc sections, library list, render(), validate()) is inherited. |
+| `vvj_core.svg_sanitizer` | Allowlist-driven SVG sanitizer for admin-pasted icons. |
+| `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` token resolution. Pattern modules call `$this->tokenResolver->resolve($namespace, $tokens, $data, $bubbleable, $expectedClass)` from their `hook_tokens()` implementation. |
+| `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable labels. |
+| `vvj_core.unique_id_generator` | `random_int`-based 8-digit unique IDs. |
+| `vvj_core.twig_extension` | Registers the `safe_html` Twig filter . |
+| `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`: adds `.vvj-component` and `.vvj-{slug}` on the view wrapper for every display using `VvjStylePluginBase`, so global CSS/a11y in `vvj-a11y.css` applies to all patterns. |
+| `Drupal\vvj_core\Hook\VvjCoreHelpHook` | `hook_help` implementation |
+
+#### Constants enums (typed PHP 8.3 const classes)
+
+| Class | Purpose |
+|---|---|
+| `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint values and labels for every VVJ pattern. |
+| `Drupal\vvj_core\Constants\Easing` | CSS easing keywords. |
+| `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets. |
+| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds shared across pattern modules: transition speed, slide timing and the rest. |
+
+#### JS
+
+| Module | Purpose |
+|---|---|
+| `js/vvj-element-base.js` | `VvjElementBase extends HTMLElement` |
+| `js/vvj-keyboard-nav.js` | `handleArrowKeyNav` |
+| `js/vvj-focus-trap.js` | `trapFocus` |
+| `js/vvj-deeplink-bridge.js` | `wireDeeplink` + `writeDeeplinkHash` |
+| `js/vvj-token-bridge.js` | `registerVvjBehavior` |
+
+#### CSS
+
+| File | Purpose |
+|---|---|
+| `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge. Aliases them as `--vvj-*` with system-color-keyword fallbacks for non-APEX sites. |
+| `css/vvj-base.css` | Cascade-layer ladder (`vvj.foundation, .tokens, .base, .pattern, .theme`), container-query setup, reduced-motion baseline, FOUC-prevention for unupgraded custom elements. |
+| `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidden utility, with forced-colors-mode fallbacks. |
+
+### What each format module adds
+
+Every `drupal/vvj*` package layers these on top of the foundation (see each module's `README.md`):
+
+| Surface | Typical contents |
+|--------|------------------|
+| `src/Hook/*ThemeHook.php` | `hook_theme` |
+| `src/Hook/*PreprocessHooks.php` | Style preprocess + row/field preprocess via core `ViewsThemeHooks` (Drupal 12-safe). |
+| `src/Hook/*TokenHooks.php` | `hook_token_info` / `hook_tokens` |
+| `src/Hook/*HelpHook.php` | `hook_help` |
+| `config/optional/views.view.*_example.yml` | Optional starter View . |
+
+### How a format module consumes VVJ Core
+
+Sketch of `vvja/src/Plugin/views/style/Accordion.php` (abridged):
+
+```php
+namespace Drupal\vvja\Plugin\views\style;
+
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\views\Attribute\ViewsStyle;
+use Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase;
+
+#[ViewsStyle(
+  id: 'views_vvja',
+  title: new TranslatableMarkup('Views Vanilla JavaScript Accordion'),
+  help: new TranslatableMarkup('Render items in an Accordion using vanilla JavaScript.'),
+  theme: 'views_view_vvja',
+  display_types: ['normal'],
+)]
+class Accordion extends VvjStylePluginBase {
+
+  public function getModuleSlug(): string { return 'vvja'; }
+  public function getCustomElementTag(): string { return 'vvja-accordion'; }
+
+  protected function definePatternOptions(array $options): array {
+    $options['single_toggle'] = ['default' => TRUE];
+    $options['global_toggle'] = ['default' => TRUE];
+    // ... rest of pattern-specific options
+    return $options;
+  }
+
+  protected function buildPatternSections(array &$form): void {
+    // Pattern-specific sections (Behavior, Animation, Layout, Custom Icons).
+    $form['behavior_section'] = [...];
+    // VvjStylePluginBase adds: warning message, advanced (enable_css),
+    // deep linking, token documentation — automatically.
+  }
+
+}
+```
+
+That's typically ~250 LOC vs the ~760 LOC the v1 plugin needed.
+
+Sketch of `vvja/js/vvja-accordion-element.js` (abridged):
+
+```javascript
+// The vvja library declares:
+//   dependencies: [vvj_core/element-base, vvj_core/keyboard-nav,
+//                  vvj_core/deeplink-bridge]
+// so Drupal.Vvj.* is populated before this file runs.
+((Drupal) => {
+  'use strict';
+
+  const {
+    ElementBase, handleArrowKeyNav, wireDeeplink, writeDeeplinkHash,
+  } = Drupal.Vvj;
+
+  class VvjaAccordionElement extends ElementBase {
+    static get patternSlug() { return 'vvja'; }
+
+    onHydrate() {
+      const triggers = this.querySelectorAll('.vvja-button');
+      triggers.forEach((t, i) => {
+        t.addEventListener(
+          'click', () => this._togglePanel(t), { signal: this.signal }
+        );
+        t.addEventListener(
+          'keydown', (e) => handleArrowKeyNav(e, triggers, i),
+          { signal: this.signal }
+        );
+      });
+
+      if (this.dataset.deeplinkId) {
+        wireDeeplink(
+          this, 'accordion', this.dataset.deeplinkId, this.signal, (n) => {
+            this._openPanel(n);
+          }
+        );
+      }
+    }
+
+    _togglePanel(trigger) {
+      this.withTransition(() => {
+        // toggle classes / aria attributes
+        this.emit('toggle', { trigger });
+      });
+    }
+  }
+
+  customElements.define('vvja-accordion', VvjaAccordionElement);
+
+})(Drupal);
+```
+
+### Drop-in upgrade contract
+
+Every VVJ v2 module, including this foundation module, preserves the v1
+contract surfaces:
+
+- Plugin IDs: `views_vvja`, `views_vvjb`, etc.
+- Theme hooks: `views_view_vvja`, etc.
+- Twig template names
+- All option keys per pattern
+- CSS class names rendered on HTML
+- Library names: `vvja/vvja`, `vvja/vvja-style`, `vvja/vvja-admin`
+- JS behavior keys: `Drupal.behaviors.VVJAccordion`, etc.
+- Public JS APIs: `Drupal.vvja.openPanel(...)`, etc.
+
+`vvj_core` is the **only** new dependency added in v2. Composer resolves it
+automatically.
+
+The drop-in contract preserves all v1 plugin IDs, theme hooks, Twig template
+names, library names, option keys, CSS classes on rendered HTML, and public
+`Drupal.vvj*` JavaScript APIs.
+
+## Patterns
+
+A Pattern is a ready-made design for a VVJ format. Choosing one in the Views format settings applies its layout,
+animation, styling and deep linking settings to the view. Each format module ships its Patterns in
+`<module>/patterns/<id>/pattern.yml`; VVJ Core ships none of its own, and carries the code that offers them.
+
+| Format | Patterns | Names |
+|---|---|---|
+| Accordion (`vvja`) | 5 | Spotlight, Stage, Answers, Cards, Agenda |
+| Basic carousel (`vvjb`) | 5 | Dockrail, Ledger, Switchboard, Swatch, Nightstory |
+| 3D carousel (`vvjc`) | 5 | Story reel, Orbit dock, Index split, Thumb rail, Ambient stage |
+| 3D flip box (`vvjf`) | 5 | Hand, Board, Rail, Figures, Plans |
+| Hero (`vvjh`) | 4 | Aperture, Bento, Panels, Stack |
+| Lightbox (`vvjl`) | 5 | Mosaic, Contact sheet, Reel, Prints, Index |
+| Parallax (`vvjp`) | 5 | Horizon, Skyline, Showroom, Shoreline, Field book |
+| Reveal (`vvjr`) | 5 | Lens, Blinds, Index, Cover, Nocturne |
+| Slideshow (`vvjs`) | 5 | Iris, Deck, Filmstrip, Ledger, Nightfall |
+| Tabs (`vvjt`) | 5 | Dock, Contents, Swatch, Folder, Glossary |
+
+VVJ Core carries three sub-modules:
+
+| Sub-module | What it does |
+|---|---|
+| `vvj_patterns` | The shared base for Patterns. It reads each format's `pattern.yml` files and adds the "Patterns" section with a "Pattern" select to the format settings. The select shows only while `vvj_patterns` is enabled. It also ships the shared Pattern scripts and stylesheet. Depends on `vvj_core`. |
+| `vvj_patterns_demo` | Optional example content. It creates a "VVJ Slide" content type, five demo slides with pictures and five image styles, plus example views titled "VVJ demo: <format>" with one page per Pattern at `vvj/<module>/<pattern>`. Uninstalling it removes the slides and pictures it created. |
+| `vvj_core_ai` | Optional. Adds "Build a VVJ view with AI" to the Views admin page. It creates the view disabled, as a block, and never edits an existing view. Requires `drupal/ai`; the parent module does not. See its own [README](./modules/vvj_core_ai/README.md). |
+
+### Choosing a Pattern
+
+1. Enable the format module and `vvj_patterns`: `drush en vvja vvj_patterns`.
+2. Edit a view that uses the format and open the format settings.
+3. In the "Patterns" section, pick a Pattern in the "Pattern" select and save. A list titled
+   "To finish the <name> Pattern" shows what the view must supply (fields, markup classes, item count).
+4. Pick "None" to keep your own settings.
+
+### Example views
+
+```bash
+drush en vvj_patterns_demo -y
+```
+
+Visit `vvj/<module>/<pattern>`, for example `vvj/vvja/stage`. Example views are created for the format modules that are
+enabled.
 
 ## Upgrading from VVJ 1.x
 
@@ -152,7 +389,7 @@ drush vvj:upgrade --module=vvja,vvjs # limit the scan to specific patterns
 
 Run it after updating a site from v1 to v2 to confirm every VVJ view is
 recognized and on the current schema. Because the **v2.0 drop-in upgrade has
-no breaking renames**, the command reports *"No migration needed — all VVJ
+no breaking renames**, the command reports *"No migration needed: all VVJ
 views are on the v2.0 schema."* for every existing v1 view. The scan/drift
 logic lives in the Drush-independent
 `\Drupal\vvj_core\Service\VvjUpgradeAuditor` service (unit tested); the
@@ -172,8 +409,6 @@ After `drush cr`, confirm:
    re-check. Shared code loads via the `Drupal.Vvj` namespace + library
    dependency order, so aggregation is safe.
 
----
-
 ## Troubleshooting
 
 | Symptom | Fix |
@@ -185,223 +420,16 @@ After `drush cr`, confirm:
 | `updb` errors before `vvj_core` is enabled | Enable it first: `drush en vvj_core -y`, then `drush updb -y && drush cr` |
 | Dependency error: pattern needs `vvj_core` | Manual install |
 
----
+Report bugs in the [issue queue](https://www.drupal.org/project/issues/vvj_core).
 
-## What VVJ Core provides
+## Changelog
 
-### PHP
+See [CHANGELOG.md](./CHANGELOG.md).
 
-| Class / service | Purpose |
-|---|---|
-| `Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase` | Abstract Views Style plugin base. Pattern modules subclass and implement four small hooks (`getModuleSlug()`, `getCustomElementTag()`, `definePatternOptions()`, `buildPatternSections()`). Everything else (form weights, warning, advanced/deeplinking/token-doc sections, library list, render(), validate()) is inherited. |
-| `vvj_core.svg_sanitizer` | Allowlist-driven SVG sanitizer for admin-pasted icons. |
-| `vvj_core.token_resolver` | `[vvjX:field]` and `[vvjX:field:plain]` token resolution. Pattern modules call `$this->tokenResolver->resolve($namespace, $tokens, $data, $bubbleable, $expectedClass)` from their `hook_tokens()` implementation. |
-| `vvj_core.breakpoint_registry` | Canonical breakpoint values + translatable labels. |
-| `vvj_core.unique_id_generator` | `random_int`-based 8-digit unique IDs. |
-| `vvj_core.twig_extension` | Registers the `safe_html` Twig filter . |
-| `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`: adds `.vvj-component` and `.vvj-{slug}` on the view wrapper for every display using `VvjStylePluginBase`, so global CSS/a11y in `vvj-a11y.css` applies to all patterns. |
-| `Drupal\vvj_core\Hook\VvjCoreHelpHook` | `hook_help` implementation |
+## Maintainers
 
-### Constants enums (typed PHP 8.3 const classes)
-
-| Class | Purpose |
-|---|---|
-| `Drupal\vvj_core\Constants\Breakpoints` | Canonical responsive breakpoint values and labels for every VVJ pattern. |
-| `Drupal\vvj_core\Constants\Easing` | CSS easing keywords. |
-| `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets. |
-| `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds shared across pattern modules: transition speed, slide timing and the rest. |
-
-### JS
-
-| Module | Purpose |
-|---|---|
-| `js/vvj-element-base.js` | `VvjElementBase extends HTMLElement` |
-| `js/vvj-keyboard-nav.js` | `handleArrowKeyNav` |
-| `js/vvj-focus-trap.js` | `trapFocus` |
-| `js/vvj-deeplink-bridge.js` | `wireDeeplink` + `writeDeeplinkHash` |
-| `js/vvj-token-bridge.js` | `registerVvjBehavior` |
-
-### CSS
-
-| File | Purpose |
-|---|---|
-| `css/vvj-tokens.css` | APEX `--apex-*` and `--r-*` token bridge. Aliases them as `--vvj-*` with system-color-keyword fallbacks for non-APEX sites. |
-| `css/vvj-base.css` | Cascade-layer ladder (`vvj.foundation, .tokens, .base, .pattern, .theme`), container-query setup, reduced-motion baseline, FOUC-prevention for unupgraded custom elements. |
-| `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidden utility, with forced-colors-mode fallbacks. |
-
----
-
-## What each pattern module adds (beyond vvj_core)
-
-Every `drupal/vvj*` package layers these on top of the foundation (see each
-module’s `README.md` for specifics):
-
-| Surface | Typical contents |
-|--------|------------------|
-| `src/Hook/*ThemeHook.php` | `hook_theme` |
-| `src/Hook/*PreprocessHooks.php` | Style preprocess + row/field preprocess via core `ViewsThemeHooks` (Drupal 12-safe). |
-| `src/Hook/*TokenHooks.php` | `hook_token_info` / `hook_tokens` |
-| `src/Hook/*HelpHook.php` | `hook_help` |
-| `config/optional/views.view.*_example.yml` | Optional starter View . |
-
----
-
-## How a pattern module consumes VVJ Core
-
-Sketch: `modules/v2/vvja/src/Plugin/views/style/Accordion.php`:
-
-```php
-namespace Drupal\vvja\Plugin\views\style;
-
-use Drupal\vvj_core\Plugin\views\style\VvjStylePluginBase;
-
-/**
- * @ViewsStyle(
- *   id = "views_vvja",
- *   title = @Translation("Views Vanilla JavaScript Accordion"),
- *   theme = "views_view_vvja",
- *   display_types = { "normal" }
- * )
- */
-class Accordion extends VvjStylePluginBase {
-
-  public function getModuleSlug(): string { return 'vvja'; }
-  public function getCustomElementTag(): string { return 'vvja-accordion'; }
-
-  protected function definePatternOptions(array $options): array {
-    $options['single_toggle'] = ['default' => TRUE];
-    $options['global_toggle'] = ['default' => TRUE];
-    // ... rest of pattern-specific options
-    return $options;
-  }
-
-  protected function buildPatternSections(array &$form): void {
-    // Pattern-specific sections (Behavior, Animation, Layout, Custom Icons).
-    $form['behavior_section'] = [...];
-    // VvjStylePluginBase adds: warning message, advanced (enable_css),
-    // deep linking, token documentation — automatically.
-  }
-
-}
-```
-
-That's typically ~250 LOC vs the ~760 LOC the v1 plugin needed.
-
-Sketch: `modules/v2/vvja/js/vvja-accordion-element.js`:
-
-```javascript
-// The vvja library declares:
-//   dependencies: [vvj_core/element-base, vvj_core/keyboard-nav,
-//                  vvj_core/deeplink-bridge]
-// so Drupal.Vvj.* is populated before this file runs.
-((Drupal) => {
-  'use strict';
-
-  const {
-    ElementBase, handleArrowKeyNav, wireDeeplink, writeDeeplinkHash,
-  } = Drupal.Vvj;
-
-  class VvjaAccordionElement extends ElementBase {
-    static get patternSlug() { return 'vvja'; }
-
-    onHydrate() {
-      const triggers = this.querySelectorAll('.vvja-button');
-      triggers.forEach((t, i) => {
-        t.addEventListener(
-          'click', () => this._togglePanel(t), { signal: this.signal }
-        );
-        t.addEventListener(
-          'keydown', (e) => handleArrowKeyNav(e, triggers, i),
-          { signal: this.signal }
-        );
-      });
-
-      if (this.dataset.deeplinkId) {
-        wireDeeplink(
-          this, 'accordion', this.dataset.deeplinkId, this.signal, (n) => {
-            this._openPanel(n);
-          }
-        );
-      }
-    }
-
-    _togglePanel(trigger) {
-      this.withTransition(() => {
-        // toggle classes / aria attributes
-        this.emit('toggle', { trigger });
-      });
-    }
-  }
-
-  customElements.define('vvja-accordion', VvjaAccordionElement);
-
-})(Drupal);
-```
-
----
-
-## Drop-in upgrade contract
-
-Every VVJ v2 module, including this foundation module, preserves the v1
-contract surfaces:
-
-- Plugin IDs: `views_vvja`, `views_vvjb`, etc.
-- Theme hooks: `views_view_vvja`, etc.
-- Twig template names
-- All option keys per pattern
-- CSS class names rendered on HTML
-- Library names: `vvja/vvja`, `vvja/vvja-style`, `vvja/vvja-admin`
-- JS behavior keys: `Drupal.behaviors.VVJAccordion`, etc.
-- Public JS APIs: `Drupal.vvja.openPanel(...)`, etc.
-
-`vvj_core` is the **only** new dependency added in v2. Composer resolves it
-automatically.
-
-The drop-in contract preserves all v1 plugin IDs, theme hooks, Twig template
-names, library names, option keys, CSS classes on rendered HTML, and public
-`Drupal.vvj*` JavaScript APIs.
-
----
-
-## Requirements
-
-- Drupal `^11.3 || ^12`
-- PHP `>=8.3`
-- `core/views`, `core/filter`
-
----
-
-## Running the tests
-
-This module ships no `phpunit.xml` of its own, deliberately: its suites are
-Kernel, Functional and FunctionalJavascript, which need a real Drupal, so a
-module-local config would have to hard-code a relative path to `core` and would
-break the moment the module is not physically inside a docroot (a symlinked
-checkout, for instance). Drupal core's runner already does the job.
-
-Run the fast suites from the docroot:
-
-```bash
-cd /path/to/drupal/web
-export SIMPLETEST_DB="mysql://user:pass@localhost/dbname"
-../vendor/bin/phpunit -c core modules/contrib/vvj_core/tests/src/Unit
-../vendor/bin/phpunit -c core modules/contrib/vvj_core/tests/src/Kernel
-```
-
-The **Functional** and **FunctionalJavascript** suites also need
-`SIMPLETEST_BASE_URL` pointing at a running web server, and the JavaScript ones
-need chromedriver. Without those they error rather than fail, and the errors
-name missing infrastructure rather than anything about this module, so don't
-read them as test failures. The drupal.org pipeline provides both.
+- Alaa Haddad - [flashwebcenter](https://www.drupal.org/u/flashwebcenter)
 
 ## License
 
-GPL-2.0-or-later. See [LICENSE.txt](./LICENSE.txt).
-
-## Maintainer
-
-Alaa Haddad —
-[drupal.org/u/flashwebcenter](https://www.drupal.org/u/flashwebcenter)
-
-Issues:
-[drupal.org/project/issues/vvj_core](https://www.drupal.org/project/issues/vvj_core)
+GPL-2.0-or-later. See the [GNU General Public License, version 2 or later](https://www.gnu.org/licenses/gpl-2.0.html).

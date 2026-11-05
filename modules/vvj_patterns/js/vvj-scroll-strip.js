@@ -12,6 +12,15 @@
  * own scroll position, unlike scrollIntoView(), which also scrolls every
  * scrollable ancestor and can jump the page.
  *
+ * Swipe: when a Pattern's CSS gives the strip `overflow-x: hidden` (or
+ * `clip`), the strip is not a user scroller, so a sideways touch or pen
+ * swipe of 40px or more pages it like the buttons (RTL-aware, reduced motion
+ * respected through scrollByPage()). The Pattern also sets
+ * `touch-action: pan-y pinch-zoom` on the strip so vertical swipes still
+ * scroll the page. A strip with `overflow-x: auto` keeps the browser's own
+ * scrolling and gets no swipe handling. The click that ends a swipe is
+ * swallowed, so a swipe never activates an item.
+ *
  * @license SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -45,6 +54,7 @@
         });
       }
       strip.addEventListener('scroll', this.update, { passive: true, signal });
+      this.listenForSwipe(signal);
       if ('ResizeObserver' in window) {
         const observer = new ResizeObserver(this.update);
         observer.observe(strip);
@@ -80,6 +90,78 @@
      */
     get direction() {
       return getComputedStyle(this.strip).direction === 'rtl' ? -1 : 1;
+    }
+
+    /**
+     * Whether the strip is closed to user scrolling (overflow-x hidden or clip).
+     *
+     * @return {boolean}
+     */
+    get swipeable() {
+      const { overflowX } = getComputedStyle(this.strip);
+      return overflowX === 'hidden' || overflowX === 'clip';
+    }
+
+    /**
+     * Pages the strip on a sideways touch or pen swipe, see the file docblock.
+     *
+     * @param {AbortSignal} signal
+     *   Releases the listeners.
+     */
+    listenForSwipe(signal) {
+      const { strip } = this;
+      let start = null;
+      strip.addEventListener(
+        'pointerdown',
+        (event) => {
+          // Read per gesture: a Pattern may switch overflow in a media query.
+          start =
+            event.pointerType === 'mouse' || !this.swipeable
+              ? null
+              : { x: event.clientX, y: event.clientY };
+        },
+        { passive: true, signal },
+      );
+      strip.addEventListener(
+        'pointercancel',
+        () => {
+          start = null;
+        },
+        { signal },
+      );
+      strip.addEventListener(
+        'pointerup',
+        (event) => {
+          if (!start) {
+            return;
+          }
+          const dx = event.clientX - start.x;
+          const dy = event.clientY - start.y;
+          start = null;
+          if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) {
+            return;
+          }
+          // A leftward swipe moves towards the end in LTR, the start in RTL.
+          const rtl = this.direction === -1;
+          this.scrollByPage((dx < 0) !== rtl ? 1 : -1);
+          const swallow = (click) => {
+            click.preventDefault();
+            click.stopPropagation();
+          };
+          strip.addEventListener('click', swallow, {
+            capture: true,
+            once: true,
+            signal,
+          });
+          // No click follows some swipes; never eat a later, real click.
+          setTimeout(
+            () =>
+              strip.removeEventListener('click', swallow, { capture: true }),
+            400,
+          );
+        },
+        { signal },
+      );
     }
 
     /**

@@ -12,6 +12,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Patterns**: two new sub-modules. `vvj_patterns` is the shared base for the ready-made designs each VVJ format ships: it reads each format's `patterns/<id>/pattern.yml` and adds a "Patterns" section with a "Pattern" select to the format settings. `vvj_patterns_demo` is optional example content: a "VVJ Slide" content type, five demo slides with pictures, and example views with one page per Pattern.
+
 - **`vvj_core_ai`**: optional AI sub-module: **Build a VVJ view with AI** on the
   Views admin page. Choose a format, a content type, fields or a view mode (only
   where the format keeps one, asked of the format, not a list) and how many;
