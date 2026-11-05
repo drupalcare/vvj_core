@@ -38,6 +38,15 @@
  *   - `vvj:*` CustomEvent dispatch via `this.emit(name, detail)` — bubbles
  *     on document so any consumer can listen cross-instance, cross-module
  *     without polluting globals.
+ *   - `this.hydrated` and `Drupal.Vvj.whenReady(el, cb, signal)` so a script
+ *     attached after hydration still runs its setup once.
+ *   - `this.writeState({ index, total })`: the one shared "which item is
+ *     active" contract (`data-vvj-index`, `--vvj-index`, `--vvj-total`,
+ *     `--vvj-progress`, per item `--vvj-i`, and a `vvj:change` event). It
+ *     does nothing unless the element carries the `vvj-pattern` class, so a
+ *     view without a Pattern renders and behaves exactly as before.
+ *   - Static `Drupal.Vvj.reducedMotion()` and `Drupal.Vvj.withTransition(cb)`
+ *     for scripts that are not elements; the instance members delegate.
  *
  * @license SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -48,6 +57,77 @@
 
 ((Drupal) => {
   Drupal.Vvj = Drupal.Vvj || {};
+
+  /**
+   * `true` when the user asked for reduced motion.
+   *
+   * @return {boolean}
+   *   Whether `prefers-reduced-motion: reduce` matches.
+   */
+  Drupal.Vvj.reducedMotion = () =>
+    matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /**
+   * Runs `cb` inside a view transition when one can run, else directly.
+   *
+   * NOT WHILE THE PAGE IS HIDDEN. The browser rejects a view transition in a
+   * hidden document ("Transition was aborted because of invalid state.
+   * Document hidden"), and nothing catches that rejection. The state change
+   * still happens; there is simply nobody to animate it for.
+   *
+   * @param {() => void|Promise<void>} cb
+   *   The state mutation to perform.
+   * @return {ViewTransition|null}
+   *   The ViewTransition if one was started, null otherwise.
+   */
+  Drupal.Vvj.withTransition = (cb) => {
+    if (
+      typeof document.startViewTransition === 'function' &&
+      !Drupal.Vvj.reducedMotion() &&
+      !document.hidden
+    ) {
+      const transition = document.startViewTransition(cb);
+      // A quick second click starts a new transition, and the browser skips
+      // the running one by rejecting its `ready` promise ("Transition was
+      // skipped"). Only the animation is dropped; the state change still
+      // ran. Errors thrown by `cb` still surface through `finished`.
+      transition.ready.catch(() => {});
+      return transition;
+    }
+    cb();
+    return null;
+  };
+
+  /**
+   * Calls `cb(el)` once the VVJ element has hydrated.
+   *
+   * Elements hydrate lazily and fire `vvj:ready` once; a script attached
+   * later would miss that event, so this checks `el.hydrated` first.
+   *
+   * @param {HTMLElement} el
+   *   A VVJ custom element.
+   * @param {(el: HTMLElement) => void} cb
+   *   Called once, with the element.
+   * @param {AbortSignal} [signal]
+   *   Cancels the wait.
+   */
+  Drupal.Vvj.whenReady = (el, cb, signal) => {
+    if (signal?.aborted) {
+      return;
+    }
+    if (el.hydrated) {
+      cb(el);
+      return;
+    }
+    const onReady = (event) => {
+      if (event.detail?.source !== el) {
+        return;
+      }
+      document.removeEventListener('vvj:ready', onReady);
+      cb(el);
+    };
+    document.addEventListener('vvj:ready', onReady, { signal });
+  };
 
   Drupal.Vvj.ElementBase = class VvjElementBase extends HTMLElement {
     /**
@@ -80,6 +160,8 @@
       this._isHydrated = false;
       /** @type {IntersectionObserver|null} */
       this._observer = null;
+      /** @type {number|null} */
+      this._vvjStateIndex = null;
     }
 
     // ---------------------------------------------------------------
@@ -117,6 +199,7 @@
       this._abortController = null;
       this._observer = null;
       this._isHydrated = false;
+      this._vvjStateIndex = null;
       this.onDisconnect?.();
     }
 
@@ -168,7 +251,16 @@
      * @return {boolean}
      */
     get reducedMotion() {
-      return matchMedia('(prefers-reduced-motion: reduce)').matches;
+      return Drupal.Vvj.reducedMotion();
+    }
+
+    /**
+     * `true` once `onHydrate()` has run (and until disconnect).
+     *
+     * @return {boolean}
+     */
+    get hydrated() {
+      return this._isHydrated;
     }
 
     /**
@@ -182,19 +274,49 @@
      *   The ViewTransition if one was started, null otherwise.
      */
     withTransition(cb) {
-      // NOT WHILE THE PAGE IS HIDDEN. The browser rejects a view transition
-      // in a hidden document ("Transition was aborted because of invalid
-      // state. Document hidden"), and nothing catches that rejection. The
-      // state change still happens; there is simply nobody to animate it for.
-      if (
-        typeof document.startViewTransition === 'function' &&
-        !this.reducedMotion &&
-        !document.hidden
-      ) {
-        return document.startViewTransition(cb);
+      return Drupal.Vvj.withTransition(cb);
+    }
+
+    /**
+     * Writes the active item for Pattern CSS and Pattern scripts.
+     *
+     * Only on elements with the `vvj-pattern` class; anything else returns
+     * at once, so a view without a Pattern is untouched. Writes
+     * `data-vvj-index` and `--vvj-index` (0-based), `--vvj-total`,
+     * `--vvj-progress` (0 to 1; defaults to (index + 1) / total) and, when
+     * `items` is given, `--vvj-i` on each item. Emits `vvj:change`
+     * `{ index, total }` once per change of index.
+     *
+     * @param {{index: number, total: number, progress?: number,
+     *   items?: ArrayLike<HTMLElement>}} state
+     *   The state to write.
+     */
+    writeState({ index, total, progress, items }) {
+      if (!this.classList.contains('vvj-pattern') || index < 0) {
+        return;
       }
-      cb();
-      return null;
+      const value =
+        typeof progress === 'number'
+          ? progress
+          : total > 0
+            ? (index + 1) / total
+            : 0;
+      this.dataset.vvjIndex = String(index);
+      this.style.setProperty('--vvj-index', String(index));
+      this.style.setProperty('--vvj-total', String(total));
+      this.style.setProperty(
+        '--vvj-progress',
+        String(Math.min(1, Math.max(0, value))),
+      );
+      if (items) {
+        Array.from(items).forEach((item, i) => {
+          item.style.setProperty('--vvj-i', String(i));
+        });
+      }
+      if (this._vvjStateIndex !== index) {
+        this._vvjStateIndex = index;
+        this.emit('change', { index, total });
+      }
     }
 
     /**

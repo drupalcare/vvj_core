@@ -1,0 +1,134 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall steps for VVJ Patterns Demo.
+ *
+ * @license SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\File\FileExists;
+use Drupal\file\Entity\File;
+use Drupal\node\Entity\Node;
+
+/**
+ * Returns the five demo slides, in tab order.
+ *
+ * Words are plain, generic advice written for the demo; the picture file is
+ * one of the five pencil sketches shipped in images/.
+ *
+ * @return array<int, array<string, string>>
+ *   Slide values keyed by field name, plus the image file name and alt text.
+ */
+function _vvj_patterns_demo_slides(): array {
+  return [
+    [
+      'nav' => 'Listen',
+      'title' => 'Start with the people who will use it',
+      'kicker' => 'Step one',
+      'summary' => 'Talk to a handful of real visitors before drawing anything. Ask what they came to do, what got in the way, and what they would change first.',
+      'link' => 'https://www.drupal.org/docs',
+      'link_title' => 'Read the guide',
+      'image' => 'vvj-demo-1.webp',
+      'alt' => 'Pencil sketch: the Tokyo skyline, with Tokyo Tower rising above dense city blocks.',
+    ],
+    [
+      'nav' => 'Shape',
+      'title' => 'Sketch the page before styling it',
+      'kicker' => 'Step two',
+      'summary' => 'Decide what goes first, what goes second and what can wait. A page with a clear order feels calm even when it holds a lot.',
+      'link' => 'https://www.drupal.org/docs',
+      'link_title' => 'See how pages are built',
+      'image' => 'vvj-demo-2.webp',
+      'alt' => 'Pencil sketch: a herd of elephants crossing the plain, with an acacia tree and Mount Kilimanjaro behind them.',
+    ],
+    [
+      'nav' => 'Build',
+      'title' => 'Build the content, then the container',
+      'kicker' => 'Step three',
+      'summary' => 'Write the real words and pick the real pictures first. Layout that fits true content lasts longer than layout made for placeholder text.',
+      'link' => 'https://www.drupal.org/docs',
+      'link_title' => 'Learn about content types',
+      'image' => 'vvj-demo-3.webp',
+      'alt' => 'Pencil sketch: a Japanese garden with old twisted trees, a pond and a temple roof.',
+    ],
+    [
+      'nav' => 'Polish',
+      'title' => 'Check it with a keyboard and a small screen',
+      'kicker' => 'Step four',
+      'summary' => 'Tab through every control, zoom to 200 percent and open the page on a phone. Most problems visitors meet show up in those three minutes.',
+      'link' => 'https://www.drupal.org/docs',
+      'link_title' => 'Accessibility basics',
+      'image' => 'vvj-demo-4.webp',
+      'alt' => 'Pencil sketch: a tiger walking toward the viewer through dry grass.',
+    ],
+    [
+      'nav' => 'Grow',
+      'title' => 'Keep listening after launch',
+      'kicker' => 'Step five',
+      'summary' => 'Read the messages people send, watch which pages they leave, and change one thing at a time so you can tell what helped.',
+      'link' => 'https://www.drupal.org/docs',
+      'link_title' => 'Keep your site healthy',
+      'image' => 'vvj-demo-5.webp',
+      'alt' => 'Pencil sketch: a close-up of a chameleon on a leafy branch.',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_install().
+ */
+function vvj_patterns_demo_install(bool $is_syncing): void {
+  // Config sync brings its own content; never create demo nodes then.
+  if ($is_syncing) {
+    return;
+  }
+  $source = \Drupal::service('extension.list.module')->getPath('vvj_patterns_demo') . '/images/';
+  $file_repository = \Drupal::service('file.repository');
+  $file_system = \Drupal::service('file_system');
+  $directory = 'public://vvj-demo';
+  $file_system->prepareDirectory($directory, $file_system::CREATE_DIRECTORY | $file_system::MODIFY_PERMISSIONS);
+
+  $nids = [];
+  $fids = [];
+  foreach (_vvj_patterns_demo_slides() as $slide) {
+    $data = file_get_contents($source . $slide['image']);
+    if ($data === FALSE) {
+      continue;
+    }
+    $file = $file_repository->writeData($data, $directory . '/' . $slide['image'], FileExists::Replace);
+    $fids[] = (int) $file->id();
+    $node = Node::create([
+      'type' => 'vvj_slide',
+      'title' => $slide['title'],
+      'status' => 1,
+      'uid' => 1,
+      'vvj_nav_label' => $slide['nav'],
+      'vvj_kicker' => $slide['kicker'],
+      'vvj_summary' => $slide['summary'],
+      'vvj_link' => ['uri' => $slide['link'], 'title' => $slide['link_title']],
+      'vvj_image' => ['target_id' => $file->id(), 'alt' => $slide['alt']],
+    ]);
+    $node->save();
+    $nids[] = (int) $node->id();
+  }
+  // Remember exactly what was created so uninstall removes only that.
+  \Drupal::state()->set('vvj_patterns_demo.created', ['nids' => $nids, 'fids' => $fids]);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function vvj_patterns_demo_uninstall(): void {
+  $created = \Drupal::state()->get('vvj_patterns_demo.created', ['nids' => [], 'fids' => []]);
+  $nodes = Node::loadMultiple($created['nids']);
+  if ($nodes) {
+    \Drupal::entityTypeManager()->getStorage('node')->delete($nodes);
+  }
+  foreach (File::loadMultiple($created['fids']) as $file) {
+    $file->delete();
+  }
+  \Drupal::state()->delete('vvj_patterns_demo.created');
+}

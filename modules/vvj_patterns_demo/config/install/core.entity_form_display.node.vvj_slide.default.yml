@@ -1,0 +1,78 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.vvj_slide.vvj_image
+    - field.field.node.vvj_slide.vvj_kicker
+    - field.field.node.vvj_slide.vvj_link
+    - field.field.node.vvj_slide.vvj_nav_label
+    - field.field.node.vvj_slide.vvj_summary
+    - node.type.vvj_slide
+  module:
+    - image
+    - link
+id: node.vvj_slide.default
+targetEntityType: node
+bundle: vvj_slide
+mode: default
+content:
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  vvj_nav_label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+  vvj_image:
+    type: image_image
+    weight: 2
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: vvj_thumb_240
+    third_party_settings: {  }
+  vvj_kicker:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 40
+      placeholder: ''
+    third_party_settings: {  }
+  vvj_summary:
+    type: string_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 4
+      placeholder: ''
+    third_party_settings: {  }
+  vvj_link:
+    type: link_default
+    weight: 5
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 10
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  created: true
+  promote: true
+  sticky: true
+  uid: true

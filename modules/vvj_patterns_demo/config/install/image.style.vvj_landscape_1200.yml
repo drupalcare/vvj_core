@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_landscape_1200
+label: 'VVJ Landscape (3:2)'
+effects:
+  a380e2f4-a70c-4242-a57f-2db532020944:
+    uuid: a380e2f4-a70c-4242-a57f-2db532020944
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 800
+      anchor: center-center

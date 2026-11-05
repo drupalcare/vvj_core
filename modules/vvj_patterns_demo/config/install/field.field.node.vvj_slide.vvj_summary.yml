@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.vvj_summary
+    - node.type.vvj_slide
+id: node.vvj_slide.vvj_summary
+field_name: vvj_summary
+entity_type: node
+bundle: vvj_slide
+label: 'Summary'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  {  }
+field_type: string_long

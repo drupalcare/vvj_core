@@ -1,0 +1,38 @@
+/**
+ * @file
+ * VVJ Patterns Demo: the stage the demo views sit on.
+ *
+ * Scoped to the view's own wrapper (.vvj-demo-stage); nothing outside the view
+ * is styled. The ground follows the colour scheme like a design page does
+ * (light #fff, dark #111: the same values as --vvj-surface in
+ * vvj_patterns/css/vvj-patterns-base.css, repeated here because those tokens
+ * live on the Pattern, which is inside the stage).
+ *
+ * Without JavaScript the stage stays inside the theme's content column. With
+ * it, vvj-demo-stage.js measures the column and the viewport WITHOUT its
+ * scrollbar and writes the two variables below, so the stage reaches both
+ * edges and never causes sideways scroll (100vw would include the scrollbar).
+ */
+
+.vvj-demo-stage {
+  --vvj-demo-stage-bg: #fff;
+  --vvj-demo-stage-color: #111;
+
+  box-sizing: border-box;
+  color: var(--vvj-demo-stage-color);
+  background: var(--vvj-demo-stage-bg);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  .vvj-demo-stage {
+    --vvj-demo-stage-bg: #111;
+    --vvj-demo-stage-color: #f2f2f2;
+  }
+}
+
+.vvj-demo-stage.vvj-demo-stage--bleed {
+  width: var(--vvj-demo-stage-width);
+  max-width: none;
+  margin-inline: calc(-1 * var(--vvj-demo-stage-offset)) 0;
+}

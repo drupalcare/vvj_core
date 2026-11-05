@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_cinema_1680
+label: 'VVJ Cinema (21:9)'
+effects:
+  1f84a3a5-11e1-4637-955b-0ace3e6c4233:
+    uuid: 1f84a3a5-11e1-4637-955b-0ace3e6c4233
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1680
+      height: 720
+      anchor: center-center

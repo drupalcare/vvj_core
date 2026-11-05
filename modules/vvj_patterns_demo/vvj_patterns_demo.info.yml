@@ -1,0 +1,13 @@
+name: 'VVJ Patterns Demo'
+type: module
+description: 'Example content for the VVJ Patterns: the VVJ Slide content type, its fields, image styles and five demo slides with original pictures.'
+core_version_requirement: ^11.3 || ^12
+package: VVJ
+php: 8.3
+dependencies:
+  - drupal:field
+  - drupal:file
+  - drupal:image
+  - drupal:link
+  - drupal:node
+  - vvj_core:vvj_patterns

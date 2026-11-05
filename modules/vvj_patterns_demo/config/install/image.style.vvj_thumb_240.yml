@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_thumb_240
+label: 'VVJ Thumb (3:2)'
+effects:
+  191d134f-52af-4c35-9ce3-b023c025c542:
+    uuid: 191d134f-52af-4c35-9ce3-b023c025c542
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 240
+      height: 160
+      anchor: center-center

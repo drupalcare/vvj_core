@@ -1,0 +1,2357 @@
+langcode: 'en'
+status: true
+dependencies:
+  config:
+    - 'field.storage.node.vvj_image'
+    - 'field.storage.node.vvj_kicker'
+    - 'field.storage.node.vvj_link'
+    - 'field.storage.node.vvj_nav_label'
+    - 'field.storage.node.vvj_summary'
+    - 'image.style.vvj_cinema_1680'
+    - 'image.style.vvj_landscape_1200'
+    - 'image.style.vvj_square_800'
+    - 'image.style.vvj_thumb_240'
+    - 'image.style.vvj_wide_1600'
+    - 'node.type.vvj_slide'
+  module:
+    - 'image'
+    - 'link'
+    - 'node'
+    - 'user'
+    - 'vvjt'
+id: 'vvj_demo_vvjt'
+label: 'VVJ demo: Tabs'
+module: 'views'
+description: 'Five ready-made VVJ Patterns for Tabs, each on its own page under /vvj/vvjt/.'
+tag: ''
+base_table: 'node_field_data'
+base_field: 'nid'
+display:
+  default:
+    id: 'default'
+    display_title: 'Default'
+    display_plugin: 'default'
+    position: 0
+    display_options:
+      title: 'VVJ demo: Tabs'
+      fields:
+        title:
+          id: 'title'
+          table: 'node_field_data'
+          field: 'title'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'title'
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'h3'
+          element_class: 'vvj-title'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+      pager:
+        type: 'none'
+        options:
+          offset: 0
+      exposed_form:
+        type: 'basic'
+        options: {  }
+      access:
+        type: 'perm'
+        options:
+          perm: 'access content'
+      cache:
+        type: 'tag'
+        options: {  }
+      empty: {  }
+      sorts:
+        created:
+          id: 'created'
+          table: 'node_field_data'
+          field: 'created'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'created'
+          plugin_id: 'date'
+          order: 'ASC'
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: 'second'
+      arguments: {  }
+      filters:
+        status:
+          id: 'status'
+          table: 'node_field_data'
+          field: 'status'
+          entity_type: 'node'
+          entity_field: 'status'
+          plugin_id: 'boolean'
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: 'type'
+          table: 'node_field_data'
+          field: 'type'
+          entity_type: 'node'
+          entity_field: 'type'
+          plugin_id: 'bundle'
+          value:
+            vvj_slide: 'vvj_slide'
+      style:
+        type: 'default'
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+      row:
+        type: 'fields'
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      query:
+        type: 'views_query'
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_tags: {  }
+      relationships: {  }
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args'
+        - 'user.node_grants:view'
+        - 'user.permissions'
+      tags:
+        - 'config:field.storage.node.vvj_image'
+        - 'config:field.storage.node.vvj_kicker'
+        - 'config:field.storage.node.vvj_link'
+        - 'config:field.storage.node.vvj_nav_label'
+        - 'config:field.storage.node.vvj_summary'
+  vvjt_dock:
+    id: 'vvjt_dock'
+    display_title: 'Dock'
+    display_plugin: 'page'
+    position: 1
+    display_options:
+      title: 'VVJ demo: Tabs, Dock'
+      fields:
+        vvj_nav_label:
+          id: 'vvj_nav_label'
+          table: 'node__vvj_nav_label'
+          field: 'vvj_nav_label'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_image:
+          id: 'vvj_image'
+          table: 'node__vvj_image'
+          field: 'vvj_image'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'target_id'
+          type: 'image'
+          settings:
+            image_link: ''
+            image_style: 'vvj_wide_1600'
+            image_loading:
+              attribute: 'lazy'
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_kicker:
+          id: 'vvj_kicker'
+          table: 'node__vvj_kicker'
+          field: 'vvj_kicker'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-kicker'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: 'title'
+          table: 'node_field_data'
+          field: 'title'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'title'
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'h3'
+          element_class: 'vvj-title'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_summary:
+          id: 'vvj_summary'
+          table: 'node__vvj_summary'
+          field: 'vvj_summary'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 180
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-summary'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'basic_string'
+          settings: {  }
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_link:
+          id: 'vvj_link'
+          table: 'node__vvj_link'
+          field: 'vvj_link'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-link'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'uri'
+          type: 'link'
+          settings:
+            trim_length: 80
+            url_only: false
+            url_plain: false
+            rel: ''
+            target: ''
+          group_column: 'uri'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+      style:
+        type: 'views_vvjt'
+        options:
+          grouping: {  }
+          animation: 'a-bottom'
+          tabs_position: 'bottom'
+          max_width: 0
+          max_height: 0
+          available_breakpoints: '992'
+          enable_css: false
+          disable_background: true
+          background_buttons: ''
+          background_panes: ''
+          wrap_tabs: false
+          enable_deeplink: false
+          vvj_pattern: 'vvjt_dock'
+          unique_id: 7100
+      row:
+        type: 'fields'
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      display_extenders: {  }
+      path: 'vvj/vvjt/dock'
+      menu:
+        type: 'none'
+      defaults:
+        title: false
+        fields: false
+        style: false
+        row: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args'
+        - 'user.node_grants:view'
+        - 'user.permissions'
+      tags:
+        - 'config:field.storage.node.vvj_image'
+        - 'config:field.storage.node.vvj_kicker'
+        - 'config:field.storage.node.vvj_link'
+        - 'config:field.storage.node.vvj_nav_label'
+        - 'config:field.storage.node.vvj_summary'
+  vvjt_contents:
+    id: 'vvjt_contents'
+    display_title: 'Contents'
+    display_plugin: 'page'
+    position: 2
+    display_options:
+      title: 'VVJ demo: Tabs, Contents'
+      fields:
+        vvj_nav_label:
+          id: 'vvj_nav_label'
+          table: 'node__vvj_nav_label'
+          field: 'vvj_nav_label'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'span'
+          element_class: 'vvj-nav-label'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_image:
+          id: 'vvj_image'
+          table: 'node__vvj_image'
+          field: 'vvj_image'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'target_id'
+          type: 'image'
+          settings:
+            image_link: ''
+            image_style: 'vvj_landscape_1200'
+            image_loading:
+              attribute: 'lazy'
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_kicker:
+          id: 'vvj_kicker'
+          table: 'node__vvj_kicker'
+          field: 'vvj_kicker'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-kicker'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: 'title'
+          table: 'node_field_data'
+          field: 'title'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'title'
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'h3'
+          element_class: 'vvj-title'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_summary:
+          id: 'vvj_summary'
+          table: 'node__vvj_summary'
+          field: 'vvj_summary'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 220
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-summary'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'basic_string'
+          settings: {  }
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_link:
+          id: 'vvj_link'
+          table: 'node__vvj_link'
+          field: 'vvj_link'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-link'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'uri'
+          type: 'link'
+          settings:
+            trim_length: 80
+            url_only: false
+            url_plain: false
+            rel: ''
+            target: ''
+          group_column: 'uri'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+      style:
+        type: 'views_vvjt'
+        options:
+          grouping: {  }
+          animation: 'a-left'
+          tabs_position: 'left'
+          max_width: 360
+          max_height: 0
+          available_breakpoints: '992'
+          enable_css: false
+          disable_background: true
+          background_buttons: ''
+          background_panes: ''
+          wrap_tabs: false
+          enable_deeplink: false
+          vvj_pattern: 'vvjt_contents'
+          unique_id: 7101
+      row:
+        type: 'fields'
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      display_extenders: {  }
+      path: 'vvj/vvjt/contents'
+      menu:
+        type: 'none'
+      defaults:
+        title: false
+        fields: false
+        style: false
+        row: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args'
+        - 'user.node_grants:view'
+        - 'user.permissions'
+      tags:
+        - 'config:field.storage.node.vvj_image'
+        - 'config:field.storage.node.vvj_kicker'
+        - 'config:field.storage.node.vvj_link'
+        - 'config:field.storage.node.vvj_nav_label'
+        - 'config:field.storage.node.vvj_summary'
+  vvjt_swatch:
+    id: 'vvjt_swatch'
+    display_title: 'Swatch'
+    display_plugin: 'page'
+    position: 3
+    display_options:
+      title: 'VVJ demo: Tabs, Swatch'
+      fields:
+        vvj_nav_label:
+          id: 'vvj_nav_label'
+          table: 'node__vvj_nav_label'
+          field: 'vvj_nav_label'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_image:
+          id: 'vvj_image'
+          table: 'node__vvj_image'
+          field: 'vvj_image'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: '{{ vvj_image }}<span class="vvj-nav-label">{{ vvj_nav_label }}</span>'
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'target_id'
+          type: 'image'
+          settings:
+            image_link: ''
+            image_style: 'vvj_thumb_240'
+            image_loading:
+              attribute: 'lazy'
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_image_1:
+          id: 'vvj_image_1'
+          table: 'node__vvj_image'
+          field: 'vvj_image'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'target_id'
+          type: 'image'
+          settings:
+            image_link: ''
+            image_style: 'vvj_landscape_1200'
+            image_loading:
+              attribute: 'lazy'
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_kicker:
+          id: 'vvj_kicker'
+          table: 'node__vvj_kicker'
+          field: 'vvj_kicker'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-kicker'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: 'title'
+          table: 'node_field_data'
+          field: 'title'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'title'
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'h3'
+          element_class: 'vvj-title'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_summary:
+          id: 'vvj_summary'
+          table: 'node__vvj_summary'
+          field: 'vvj_summary'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 180
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-summary'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'basic_string'
+          settings: {  }
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+      style:
+        type: 'views_vvjt'
+        options:
+          grouping: {  }
+          animation: 'a-right'
+          tabs_position: 'right'
+          max_width: 132
+          max_height: 560
+          available_breakpoints: '768'
+          enable_css: false
+          disable_background: true
+          background_buttons: ''
+          background_panes: ''
+          wrap_tabs: false
+          enable_deeplink: false
+          vvj_pattern: 'vvjt_swatch'
+          unique_id: 7102
+      row:
+        type: 'fields'
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      display_extenders: {  }
+      path: 'vvj/vvjt/swatch'
+      menu:
+        type: 'none'
+      defaults:
+        title: false
+        fields: false
+        style: false
+        row: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args'
+        - 'user.node_grants:view'
+        - 'user.permissions'
+      tags:
+        - 'config:field.storage.node.vvj_image'
+        - 'config:field.storage.node.vvj_kicker'
+        - 'config:field.storage.node.vvj_link'
+        - 'config:field.storage.node.vvj_nav_label'
+        - 'config:field.storage.node.vvj_summary'
+  vvjt_folder:
+    id: 'vvjt_folder'
+    display_title: 'Folder'
+    display_plugin: 'page'
+    position: 4
+    display_options:
+      title: 'VVJ demo: Tabs, Folder'
+      fields:
+        vvj_nav_label:
+          id: 'vvj_nav_label'
+          table: 'node__vvj_nav_label'
+          field: 'vvj_nav_label'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'span'
+          element_class: 'vvj-nav-label'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_image:
+          id: 'vvj_image'
+          table: 'node__vvj_image'
+          field: 'vvj_image'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'target_id'
+          type: 'image'
+          settings:
+            image_link: ''
+            image_style: 'vvj_square_800'
+            image_loading:
+              attribute: 'lazy'
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_kicker:
+          id: 'vvj_kicker'
+          table: 'node__vvj_kicker'
+          field: 'vvj_kicker'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-kicker'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: 'title'
+          table: 'node_field_data'
+          field: 'title'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'title'
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'h3'
+          element_class: 'vvj-title'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_summary:
+          id: 'vvj_summary'
+          table: 'node__vvj_summary'
+          field: 'vvj_summary'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 160
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-summary'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'basic_string'
+          settings: {  }
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_link:
+          id: 'vvj_link'
+          table: 'node__vvj_link'
+          field: 'vvj_link'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-link'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'uri'
+          type: 'link'
+          settings:
+            trim_length: 80
+            url_only: false
+            url_plain: false
+            rel: ''
+            target: ''
+          group_column: 'uri'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+      style:
+        type: 'views_vvjt'
+        options:
+          grouping: {  }
+          animation: 'a-opacity'
+          tabs_position: 'top'
+          max_width: 0
+          max_height: 0
+          available_breakpoints: '992'
+          enable_css: false
+          disable_background: true
+          background_buttons: ''
+          background_panes: ''
+          wrap_tabs: true
+          enable_deeplink: true
+          deeplink_identifier: 'surfaces'
+          vvj_pattern: 'vvjt_folder'
+          unique_id: 7103
+      row:
+        type: 'fields'
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      display_extenders: {  }
+      path: 'vvj/vvjt/folder'
+      menu:
+        type: 'none'
+      defaults:
+        title: false
+        fields: false
+        style: false
+        row: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args'
+        - 'user.node_grants:view'
+        - 'user.permissions'
+      tags:
+        - 'config:field.storage.node.vvj_image'
+        - 'config:field.storage.node.vvj_kicker'
+        - 'config:field.storage.node.vvj_link'
+        - 'config:field.storage.node.vvj_nav_label'
+        - 'config:field.storage.node.vvj_summary'
+  vvjt_glossary:
+    id: 'vvjt_glossary'
+    display_title: 'Glossary'
+    display_plugin: 'page'
+    position: 5
+    display_options:
+      title: 'VVJ demo: Tabs, Glossary'
+      fields:
+        vvj_nav_label:
+          id: 'vvj_nav_label'
+          table: 'node__vvj_nav_label'
+          field: 'vvj_nav_label'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_image:
+          id: 'vvj_image'
+          table: 'node__vvj_image'
+          field: 'vvj_image'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'target_id'
+          type: 'image'
+          settings:
+            image_link: ''
+            image_style: 'vvj_cinema_1680'
+            image_loading:
+              attribute: 'lazy'
+            svg_attributes:
+              width: null
+              height: null
+            svg_render_as_image: true
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_kicker:
+          id: 'vvj_kicker'
+          table: 'node__vvj_kicker'
+          field: 'vvj_kicker'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-kicker'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: 'title'
+          table: 'node_field_data'
+          field: 'title'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          entity_type: 'node'
+          entity_field: 'title'
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: 'h3'
+          element_class: 'vvj-title'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'string'
+          settings:
+            link_to_entity: false
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+        vvj_summary:
+          id: 'vvj_summary'
+          table: 'node__vvj_summary'
+          field: 'vvj_summary'
+          relationship: 'none'
+          group_type: 'group'
+          admin_label: ''
+          plugin_id: 'field'
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: 'none'
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 160
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: 'p'
+          element_class: 'vvj-summary'
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: false
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: 'value'
+          type: 'basic_string'
+          settings: {  }
+          group_column: 'value'
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: 'separator'
+          separator: ', '
+          field_api_classes: false
+      style:
+        type: 'views_vvjt'
+        options:
+          grouping: {  }
+          animation: 'a-top'
+          tabs_position: 'top'
+          max_width: 180
+          max_height: 0
+          available_breakpoints: '992'
+          enable_css: false
+          disable_background: true
+          background_buttons: ''
+          background_panes: ''
+          wrap_tabs: false
+          enable_deeplink: false
+          vvj_pattern: 'vvjt_glossary'
+          unique_id: 7104
+      row:
+        type: 'fields'
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      display_extenders: {  }
+      path: 'vvj/vvjt/glossary'
+      menu:
+        type: 'none'
+      defaults:
+        title: false
+        fields: false
+        style: false
+        row: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'url.query_args'
+        - 'user.node_grants:view'
+        - 'user.permissions'
+      tags:
+        - 'config:field.storage.node.vvj_image'
+        - 'config:field.storage.node.vvj_kicker'
+        - 'config:field.storage.node.vvj_link'
+        - 'config:field.storage.node.vvj_nav_label'
+        - 'config:field.storage.node.vvj_summary'

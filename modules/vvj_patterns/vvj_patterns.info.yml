@@ -1,0 +1,8 @@
+name: 'VVJ Patterns'
+type: module
+description: 'Shared base for the ready-made Patterns each VVJ module offers in its Views style settings.'
+core_version_requirement: ^11.3 || ^12
+package: VVJ
+php: 8.3
+dependencies:
+  - vvj_core:vvj_core

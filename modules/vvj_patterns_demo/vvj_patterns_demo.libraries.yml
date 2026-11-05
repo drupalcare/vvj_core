@@ -1,0 +1,10 @@
+stage:
+  version: VERSION
+  css:
+    component:
+      css/vvj-demo-stage.css: {}
+  js:
+    js/vvj-demo-stage.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

@@ -1,0 +1,12 @@
+services:
+  vvj_patterns.repository:
+    class: Drupal\vvj_patterns\PatternRepository
+    arguments: ['@extension.list.module']
+  Drupal\vvj_patterns\PatternRepository: '@vvj_patterns.repository'
+
+  # Module-independent Patterns logic every VVJ style plugin uses (optional
+  # in vvj_core through Drupal\vvj_core\Service\StylePatternsInterface).
+  vvj_patterns.style_patterns:
+    class: Drupal\vvj_patterns\StylePatterns
+    arguments: ['@vvj_patterns.repository', '@messenger']
+  Drupal\vvj_patterns\StylePatterns: '@vvj_patterns.style_patterns'

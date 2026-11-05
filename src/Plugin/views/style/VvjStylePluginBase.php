@@ -12,6 +12,7 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
 use Drupal\vvj_core\Constants\AnimationDirection;
 use Drupal\vvj_core\Constants\ValidationBounds;
 use Drupal\vvj_core\Service\BreakpointRegistry;
+use Drupal\vvj_core\Service\StylePatternsInterface;
 use Drupal\vvj_core\Service\SvgSanitizer;
 use Drupal\vvj_core\Service\TokenResolver;
 use Drupal\vvj_core\Service\UniqueIdGenerator;
@@ -92,6 +93,15 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   protected TransliterationInterface $transliteration;
 
   /**
+   * The Patterns provider, or NULL when vvj_patterns is not enabled.
+   *
+   * vvj_core does not depend on vvj_patterns: the optional module supplies the
+   * service, and every use is guarded. Protected and not readonly so
+   * DependencySerializationTrait can restore it.
+   */
+  protected ?StylePatternsInterface $stylePatterns = NULL;
+
+  /**
    * {@inheritdoc}
    */
   protected $usesRowPlugin = TRUE;
@@ -151,6 +161,12 @@ abstract class VvjStylePluginBase extends StylePluginBase {
     $transliteration = $container->get('transliteration');
     assert($transliteration instanceof TransliterationInterface);
     $instance->transliteration = $transliteration;
+    if ($container->has('vvj_patterns.style_patterns')) {
+      $stylePatterns = $container->get('vvj_patterns.style_patterns');
+      if ($stylePatterns instanceof StylePatternsInterface) {
+        $instance->stylePatterns = $stylePatterns;
+      }
+    }
     return $instance;
   }
 
@@ -225,6 +241,17 @@ abstract class VvjStylePluginBase extends StylePluginBase {
    */
   protected function supportsEnableCss(): bool {
     return TRUE;
+  }
+
+  /**
+   * Whether this pattern offers the Patterns select (needs vvj_patterns).
+   *
+   * Default FALSE. A module that ships `patterns/` returns TRUE: it then gets
+   * the `vvj_pattern` option, the Patterns form section, and the Pattern
+   * render keys, all only while vvj_patterns is enabled.
+   */
+  protected function supportsPatterns(): bool {
+    return FALSE;
   }
 
   /**
@@ -307,6 +334,12 @@ abstract class VvjStylePluginBase extends StylePluginBase {
       $options['deeplink_identifier'] = ['default' => ''];
     }
 
+    if ($this->supportsPatterns()) {
+      // Defined whether or not vvj_patterns is enabled, so a stored choice
+      // survives the module being disabled.
+      $options['vvj_pattern'] = ['default' => 'none'];
+    }
+
     return $this->definePatternOptions($options);
   }
 
@@ -331,6 +364,11 @@ abstract class VvjStylePluginBase extends StylePluginBase {
     $this->enforceFieldsRowPlugin();
     $this->setDefaultElementWeights($form);
     $this->buildWarningMessage($form);
+
+    // Patterns section, shown only when vvj_patterns is enabled.
+    if ($this->supportsPatterns() && $this->stylePatterns !== NULL) {
+      $this->stylePatterns->buildSection($this->getModuleSlug(), $this->options, $form);
+    }
 
     // Pattern-specific sections (subclass-defined order).
     $this->buildPatternSections($form);
@@ -723,6 +761,35 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   }
 
   /*
+   * Patterns hooks — thin, guarded calls into the optional vvj_patterns service.
+   */
+
+  /**
+   * Records the submitted Pattern choice into the flattened options.
+   *
+   * Subclasses that flatten their sectioned form values call this once, last.
+   * Does nothing unless the module supports Patterns and vvj_patterns is
+   * enabled, so a stored choice is kept untouched otherwise.
+   *
+   * @param array<int|string, mixed> $values
+   *   The submitted style option values, keyed by section.
+   * @param array<string, mixed> $flattened
+   *   The flattened options to save, modified in place.
+   */
+  protected function flattenPatternChoice(array $values, array &$flattened): void {
+    if (!$this->supportsPatterns()) {
+      return;
+    }
+    if ($this->stylePatterns === NULL) {
+      // vvj_patterns is disabled: keep the stored choice as it is.
+      $stored = $this->options['vvj_pattern'] ?? 'none';
+      $flattened['vvj_pattern'] = is_string($stored) ? $stored : 'none';
+      return;
+    }
+    $this->stylePatterns->applyChoice($this->getModuleSlug(), $this->defineOptions(), $this->options, $values, $flattened);
+  }
+
+  /*
    * render() + library list + validate().
    */
 
@@ -733,6 +800,20 @@ abstract class VvjStylePluginBase extends StylePluginBase {
    *   The render array for the pattern's theme hook.
    */
   public function render(): array {
+    $pattern = NULL;
+    if ($this->supportsPatterns()) {
+      if ($this->stylePatterns !== NULL) {
+        $pattern = $this->stylePatterns->getActivePattern($this->getModuleSlug(), $this->options);
+      }
+      if ($pattern === NULL) {
+        unset($this->options['vvj_pattern_active']);
+      }
+      elseif ($this->stylePatterns !== NULL) {
+        // Runtime-only keys read by the templates; never saved.
+        $this->options = $this->stylePatterns->getRuntimeOptions($pattern, $this->view->getTitle()) + $this->options;
+      }
+    }
+
     /** @var list<array<string, mixed>> $rows */
     $rows = [];
 
@@ -747,7 +828,7 @@ abstract class VvjStylePluginBase extends StylePluginBase {
 
     $cache_metadata = $this->view->display_handler->getCacheMetadata();
 
-    return [
+    $build = [
       '#theme' => $this->themeFunctions(),
       '#view' => $this->view,
       '#options' => $this->options,
@@ -762,6 +843,10 @@ abstract class VvjStylePluginBase extends StylePluginBase {
         'max-age' => $cache_metadata->getCacheMaxAge(),
       ],
     ];
+    if ($pattern !== NULL) {
+      $build['#attached']['library'][] = $pattern['library'];
+    }
+    return $build;
   }
 
   /**

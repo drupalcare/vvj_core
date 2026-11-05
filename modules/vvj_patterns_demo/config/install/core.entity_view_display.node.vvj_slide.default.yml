@@ -1,0 +1,64 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.vvj_slide.vvj_image
+    - field.field.node.vvj_slide.vvj_kicker
+    - field.field.node.vvj_slide.vvj_link
+    - field.field.node.vvj_slide.vvj_nav_label
+    - field.field.node.vvj_slide.vvj_summary
+    - image.style.vvj_wide_1600
+    - node.type.vvj_slide
+  module:
+    - image
+    - link
+id: node.vvj_slide.default
+targetEntityType: node
+bundle: vvj_slide
+mode: default
+content:
+  vvj_image:
+    type: image
+    label: hidden
+    weight: 0
+    region: content
+    settings:
+      image_link: ''
+      image_style: vvj_wide_1600
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+  vvj_kicker:
+    type: string
+    label: hidden
+    weight: 1
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  vvj_summary:
+    type: basic_string
+    label: hidden
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  vvj_link:
+    type: link
+    label: hidden
+    weight: 3
+    region: content
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+hidden:
+  links: true
+  vvj_nav_label: true

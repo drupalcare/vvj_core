@@ -1,0 +1,54 @@
+base:
+  css:
+    theme:
+      css/vvj-patterns-base.css: {}
+  dependencies:
+    - vvj_core/tokens
+
+state:
+  js:
+    js/vvj-state.js: {}
+  dependencies:
+    - core/drupal
+    - vvj_core/element-base
+
+scroll-strip:
+  js:
+    js/vvj-scroll-strip.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.debounce
+    - vvj_core/element-base
+
+split-text:
+  js:
+    js/vvj-split-text.js: {}
+  dependencies:
+    - core/drupal
+
+count-up:
+  js:
+    js/vvj-count-up.js: {}
+  dependencies:
+    - core/drupal
+    - vvj_core/element-base
+
+segmented:
+  js:
+    js/vvj-segmented.js: {}
+  dependencies:
+    - core/drupal
+    - vvj_core/keyboard-nav
+
+autoplay:
+  js:
+    js/vvj-autoplay.js: {}
+  dependencies:
+    - core/drupal
+    - vvj_core/element-base
+
+origin:
+  js:
+    js/vvj-origin.js: {}
+  dependencies:
+    - core/drupal

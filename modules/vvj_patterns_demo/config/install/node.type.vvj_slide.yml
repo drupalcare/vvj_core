@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'VVJ Slide'
+type: vvj_slide
+description: 'One slide, tab or item for the VVJ Patterns demos: a short label, a picture, a kicker, a title, a summary and a link.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

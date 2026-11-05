@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.vvj_kicker
+    - node.type.vvj_slide
+id: node.vvj_slide.vvj_kicker
+field_name: vvj_kicker
+entity_type: node
+bundle: vvj_slide
+label: 'Kicker'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  {  }
+field_type: string

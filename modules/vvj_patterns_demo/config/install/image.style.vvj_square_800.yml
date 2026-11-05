@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_square_800
+label: 'VVJ Square (1:1)'
+effects:
+  34a281ad-808a-45b6-a5aa-b5bf38c927df:
+    uuid: 34a281ad-808a-45b6-a5aa-b5bf38c927df
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 800
+      height: 800
+      anchor: center-center

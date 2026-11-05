@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_wide_1600
+label: 'VVJ Wide (16:9)'
+effects:
+  a5df0eb2-42c5-4e4b-82eb-01d695b0be92:
+    uuid: a5df0eb2-42c5-4e4b-82eb-01d695b0be92
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1600
+      height: 900
+      anchor: center-center
