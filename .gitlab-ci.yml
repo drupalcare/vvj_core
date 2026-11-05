@@ -58,3 +58,78 @@ variables:
   _AUTORUN_PREVIOUS_MINOR: 'all'
   OPT_IN_TEST_NEXT_MAJOR: '0'
   _AUTORUN_NEXT_MAJOR: 'all'
+
+################
+# VVJ CSS cascade check (static, no site, no browser).
+#
+# scripts/check-vvj-cascade.py compares which CSS declaration wins on each VVJ
+# element, before and after this change, and fails on a changed winner, a new
+# Pattern selector above 0,2,0, a new P4 loss or a new P5 token-ownership breach.
+# It reads ALL eleven VVJ repos, so a pipeline of vvj_core alone cannot run it:
+# the ten format modules are cloned (depth 1, default branch) from
+# git.drupalcode.org/project/<name>.git next to a copy of this checkout.
+#   - If any of the ten cannot be cloned, the job prints SKIPPED and the names,
+#     and the check did NOT run. It never reports a pass for a check that did not run.
+#   - Baseline: vvj_core at the merge-request base ($CI_MERGE_REQUEST_DIFF_BASE_SHA)
+#     or, on a push, HEAD~1. The ten modules are the same clone on both sides, so
+#     only a vvj_core change can move a winner. Module-side regressions are caught
+#     by the same check in the module's own change set run locally (see AGENTS.md).
+#   - If the base commit is not in the shallow clone and cannot be fetched, SKIPPED.
+#   - Solo and solo_utilities are cloned the same way (optional; the script prints
+#     "not found, skipped" for Solo when absent). Olivero is NOT fetched: the
+#     Olivero side is not compared in CI (needs checking: a sparse clone of
+#     drupal/core core/themes/olivero would add it).
+# Python is not assumed in the template's PHP image (needs checking), so the job
+# uses python:3.12-bookworm (python3 + git; needs checking on the first pipeline).
+# Coverage line to read in the log: "base <sha> (11 repos)". The job fails if it
+# is not 11.
+################
+vvj-cascade:
+  stage: validate
+  image: python:3.12-bookworm
+  script:
+    - |
+      git config --global --add safe.directory "$CI_PROJECT_DIR"
+      BASE="${CI_MERGE_REQUEST_DIFF_BASE_SHA:-}"
+      if [ -z "$BASE" ]; then BASE=$(git rev-parse -q --verify HEAD~1 || true); fi
+      if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+        git fetch --quiet --depth=100 origin ${BASE:+"$BASE"} 2>/dev/null || git fetch --quiet --deepen=50 2>/dev/null || true
+        if [ -z "$BASE" ]; then BASE=$(git rev-parse -q --verify HEAD~1 || true); fi
+      fi
+      if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+        echo "SKIPPED vvj-cascade: no base commit available (shallow clone, nothing to compare against). The check did NOT run."
+        exit 0
+      fi
+      echo "baseline commit: $BASE"
+      LANE=$(mktemp -d "${TMPDIR:-/tmp}/vvj-lane.XXXXXX")
+      BEFORE=$(mktemp -d "${TMPDIR:-/tmp}/vvj-before.XXXXXX")
+      cp -R "$CI_PROJECT_DIR" "$LANE/vvj_core"
+      MISSING=""
+      for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
+        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
+      done
+      if [ -n "$MISSING" ]; then
+        echo "SKIPPED vvj-cascade: could not clone from git.drupalcode.org:$MISSING. The check needs all ten format modules and did NOT run."
+        exit 0
+      fi
+      for s in solo solo_utilities; do
+        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$s.git" "$LANE/$s" || echo "note: $s not fetched; the Solo side is not compared"
+      done
+      echo "note: Olivero is not fetched; the Olivero side is not compared"
+      mkdir "$BEFORE/vvj_core"
+      git -C "$LANE/vvj_core" archive --format=tar -o "$BEFORE/vvj_core.tar" "$BASE"
+      tar -xf "$BEFORE/vvj_core.tar" -C "$BEFORE/vvj_core"
+      test -f "$BEFORE/vvj_core/vvj_core.info.yml" || { echo "baseline extract of vvj_core is empty"; exit 1; }
+      for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
+        mkdir "$BEFORE/$m"
+        git -C "$LANE/$m" archive --format=tar -o "$BEFORE/$m.tar" HEAD
+        tar -xf "$BEFORE/$m.tar" -C "$BEFORE/$m"
+      done
+      RC=0
+      python3 -I "$LANE/vvj_core/scripts/check-vvj-cascade.py" --lane "$LANE" --vvj "$LANE" --before "$BEFORE" > "$LANE/cascade.out" 2>&1 || RC=$?
+      cat "$LANE/cascade.out"
+      if [ "$RC" -ne 0 ]; then echo "vvj-cascade FAILED (exit $RC)"; exit "$RC"; fi
+      if [ "$(grep -c '(11 repos)' "$LANE/cascade.out")" -ne 1 ]; then
+        echo "vvj-cascade checked fewer than 11 repos: the pass above is not a pass."
+        exit 1
+      fi

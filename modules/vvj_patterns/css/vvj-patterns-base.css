@@ -53,20 +53,74 @@
   }
 }
 
-.vvj-pattern img {
+/*
+ * Neutral reset inside the box: a theme's element styles (margins, fonts,
+ * link and button looks) stop at the Pattern edge, so a Pattern looks the
+ * same under every theme. Unlayered. Box and type properties sit at 0,2,0
+ * (the doubled class is the specificity step), which beats theme element
+ * rules up to 0,1,x; Pattern rules at 0,2,0 load later and still win.
+ * Colour and weight sit at 0,1,0 because some Pattern rules set them at
+ * 0,1,0 and must keep winning (planning/vvj-s1b-result.md).
+ * Button margin, padding and border sit at 0,1,0 too: the slideshow and
+ * carousel control rules (vvjs.css, vvjc.css high contrast) set them at
+ * 0,1,0 or 0,1,1 and must keep winning (planning/vvj-s1c-result.md).
+ */
+.vvj-pattern.vvj-pattern :where(h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.vvj-pattern.vvj-pattern :where(button) {
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.vvj-pattern :where(button) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.vvj-pattern.vvj-pattern :where(a) {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: underline;
+}
+
+.vvj-pattern.vvj-pattern :where(img) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.vvj-pattern :where(h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote, a, button) {
+  color: inherit;
+  font-weight: inherit;
+}
+
+:where(.vvj-pattern) img {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
 /* Two-tone ring: visible on light, dark and photo grounds without colour. */
-.vvj-pattern :focus-visible {
+:where(.vvj-pattern) :focus-visible {
   outline: 2px solid var(--vvj-ink);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px var(--vvj-surface);
 }
 
-.vvj-pattern .vvj-link {
+:where(.vvj-pattern) .vvj-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
@@ -83,26 +137,26 @@
   }
 }
 
-.vvj-pattern [aria-hidden="false"] .vvj-stagger > * {
+.vvj-pattern :where([aria-hidden="false"]) :where(.vvj-stagger) > * {
   animation: vvj-rise 0.7s var(--vvj-ease-out) both;
 }
 
-.vvj-pattern [aria-hidden="false"] .vvj-stagger > :nth-child(2) {
+:where(.vvj-pattern) :where([aria-hidden="false"]) :where(.vvj-stagger) > :nth-child(2) {
   animation-delay: 0.08s;
 }
 
-.vvj-pattern [aria-hidden="false"] .vvj-stagger > :nth-child(3) {
+:where(.vvj-pattern) :where([aria-hidden="false"]) :where(.vvj-stagger) > :nth-child(3) {
   animation-delay: 0.16s;
 }
 
-.vvj-pattern [aria-hidden="false"] .vvj-stagger > :nth-child(4) {
+:where(.vvj-pattern) :where([aria-hidden="false"]) :where(.vvj-stagger) > :nth-child(4) {
   animation-delay: 0.24s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vvj-pattern *,
-  .vvj-pattern *::before,
-  .vvj-pattern *::after {
+  :where(.vvj-pattern) *,
+  :where(.vvj-pattern) *::before,
+  :where(.vvj-pattern) *::after {
     animation-duration: 0.01ms !important;
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;

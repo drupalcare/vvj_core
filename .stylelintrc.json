@@ -1,0 +1,8 @@
+{
+  "extends": "../../../core/.stylelintrc.json",
+  "rules": {
+    "selector-max-id": [0, { "severity": "warning" }],
+    "declaration-no-important": [true, { "severity": "warning" }],
+    "selector-max-specificity": ["0,2,0", { "severity": "warning" }]
+  }
+}

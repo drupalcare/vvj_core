@@ -50,19 +50,19 @@
     container-type: inline-size;
   }
 
-  .vvj-component *,
-  .vvj-component *::before,
-  .vvj-component *::after,
-  vvja-accordion *,
-  vvjb-carousel *,
-  vvjc-carousel-3d *,
-  vvjf-flipbox *,
-  vvjh-hero *,
-  vvjl-lightbox *,
-  vvjp-parallax *,
-  vvjr-reveal *,
-  vvjs-slideshow *,
-  vvjt-tabs * {
+  :where(.vvj-component) *,
+  :where(.vvj-component) *::before,
+  :where(.vvj-component) *::after,
+  :where(vvja-accordion) *,
+  :where(vvjb-carousel) *,
+  :where(vvjc-carousel-3d) *,
+  :where(vvjf-flipbox) *,
+  :where(vvjh-hero) *,
+  :where(vvjl-lightbox) *,
+  :where(vvjp-parallax) *,
+  :where(vvjr-reveal) *,
+  :where(vvjs-slideshow) *,
+  :where(vvjt-tabs) * {
     box-sizing: inherit;
   }
 
@@ -82,9 +82,9 @@
      Pattern-specific motion overrides also respect this query, but
      this is the cross-cutting safety net. */
   @media (prefers-reduced-motion: reduce) {
-    .vvj-component *,
-    .vvj-component *::before,
-    .vvj-component *::after {
+    :where(.vvj-component) *,
+    :where(.vvj-component) *::before,
+    :where(.vvj-component) *::after {
       transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;

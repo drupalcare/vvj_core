@@ -41,6 +41,11 @@ vendor/bin/phpstan analyse -c web/modules/contrib/vvj_core/phpstan.neon
 
 How to run the PHPUnit suites is in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+CSS cascade (static, no site): `python3 -I scripts/check-vvj-cascade.py` from this repo or the lane root. It reads all
+eleven VVJ repos beside this one, Solo and Olivero, and fails (exit 1) when a winning declaration changed against
+`--rev` (default `HEAD`), a new Pattern selector is over 0,2,0, or a P4/P5 contract check gets worse. `--list` prints
+each change; `--vvj DIR` points at another checkout of the repos. It is the one copy; the format modules call this one.
+
 ## What must not change
 
 - The four hooks every format implements on the base class (`getModuleSlug()`, `getCustomElementTag()`,

@@ -32,17 +32,17 @@
   /* Universal focus ring for every VVJ component's focusable descendants.
      Pattern stylesheets can override per-element, but the default ring
      here is sufficient for AAA without any pattern-specific work. */
-  .vvj-component :focus-visible,
-  vvja-accordion :focus-visible,
-  vvjb-carousel :focus-visible,
-  vvjc-carousel-3d :focus-visible,
-  vvjf-flipbox :focus-visible,
-  vvjh-hero :focus-visible,
-  vvjl-lightbox :focus-visible,
-  vvjp-parallax :focus-visible,
-  vvjr-reveal :focus-visible,
-  vvjs-slideshow :focus-visible,
-  vvjt-tabs :focus-visible {
+  :where(.vvj-component) :focus-visible,
+  :where(vvja-accordion) :focus-visible,
+  :where(vvjb-carousel) :focus-visible,
+  :where(vvjc-carousel-3d) :focus-visible,
+  :where(vvjf-flipbox) :focus-visible,
+  :where(vvjh-hero) :focus-visible,
+  :where(vvjl-lightbox) :focus-visible,
+  :where(vvjp-parallax) :focus-visible,
+  :where(vvjr-reveal) :focus-visible,
+  :where(vvjs-slideshow) :focus-visible,
+  :where(vvjt-tabs) :focus-visible {
     border-radius: var(--vvj-radius, 0.25rem);
     outline: var(--vvj-focus-width, 2px) solid var(--vvj-focus-color, Highlight);
     outline-offset: var(--vvj-focus-offset, 2px);
@@ -50,17 +50,17 @@
 
   /* Visually-hidden utility shared by every pattern.
      Use for skip links, accessible labels of decorative spans, etc. */
-  .vvj-component .visually-hidden,
-  vvja-accordion .visually-hidden,
-  vvjb-carousel .visually-hidden,
-  vvjc-carousel-3d .visually-hidden,
-  vvjf-flipbox .visually-hidden,
-  vvjh-hero .visually-hidden,
-  vvjl-lightbox .visually-hidden,
-  vvjp-parallax .visually-hidden,
-  vvjr-reveal .visually-hidden,
-  vvjs-slideshow .visually-hidden,
-  vvjt-tabs .visually-hidden {
+  :where(.vvj-component) .visually-hidden,
+  :where(vvja-accordion) .visually-hidden,
+  :where(vvjb-carousel) .visually-hidden,
+  :where(vvjc-carousel-3d) .visually-hidden,
+  :where(vvjf-flipbox) .visually-hidden,
+  :where(vvjh-hero) .visually-hidden,
+  :where(vvjl-lightbox) .visually-hidden,
+  :where(vvjp-parallax) .visually-hidden,
+  :where(vvjr-reveal) .visually-hidden,
+  :where(vvjs-slideshow) .visually-hidden,
+  :where(vvjt-tabs) .visually-hidden {
     position: absolute;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
@@ -75,17 +75,17 @@
 
 @media (forced-colors: active) {
   @layer vvj.base {
-    .vvj-component :focus-visible,
-    vvja-accordion :focus-visible,
-    vvjb-carousel :focus-visible,
-    vvjc-carousel-3d :focus-visible,
-    vvjf-flipbox :focus-visible,
-    vvjh-hero :focus-visible,
-    vvjl-lightbox :focus-visible,
-    vvjp-parallax :focus-visible,
-    vvjr-reveal :focus-visible,
-    vvjs-slideshow :focus-visible,
-    vvjt-tabs :focus-visible {
+    :where(.vvj-component) :focus-visible,
+    :where(vvja-accordion) :focus-visible,
+    :where(vvjb-carousel) :focus-visible,
+    :where(vvjc-carousel-3d) :focus-visible,
+    :where(vvjf-flipbox) :focus-visible,
+    :where(vvjh-hero) :focus-visible,
+    :where(vvjl-lightbox) :focus-visible,
+    :where(vvjp-parallax) :focus-visible,
+    :where(vvjr-reveal) :focus-visible,
+    :where(vvjs-slideshow) :focus-visible,
+    :where(vvjt-tabs) :focus-visible {
       outline-color: Highlight;
     }
   }
