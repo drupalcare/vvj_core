@@ -508,7 +508,7 @@ display:
           front_bg_color: '#000000'
           back_bg_color: '#1d1d1d'
           perspective: 900
-          available_breakpoints: '992'
+          available_breakpoints: all
           animation_easing: ease-in-out
           grid_gap: 8
           enable_css: false
@@ -884,7 +884,7 @@ display:
           front_bg_color: '#000000'
           back_bg_color: '#000000'
           perspective: 1200
-          available_breakpoints: '768'
+          available_breakpoints: all
           animation_easing: ease-out
           grid_gap: 16
           enable_css: false
@@ -1246,7 +1246,7 @@ display:
           front_bg_color: '#000000'
           back_bg_color: '#f2f2f2'
           perspective: 1400
-          available_breakpoints: '768'
+          available_breakpoints: all
           animation_easing: ease-in-out
           grid_gap: 16
           enable_css: false
@@ -1608,7 +1608,7 @@ display:
           front_bg_color: '#ffffff'
           back_bg_color: '#000000'
           perspective: 1800
-          available_breakpoints: '992'
+          available_breakpoints: all
           animation_easing: ease-in-out
           grid_gap: 24
           enable_css: false
