@@ -58,6 +58,9 @@ variables:
   _AUTORUN_PREVIOUS_MINOR: 'all'
   OPT_IN_TEST_NEXT_MAJOR: '0'
   _AUTORUN_NEXT_MAJOR: 'all'
+  # The branch the VVJ checks clone every sibling repo at. A bare clone takes the
+  # drupal.org default branch (dev or 1.0.x-dev), which is old code.
+  VVJ_LANE_BRANCH: '2.0.x'
 
 ################
 # VVJ CSS cascade check (static, no site, no browser).
@@ -106,14 +109,14 @@ vvj-cascade:
       cp -R "$CI_PROJECT_DIR" "$LANE/vvj_core"
       MISSING=""
       for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
-        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
+        git clone --quiet --depth 1 --branch "$VVJ_LANE_BRANCH" "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
       done
       if [ -n "$MISSING" ]; then
         echo "SKIPPED vvj-cascade: could not clone from git.drupalcode.org:$MISSING. The check needs all ten format modules and did NOT run."
         exit 0
       fi
       for s in solo solo_utilities; do
-        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$s.git" "$LANE/$s" || echo "note: $s not fetched; the Solo side is not compared"
+        git clone --quiet --depth 1 --branch "$VVJ_LANE_BRANCH" "https://git.drupalcode.org/project/$s.git" "$LANE/$s" || echo "note: $s not fetched; the Solo side is not compared"
       done
       echo "note: Olivero is not fetched; the Olivero side is not compared"
       mkdir "$BEFORE/vvj_core"
@@ -155,7 +158,7 @@ vvj-motion:
       cp -R "$CI_PROJECT_DIR" "$LANE/vvj_core"
       MISSING=""
       for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
-        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
+        git clone --quiet --depth 1 --branch "$VVJ_LANE_BRANCH" "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
       done
       if [ -n "$MISSING" ]; then
         echo "SKIPPED vvj-motion: could not clone from git.drupalcode.org:$MISSING. The check needs all ten format modules and did NOT run."
@@ -191,7 +194,7 @@ vvj-bridges:
       cp -R "$CI_PROJECT_DIR" "$LANE/vvj_core"
       MISSING=""
       for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
-        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
+        git clone --quiet --depth 1 --branch "$VVJ_LANE_BRANCH" "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
       done
       if [ -n "$MISSING" ]; then
         echo "SKIPPED vvj-bridges: could not clone from git.drupalcode.org:$MISSING. The check needs all ten format modules and did NOT run."

@@ -56,7 +56,7 @@ SOLO_ADMIN_FILES = ('css/theme/solo-ckeditor', 'css/debug/', 'css/components/sol
 # Custom property namespaces and their one owner (contract P5; same table as solo/scripts/check-cascade.py).
 OWNERS = {'--r-': {'solo', 'generated'}, '--vvj-': {'vvj'}, '--pb-': {'paragraphs_bundles'},
           '--selectify-': {'selectify', 'solo'}, '--uk-': {'utilikit'}, '--w3-': {'w3css_paragraphs'}}
-WALK_SKIP = ('tests', 'node_modules', '.git', 'vendor')
+WALK_SKIP = ('tests', 'node_modules', '.git', 'vendor', 'web')
 
 
 # ---------------------------------------------------------------- CSS parser

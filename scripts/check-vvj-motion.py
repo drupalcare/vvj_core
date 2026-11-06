@@ -41,7 +41,7 @@ import argparse, os, re, shutil, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPOS = ['vvj_core', 'vvja', 'vvjb', 'vvjc', 'vvjf', 'vvjh', 'vvjl', 'vvjp', 'vvjr', 'vvjs', 'vvjt']
-WALK_SKIP = {'tests', 'node_modules', '.git', 'vendor'}
+WALK_SKIP = {'tests', 'node_modules', '.git', 'vendor', 'web'}
 MOVE_PROPS = re.compile(r'^(transform|translate|scale|rotate|margin(-[a-z-]+)?|top|right|bottom|left|inset(-[a-z-]+)?'
                         r'|width|height|min-width|min-height|max-width|max-height|inline-size|block-size|padding(-[a-z-]+)?)$')
 LAYOUT_READ = re.compile(r'\b(offset(Width|Height|Top|Left)|client(Width|Height)|scroll(Width|Height)'
@@ -146,6 +146,19 @@ def unwhere(sel):
     return sel
 
 
+def unwhere_head(sel):
+    """`:where(X) Y` (a :where() around the selector head only) -> `X Y`; whole wraps go through unwhere()."""
+    sel = unwhere(sel)
+    if not sel.startswith(':where('):
+        return sel
+    depth = 0
+    for i in range(6, len(sel)):
+        depth += (sel[i] == '(') - (sel[i] == ')')
+        if depth == 0:
+            return norm(sel[7:i] + sel[i + 1:])
+    return sel
+
+
 def ancestors(part):
     """Selector text before the subject compound."""
     flat = re.sub(r'\s*([>+~])\s*', r' \1 ', norm(part))
@@ -160,7 +173,7 @@ def check_css(path, text, rel):
     for sel, body, line in rules:
         if re.search(r'inset\s*:\s*-', body):
             for part in split_top(sel, ','):
-                m = re.match(r'(.*:hover)::?(after|before)$', norm(unwhere(norm(part))))
+                m = re.match(r'(.*:hover)::?(after|before)$', norm(unwhere_head(norm(part))))
                 if m:
                     guards.add(m.group(1))
     for sel, body, line in rules:
@@ -201,7 +214,7 @@ def check_css(path, text, rel):
             if ':hover' in subj:
                 moving = [d for d in decls if not growing_zoom(*d)
                           and not (d[0] in ('transform', 'translate', 'scale', 'rotate') and d[1].split('!')[0].strip() == 'none')]
-                if moving and norm(part) in guards:
+                if moving and norm(unwhere_head(norm(part))) in guards:
                     safe.append(where + '   [hit-area guard]')
                 elif moving:
                     fails.append(where)
@@ -454,6 +467,8 @@ SELF = {
               "document.removeEventListener('keydown',k);clearInterval(t);}};})(Drupal);", None),
     'red-a-padding': ('x/css/pd.css', '.b:hover { padding: 0 24px; }', 'FAIL  x/css/pd.css:1'),
     'ok-where-guard': ('y/css/wg.css', '.v .b:hover { transform: translateY(-2px); }\n:where(.v .b:hover)::after { content: ""; position: absolute; inset: -4px; }', None),
+    'ok-where-head-guard': ('y/css/wh.css', ':where(.v .h) .b:hover { transform: translateY(-2px); }\n:where(.v .h .b:hover)::after { content: ""; position: absolute; inset: -4px; }', None),
+    'red-where-head-no-guard': ('x/css/wn.css', ':where(.v .h) .b:hover { transform: translateY(-2px); }', 'FAIL  x/css/wn.css:1'),
     'ok-pin-tag': ('y/css/pt.css', '.n button,\n.n button:hover,\n.n .button.off:hover { width: 44px; margin: 0; transform: none; }', None),
     'red-pin-not-tag': ('x/css/pn.css', '.n .btn,\n.n .button.off:hover { width: 44px; }', 'FAIL  x/css/pn.css:1  .n .button.off:hover'),
     'ok-b-element-base': ([('y/js/base.js', "(function(D){D.Vvj.ElementBase=class VvjElementBase extends HTMLElement{get signal(){if(!this._c){this._c=new AbortController();}return this._c.signal;}\n  disconnectedCallback() {\n this._c?.abort();\n }\n};})(Drupal);"), ('y/js/el.js', "(function(D){const {ElementBase}=D.Vvj;class E extends ElementBase{onHydrate(){"
