@@ -170,3 +170,39 @@ vvj-motion:
         echo "vvj-motion checked fewer than 11 repos: the pass above is not a pass."
         exit 1
       fi
+
+################
+# VVJ bridge drift check (static, no site, no browser).
+#
+# scripts/check-vvj-bridges.py fails when a bridge library declares `dependencies`
+# (the vvjh/vvjl loop was a 2 GB memory fatal), when a module bridge sets a
+# --vvjX-* token its patterns/*-pattern-base.css never declares, or when a shared
+# --vvj-theme-* role exists in only one of the two shared bridges. Cloned the
+# same way as vvj-cascade; the same SKIPPED rule applies (never a pass when it did not run).
+# Coverage line to read in the log: "20 module bridges" (10 modules x Solo and APEX).
+# The job runs --self-test first (one planted defect per check must go red).
+################
+vvj-bridges:
+  stage: validate
+  image: python:3.12-bookworm
+  script:
+    - |
+      LANE=$(mktemp -d "${TMPDIR:-/tmp}/vvj-lane.XXXXXX")
+      cp -R "$CI_PROJECT_DIR" "$LANE/vvj_core"
+      MISSING=""
+      for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
+        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
+      done
+      if [ -n "$MISSING" ]; then
+        echo "SKIPPED vvj-bridges: could not clone from git.drupalcode.org:$MISSING. The check needs all ten format modules and did NOT run."
+        exit 0
+      fi
+      python3 -I "$LANE/vvj_core/scripts/check-vvj-bridges.py" --self-test
+      RC=0
+      python3 -I "$LANE/vvj_core/scripts/check-vvj-bridges.py" --lane "$LANE" > "$LANE/bridges.out" 2>&1 || RC=$?
+      cat "$LANE/bridges.out"
+      if [ "$RC" -ne 0 ]; then echo "vvj-bridges FAILED (exit $RC)"; exit "$RC"; fi
+      if [ "$(grep -c ', 20 module bridges,' "$LANE/bridges.out")" -ne 1 ]; then
+        echo "vvj-bridges checked fewer than 20 module bridges: the pass above is not a pass."
+        exit 1
+      fi

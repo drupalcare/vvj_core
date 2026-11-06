@@ -17,7 +17,7 @@ interface ViewFeaturesInterface {
    *
    * A value is kept only when the setting exists and can hold it: a choice
    * the select offers, on or off for a checkbox, a number for a number. A
-   * colour, a text box or anything else is left at the format's default.
+   * color, a text box or anything else is left at the format's default.
    *
    * @param string $format
    *   Views style plugin id.

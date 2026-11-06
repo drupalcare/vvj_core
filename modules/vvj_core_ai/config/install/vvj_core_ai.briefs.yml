@@ -17,7 +17,7 @@
 #              user they can disable it". Real setting names and choice keys
 #              only, read from each format's own settings form; the contract
 #              test fails on a typo. Most equal the format's default and are
-#              listed so they are announced. No colours, no text, no sizes.
+#              listed so they are announced. No colors, no text, no sizes.
 
 briefs:
 

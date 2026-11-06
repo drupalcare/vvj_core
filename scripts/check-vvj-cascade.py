@@ -6,7 +6,7 @@ Plan: planning/vvj-cascade-plan.md (lane root), step S0. Modelled on solo/script
 
 What it compares. Every VVJ declaration (all 11 repos, admin CSS excluded) is paired with every other
 declaration that can reach the same element and sets the same property to a different value: other VVJ
-CSS, Solo (theme CSS plus the region colours solo_utilities generates) and Olivero. The winner of each
+CSS, Solo (theme CSS plus the region colors solo_utilities generates) and Olivero. The winner of each
 pair is computed for the working tree and for the VVJ repos at a git revision (default HEAD), extracted
 to a temporary directory and deleted afterwards. Solo and Olivero are read from disk for both sides, so
 only VVJ edits can change a winner. The baseline is git itself: no snapshot file to drift.

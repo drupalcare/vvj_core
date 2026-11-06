@@ -1,18 +1,18 @@
 /**
  * @file
- * VVJ Patterns theme bridge: Solo region colours.
+ * VVJ Patterns theme bridge: Solo region colors.
  *
  * Loaded only when the active theme is Solo or a Solo sub-theme
  * (VvjPatternsLibraryInfoAlterHook). Token mapping ONLY: it gives the
- * --vvj-* colour tokens of vvj-patterns-base.css new values taken from the
+ * --vvj-* color tokens of vvj-patterns-base.css new values taken from the
  * Solo region the Pattern sits in, and never paints an element.
  *
- * Step 1 reads the theme's region colours into --vvj-theme-* role tokens
- * (the same 18 names the APEX bridge declares; every module bridge reads these
+ * Step 1 reads the theme's region colors into --vvj-theme-* role tokens
+ * (the same 19 names the APEX bridge declares; every module bridge reads these
  * and never spells a --r-* name, so each theme's spelling lives only here). Step 2 derives every Pattern token
- * from those roles with color-mix(); no colour is hard-coded except the
- * black-and-white fallbacks, which repeat vvj-patterns-base.css for a
- * region that leaves a colour unset.
+ * from those roles with color-mix(); no color is hard-coded except the
+ * black-and-white fallbacks for a region that leaves a color unset. Mixed
+ * through step 2, they land close to vvj-patterns-base.css, not exactly on it.
  *
  * Selector: `.vvj-pattern` (0,1,0), not `:where()`. vvj-patterns-base.css
  * declares the tokens at 0,1,0, so a 0,0,0 bridge would lose to it; at
@@ -21,15 +21,14 @@
  * Solo names, each checked against solo/css (2026-11-05): --r-bg, --r-tx,
  * --r-h1, --r-sc-h1, --r-lk, --r-sc-lk, --r-lk-h, --r-sc-lk-h, --r-br,
  * --r-bg-fr, --r-tx-lk, --r-menu-tx-h, --r-menu-bg-h, --r-tx-bt,
- * --r-tx-bt-h, --r-bg-bt, --r-bg-bt-h. --r-sc-tx-bt and --r-sc-tx-bt-h are only
- * READ (by Solo's own button rule, solo-variables-regions.css:89 and 99) and are
- * declared in no Solo stylesheet, so they are a fallback hook, not a checked name.
+ * --r-tx-bt-h, --r-bg-bt, --r-bg-bt-h. --r-sc-tx-bt and --r-sc-tx-bt-h are not
+ * read here: they pair with Solo's own button ground (see the button roles).
  * Solo sets several of the others to `initial` at :root, so the var() fallbacks
  * below take over where a region is silent.
  */
 
 .vvj-pattern {
-  /* Step 1: the theme's colours as roles. */
+  /* Step 1: the theme's colors as roles. */
   --vvj-theme-bg: var(--r-bg, #fff);
   --vvj-theme-text: var(--r-tx, #111);
   --vvj-theme-heading: var(--r-h1, var(--r-sc-h1, var(--vvj-theme-text)));
@@ -40,29 +39,35 @@
   --vvj-theme-menu-text: var(--r-tx-lk, var(--vvj-theme-text));
   --vvj-theme-menu-text-hover: var(--r-menu-tx-h, var(--vvj-theme-menu-text));
   /* Not --r-header-bg: Solo schemes often set it to a gradient, which is
-     not a colour, and it belongs to the header region, not this one. */
+     not a color, and it belongs to the header region, not this one. */
   --vvj-theme-menu-bg: var(--vvj-theme-bg);
   --vvj-theme-menu-bg-hover: var(--r-menu-bg-h, var(--vvj-theme-menu-bg));
-  --vvj-theme-button-text: var(--r-tx-bt, var(--r-sc-tx-bt, var(--vvj-theme-bg)));
-  --vvj-theme-button-text-hover: var(--r-tx-bt-h, var(--r-sc-tx-bt-h, var(--vvj-theme-button-text)));
+  /* Not --r-sc-tx-bt(-h): Solo pairs those with its own button ground
+     (--r-bg, solo-variables-regions.css:89-99), and 20 regions in 4
+     predefined schemes set --r-sc-tx-bt-h with no --r-bg-bt-h, so on the ink
+     fill below it would be a color chosen for another ground. */
+  --vvj-theme-button-text: var(--r-tx-bt, var(--vvj-theme-bg));
+  --vvj-theme-button-text-hover: var(--r-tx-bt-h, var(--vvj-theme-button-text));
   --vvj-theme-button-bg: var(--r-bg-bt, var(--vvj-theme-text));
   --vvj-theme-button-bg-hover: var(--r-bg-bt-h, var(--vvj-theme-button-bg));
   /*
    * Pairs: a fill and the text on it come from the same pair of roles, and the
-   * fallbacks of a pair are the page pair swapped (fill = text colour, text =
-   * ground), so with both unset they are a black-and-white pair. A scheme that
-   * sets only one of a pair gets that colour next to the fallback: it must set both
-   * (NEEDS OWNER: a contrast-derived text role, B36-W10-result.md).
+   * fallbacks of a pair are the page pair swapped (fill = text color, text =
+   * ground), so with both unset they are a black-and-white pair. Checked
+   * 2026-11-05: none of the 50 predefined schemes sets a button or menu-hover
+   * fill without its text, so no pair here mixes a scheme color with a fallback.
    */
-  /* The active pair (current tab, active chip, open bar): menu hover colours, ink fill and ground text when unset. */
+  /* The active pair (current tab, active chip, open bar): menu hover colors, ink fill and ground text when unset. */
   --vvj-theme-active-bg: var(--r-menu-bg-h, var(--vvj-theme-text));
   --vvj-theme-active-text: var(--r-menu-tx-h, var(--vvj-theme-bg));
   /* A control's outline (quiet button line): the theme border, else the muted ink. */
   --vvj-theme-control-line: var(--r-br, var(--vvj-muted));
+  /* The track a progress fill runs on: the theme border. */
+  --vvj-theme-track: var(--vvj-theme-border);
 
   /*
    * Brand roles, the same five names the APEX bridge reads from its scheme:
-   * primary = the region heading colour, secondary = link, accent = link
+   * primary = the region heading color, secondary = link, accent = link
    * hover, and Solo's own light and dark inks (solo-variables-regions.css:12-14).
    * Used only where a contrast floor holds whatever the region is: the stage.
    */
@@ -99,12 +104,12 @@
   --vvj-glass-line: color-mix(in oklab, var(--vvj-stage-color) 16%, transparent);
   --vvj-glass-shadow: 0 18px 40px color-mix(in oklab, var(--vvj-stage-bg) 35%, transparent);
 
-  /* --vvj-mask-solid is not mapped: a mask reads only alpha, never colour. */
+  /* --vvj-mask-solid is not mapped: a mask reads only alpha, never color. */
 }
 
 /*
  * Dark mode. vvj-patterns-base.css swaps its page tokens here; under Solo
- * the region colours already decide light or dark, so only the fallbacks
+ * the region colors already decide light or dark, so only the fallbacks
  * for an unset region change, to the base's dark values. Everything in
  * step 2 recomputes from these roles.
  */
@@ -116,7 +121,7 @@
 }
 
 /* The demo stage (vvj_patterns_demo) takes the region ground the Pattern
-   reads, not the system colour scheme, so the stage and the Pattern ink stay a pair. */
+   reads, not the system color scheme, so the stage and the Pattern ink stay a pair. */
 .vvj-demo-stage {
   --vvj-demo-stage-bg: var(--r-bg, #fff);
   --vvj-demo-stage-color: var(--r-tx, #111);

@@ -3,7 +3,7 @@
  * VVJ Patterns Demo: the stage the demo views sit on.
  *
  * Scoped to the view's own wrapper (.vvj-demo-stage); nothing outside the view
- * is styled. The ground follows the colour scheme like a design page does
+ * is styled. The ground follows the color scheme like a design page does
  * (light #fff, dark #111: the same values as --vvj-surface in
  * vvj_patterns/css/vvj-patterns-base.css, repeated here because those tokens
  * live on the Pattern, which is inside the stage).

@@ -1,18 +1,18 @@
 /**
  * @file
- * VVJ Patterns theme bridge: APEX region colours.
+ * VVJ Patterns theme bridge: APEX region colors.
  *
  * Loaded only when the active theme is apex_theme or an apex_* sub-theme
  * (VvjPatternsLibraryInfoAlterHook). Token mapping ONLY: it gives the
- * --vvj-* colour tokens of vvj-patterns-base.css new values taken from the
+ * --vvj-* color tokens of vvj-patterns-base.css new values taken from the
  * APEX region the Pattern sits in, and never paints an element.
  *
- * Step 1 reads the theme's region colours into --vvj-theme-* role tokens
- * (the same 18 names the Solo bridge declares, plus the five APEX scheme roles; every module bridge reads these
+ * Step 1 reads the theme's region colors into --vvj-theme-* role tokens
+ * (the same 19 names the Solo bridge declares, plus the five APEX scheme roles; every module bridge reads these
  * and never spells a --r-* name, so each theme's spelling lives only here). Step 2 derives every Pattern token
- * from those roles with color-mix(); no colour is hard-coded except the
- * black-and-white fallbacks, which repeat vvj-patterns-base.css for a
- * region that leaves a colour unset.
+ * from those roles with color-mix(); no color is hard-coded except the
+ * black-and-white fallbacks for a region that leaves a color unset. Mixed
+ * through step 2, they land close to vvj-patterns-base.css, not exactly on it.
  *
  * Selector: `.vvj-pattern` (0,1,0), not `:where()`. vvj-patterns-base.css
  * declares the tokens at 0,1,0, so a 0,0,0 bridge would lose to it; at
@@ -23,7 +23,7 @@
  */
 
 .vvj-pattern {
-  /* Step 1: the theme's colours as roles. */
+  /* Step 1: the theme's colors as roles. */
   --vvj-theme-bg: var(--r-background, #fff);
   --vvj-theme-text: var(--r-text, #111);
   --vvj-theme-heading: var(--r-heading, var(--vvj-theme-text));
@@ -41,19 +41,21 @@
   --vvj-theme-button-bg-hover: var(--r-button-background-hover, var(--vvj-theme-button-bg));
   /*
    * Pairs: a fill and the text on it come from the same pair of roles, and the
-   * fallbacks of a pair are the page pair swapped (fill = text colour, text =
-   * ground), so with both unset they are a black-and-white pair. A scheme that
-   * sets only one of a pair gets that colour next to the fallback: it must set both
-   * (NEEDS OWNER: a contrast-derived text role, B36-W10-result.md).
+   * fallbacks of a pair are the page pair swapped (fill = text color, text =
+   * ground), so with both unset they are a black-and-white pair. APEX always
+   * sets both halves (a missing one is derived, apex-variables-regions.css);
+   * the ground guards below cover the derived pairs.
    */
-  /* The active pair (current tab, active chip, open bar): menu hover colours, ink fill and ground text when unset. */
+  /* The active pair (current tab, active chip, open bar): menu hover colors, ink fill and ground text when unset. */
   --vvj-theme-active-bg: var(--r-menu-background-hover, var(--vvj-theme-text));
   --vvj-theme-active-text: var(--r-menu-text-hover, var(--vvj-theme-bg));
   /* A control's outline (quiet button line): the theme border, else the muted ink. */
   --vvj-theme-control-line: var(--r-border, var(--vvj-muted));
+  /* The track a progress fill runs on: the theme border (see the guards below). */
+  --vvj-theme-track: var(--vvj-theme-border);
 
   /*
-   * APEX scheme colours (owner, 2026-11-05): the five --apex-scheme-* colours
+   * APEX scheme colors (owner, 2026-11-05): the five --apex-scheme-* colors
    * APEX writes on :root. They are page-wide, not per region, so they are used
    * only where a contrast floor holds whatever the region is: the dark stage.
    * Secondary, accent and ink-dark are declared for module bridges; none is
@@ -93,12 +95,64 @@
   --vvj-glass-line: color-mix(in oklab, var(--vvj-stage-color) 16%, transparent);
   --vvj-glass-shadow: 0 18px 40px color-mix(in oklab, var(--vvj-stage-bg) 35%, transparent);
 
-  /* --vvj-mask-solid is not mapped: a mask reads only alpha, never colour. */
+  /* --vvj-mask-solid is not mapped: a mask reads only alpha, never color. */
+}
+
+/*
+ * Ground guards (WCAG 1.4.11, 3:1). APEX gives every region all 15 colors:
+ * one it leaves unset is derived from Color 1 and 2 (apex-variables-regions.css,
+ * "Two-Color Cascade Foundation"), so the button and menu-hover fills are the
+ * ground itself and the border is the full text color. The var() fallbacks
+ * above then never apply, and a VVJ fill (button, active tab, mark, progress)
+ * would vanish into its ground. Each query below matches only that derived
+ * case (the color equals the one APEX derives it from), so a scheme that sets
+ * its own colors keeps them. The query reads the Pattern's parent, which
+ * holds the same inherited region colors. A browser without style queries
+ * keeps the colors above.
+ */
+
+/* Button pair left to APEX: ink fill, ground words (the region's own contrast). */
+@container style(--r-button-background: var(--r-background)) and style(--r-button-text: var(--r-text)) {
+  .vvj-pattern {
+    --vvj-theme-button-bg: var(--vvj-theme-text);
+    --vvj-theme-button-text: var(--vvj-theme-bg);
+  }
+}
+
+@container style(--r-button-background-hover: var(--r-background)) and style(--r-button-text-hover: var(--r-text)) {
+  .vvj-pattern {
+    --vvj-theme-button-bg-hover: var(--vvj-theme-text);
+    --vvj-theme-button-text-hover: var(--vvj-theme-bg);
+  }
+}
+
+/* Active pair left to APEX: the same ink fill and ground words. */
+@container style(--r-menu-background-hover: var(--r-background)) and style(--r-menu-text-hover: var(--r-text)) {
+  .vvj-pattern {
+    --vvj-theme-active-bg: var(--vvj-theme-text);
+    --vvj-theme-active-text: var(--vvj-theme-bg);
+  }
+}
+
+/* Menu fill left to APEX: the raised step, so an idle tab differs from the
+   ground-colored current one, as in vvj-patterns-base.css. */
+@container style(--r-menu-background: var(--r-background)) {
+  .vvj-pattern {
+    --vvj-theme-menu-bg: var(--vvj-raised);
+  }
+}
+
+/* Border left to APEX (the full text color): a light track, so an ink
+   progress fill stays visible on it. */
+@container style(--r-border: var(--r-text)) {
+  .vvj-pattern {
+    --vvj-theme-track: color-mix(in oklab, var(--vvj-theme-text) 20%, var(--vvj-theme-bg));
+  }
 }
 
 /*
  * Dark mode. vvj-patterns-base.css swaps its page tokens here; under APEX
- * the region colours already decide light or dark, so only the fallbacks
+ * the region colors already decide light or dark, so only the fallbacks
  * for an unset region change, to the base's dark values. Everything in
  * step 2 recomputes from these roles.
  */
@@ -110,7 +164,7 @@
 }
 
 /* The demo stage (vvj_patterns_demo) takes the region ground the Pattern
-   reads, not the system colour scheme, so the stage and the Pattern ink stay a pair. */
+   reads, not the system color scheme, so the stage and the Pattern ink stay a pair. */
 .vvj-demo-stage {
   --vvj-demo-stage-bg: var(--r-background, #fff);
   --vvj-demo-stage-color: var(--r-text, #111);

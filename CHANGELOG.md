@@ -12,8 +12,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- `scripts/check-vvj-bridges.py` and a `vvj-bridges` CI job: fail on a bridge library with `dependencies`, a module bridge token its Pattern base never declares, or a shared `--vvj-theme-*` role missing from one of the two bridges.
 - `vvj_patterns` bridges: three new shared roles (`--vvj-theme-active-bg`, `--vvj-theme-active-text`, `--vvj-theme-control-line`) so module bridges never spell `--r-*` names.
-- **Patterns theme bridges**: under Solo or APEX (or a sub-theme of either), `vvj_patterns` loads a bridge that takes the Pattern colours from the theme region the Pattern sits in, with lighter, darker and see-through shades mixed from those colours. Every other theme keeps the black-and-white look.
+- **Patterns theme bridges**: under Solo or APEX (or a sub-theme of either), `vvj_patterns` loads a bridge that takes the Pattern colors from the theme region the Pattern sits in, with lighter, darker and see-through shades mixed from those colors. Every other theme keeps the black-and-white look.
 
 - **Patterns**: two new sub-modules. `vvj_patterns` is the shared base for the ready-made designs each VVJ format ships: it reads each format's `patterns/<id>/pattern.yml` and adds a "Patterns" section with a "Pattern" select to the format settings. `vvj_patterns_demo` is optional example content: a "VVJ Slide" content type, five demo slides with pictures, and example views with one page per Pattern.
 
@@ -36,6 +37,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Patterns under APEX: where a region leaves its button, menu-hover or border colors to APEX (which derives them from Color 1 and 2), Pattern buttons, active tabs, marks and progress fills no longer take the region ground and vanish; they use the region text color with ground-colored words, idle tabs the raised step and progress tracks a light text mix. Schemes that set their own colors are unchanged. Under Solo, Pattern button words no longer read `--r-sc-tx-bt(-h)`, which four predefined schemes set for Solo's own button ground.
 - Patterns: under Solo and APEX (same rule in both), the dark stage takes the brand primary color (Solo: the region heading color; APEX: the scheme primary) (lightness capped so its words keep at least 4.5:1; 12.8:1 with the default scheme) and the stage words take the light ink. Both bridges declare the same five brand roles for module bridges: `--vvj-theme-primary`, `-secondary`, `-accent`, `-ink-light` and `-ink-dark`.
 - Patterns: under Solo and APEX, muted words (`--vvj-muted`) mix 15% of the ground into the text instead of 30%, so they keep a 4.5:1 contrast (measured 3.58:1 before, 5.0:1 after on apex_theme).
 - The foundation and accessibility layers named the 3D carousel `vvjc-carousel-3d`, a tag vvjc never prints; they now use `vvjc-carousel`, so vvjc gets the same container setup, focus ring and visually-hidden rules as the other VVJ elements.

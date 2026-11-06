@@ -3,8 +3,8 @@
  * VVJ Patterns shared base: the design variables and shared motion.
  *
  * Black, white and greys only, for now. This token block is the ONE place a
- * colour value may be written; every Pattern CSS file reads var(--vvj-*)
- * and nothing else (no theme tokens, no fallbacks of its own). Colour comes
+ * color value may be written; every Pattern CSS file reads var(--vvj-*)
+ * and nothing else (no theme tokens, no fallbacks of its own). Color comes
  * later as new values for these same tokens, with no Pattern file changes.
  * Every --vvj-<part>-color has its --vvj-<part>-bg.
  */
@@ -29,7 +29,7 @@
   --vvj-glass-line: rgb(255 255 255 / 0.16);
   --vvj-glass-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
 
-  /* Mask: the opaque stop of a fade mask (not a visible colour). */
+  /* Mask: the opaque stop of a fade mask (not a visible color). */
   --vvj-mask-solid: #000;
 
   --vvj-radius: 16px;
@@ -59,7 +59,7 @@
  * same under every theme. Unlayered. Box and type properties sit at 0,2,0
  * (the doubled class is the specificity step), which beats theme element
  * rules up to 0,1,x; Pattern rules at 0,2,0 load later and still win.
- * Colour and weight sit at 0,1,0 because some Pattern rules set them at
+ * Color and weight sit at 0,1,0 because some Pattern rules set them at
  * 0,1,0 and must keep winning (planning/vvj-s1b-result.md).
  * Button margin, padding and border sit at 0,1,0 too: the slideshow and
  * carousel control rules (vvjs.css, vvjc.css high contrast) set them at
@@ -113,7 +113,7 @@
   height: auto;
 }
 
-/* Two-tone ring: visible on light, dark and photo grounds without colour. */
+/* Two-tone ring: visible on light, dark and photo grounds without color. */
 :where(.vvj-pattern) :focus-visible {
   outline: 2px solid var(--vvj-ink);
   outline-offset: 2px;

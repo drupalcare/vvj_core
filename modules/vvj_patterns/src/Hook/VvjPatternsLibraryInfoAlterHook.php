@@ -35,7 +35,7 @@ final class VvjPatternsLibraryInfoAlterHook {
       return;
     }
 
-    // The shared bridge: maps the --vvj-* colour tokens every Pattern reads.
+    // The shared bridge: maps the --vvj-* color tokens every Pattern reads.
     if ($extension === 'vvj_patterns') {
       $this->addDependency($libraries, 'base', 'vvj_patterns/theme-bridge-' . $id);
       return;
