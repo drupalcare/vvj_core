@@ -1058,7 +1058,13 @@ display:
           inline: {  }
           separator: ''
           hide_empty: false
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 8
       defaults:
+        pager: false
         title: false
         style: false
         row: false
@@ -1954,7 +1960,13 @@ display:
           inline: {  }
           separator: ''
           hide_empty: false
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 6
       defaults:
+        pager: false
         title: false
         style: false
         row: false
@@ -2402,7 +2414,13 @@ display:
           inline: {  }
           separator: ''
           hide_empty: false
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 5
       defaults:
+        pager: false
         title: false
         style: false
         row: false

@@ -133,3 +133,40 @@ vvj-cascade:
         echo "vvj-cascade checked fewer than 11 repos: the pass above is not a pass."
         exit 1
       fi
+
+################
+# VVJ motion check (static, no site, no browser).
+#
+# scripts/check-vvj-motion.py fails on a hover rule that moves its own box (the
+# shake), a mode button rule or handler that reaches both hover and click mode,
+# a document/window listener, timer or observer with no removal, and a behavior
+# without once(). Rules and examples: docs/JS-RULES.md. No baseline: it reads
+# the current tree of all eleven VVJ repos, cloned the same way as vvj-cascade.
+#   - If any of the ten cannot be cloned, the job prints SKIPPED and the names,
+#     and the check did NOT run. It never reports a pass for a check that did not run.
+# Coverage line to read in the log: "11 repos". The job fails if it is not 11.
+################
+vvj-motion:
+  stage: validate
+  image: python:3.12-bookworm
+  script:
+    - |
+      LANE=$(mktemp -d "${TMPDIR:-/tmp}/vvj-lane.XXXXXX")
+      cp -R "$CI_PROJECT_DIR" "$LANE/vvj_core"
+      MISSING=""
+      for m in vvja vvjb vvjc vvjf vvjh vvjl vvjp vvjr vvjs vvjt; do
+        git clone --quiet --depth 1 "https://git.drupalcode.org/project/$m.git" "$LANE/$m" || MISSING="$MISSING $m"
+      done
+      if [ -n "$MISSING" ]; then
+        echo "SKIPPED vvj-motion: could not clone from git.drupalcode.org:$MISSING. The check needs all ten format modules and did NOT run."
+        exit 0
+      fi
+      python3 -I "$LANE/vvj_core/scripts/check-vvj-motion.py" --self-test
+      RC=0
+      python3 -I "$LANE/vvj_core/scripts/check-vvj-motion.py" > "$LANE/motion.out" 2>&1 || RC=$?
+      cat "$LANE/motion.out"
+      if [ "$RC" -ne 0 ]; then echo "vvj-motion FAILED (exit $RC)"; exit "$RC"; fi
+      if [ "$(grep -c '; 11 repos' "$LANE/motion.out")" -ne 1 ]; then
+        echo "vvj-motion checked fewer than 11 repos: the pass above is not a pass."
+        exit 1
+      fi

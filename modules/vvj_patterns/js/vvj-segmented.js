@@ -26,7 +26,9 @@
       this.onSelect = onSelect;
       const start = Math.max(
         0,
-        this.buttons.findIndex((b) => b.getAttribute('aria-pressed') === 'true'),
+        this.buttons.findIndex(
+          (b) => b.getAttribute('aria-pressed') === 'true',
+        ),
       );
       this.buttons.forEach((button, index) => {
         button.setAttribute('aria-pressed', index === start ? 'true' : 'false');
@@ -55,7 +57,10 @@
         return;
       }
       this.buttons.forEach((button) => {
-        button.setAttribute('aria-pressed', button === target ? 'true' : 'false');
+        button.setAttribute(
+          'aria-pressed',
+          button === target ? 'true' : 'false',
+        );
       });
       this.onSelect(index, target);
     }

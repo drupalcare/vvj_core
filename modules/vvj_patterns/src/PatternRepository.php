@@ -11,7 +11,7 @@ use Drupal\Core\Extension\ModuleExtensionList;
  * Reads the Patterns a VVJ module ships in `<module>/patterns/<p>/pattern.yml`.
  *
  * Each module owns its Patterns (files, CSS, JS, library). This service only
- * finds and normalises their definitions, so every module reads them the same
+ * finds and normalizes their definitions, so every module reads them the same
  * way. A Pattern definition holds:
  * - label: the Pattern name shown in the select (English, translatable).
  * - description: one sentence shown under the select.
@@ -19,13 +19,15 @@ use Drupal\Core\Extension\ModuleExtensionList;
  *   module's own option names.
  * - features: optional template features the Pattern switches on.
  * - needs: steps the site builder must still do by hand.
+ *
+ * @phpstan-type PatternDefinition array{id: string, name: string, module: string, label: string, description: string, options: array<string, mixed>, features: list<string>, needs: list<string>, library: string, class: string}
  */
 final class PatternRepository {
 
   /**
    * Definitions per module, memoised for the request.
    *
-   * @var array<string, array<string, array<string, mixed>>>
+   * @var array<string, array<string, PatternDefinition>>
    */
   private array $cache = [];
 
@@ -39,7 +41,7 @@ final class PatternRepository {
    * @param string $module
    *   The module machine name, for example `vvjt`.
    *
-   * @return array<string, array{id: string, name: string, module: string, label: string, description: string, options: array<string, mixed>, features: list<string>, needs: list<string>, library: string, class: string}>
+   * @return array<string, PatternDefinition>
    *   Definitions keyed by `<module>_<pattern>`, sorted by their weight.
    */
   public function getPatterns(string $module): array {

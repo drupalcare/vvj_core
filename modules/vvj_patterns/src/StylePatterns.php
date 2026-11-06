@@ -65,11 +65,12 @@ final class StylePatterns implements StylePatternsInterface {
     ];
     $active = $this->getActivePattern($module, $options);
     if ($active !== NULL) {
+      $needs = array_values(array_filter((array) ($active['needs'] ?? []), 'is_string'));
       $form['patterns_section']['vvj_pattern_needs'] = [
         '#theme' => 'item_list',
         '#title' => $this->t('To finish the @name Pattern', ['@name' => $choices[$active['id']]]),
         // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
-        '#items' => array_map(fn (string $need) => $this->t($need), $active['needs']),
+        '#items' => array_map(fn (string $need) => $this->t($need), $needs),
       ];
     }
   }

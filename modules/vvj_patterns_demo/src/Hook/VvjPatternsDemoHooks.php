@@ -27,8 +27,16 @@ final class VvjPatternsDemoHooks {
     if (!($view instanceof ViewExecutable) || !str_starts_with((string) $view->id(), 'vvj_demo_')) {
       return;
     }
-    $variables['attributes']['class'][] = 'vvj-demo-stage';
-    $variables['#attached']['library'][] = 'vvj_patterns_demo/stage';
+    $attributes = is_array($variables['attributes'] ?? NULL) ? $variables['attributes'] : [];
+    $classes = is_array($attributes['class'] ?? NULL) ? $attributes['class'] : [];
+    $classes[] = 'vvj-demo-stage';
+    $attributes['class'] = $classes;
+    $variables['attributes'] = $attributes;
+    $attached = is_array($variables['#attached'] ?? NULL) ? $variables['#attached'] : [];
+    $libraries = is_array($attached['library'] ?? NULL) ? $attached['library'] : [];
+    $libraries[] = 'vvj_patterns_demo/stage';
+    $attached['library'] = $libraries;
+    $variables['#attached'] = $attached;
   }
 
 }

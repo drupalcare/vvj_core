@@ -7,8 +7,10 @@
  *
  * The root gets `vvj-autoplay--playing` while it runs and
  * `vvj-autoplay--held` while it waits, and `--vvj-autoplay-duration`, so a
- * Pattern can draw its timer in CSS. The button gets `aria-pressed="true"`
- * while stopped and its `.vvj-autoplay-label` reads "Pause" or "Play".
+ * Pattern can draw its timer in CSS. The button gets the class
+ * `vvj-autoplay--stopped` while stopped and its `.vvj-autoplay-label` reads
+ * "Pause" or "Play". The label alone carries the state: no aria-pressed,
+ * which would announce a second, contradicting state (WCAG 4.1.2).
  *
  * @license SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -109,10 +111,13 @@
         !this.stopped && waiting,
       );
       if (this.button) {
-        this.button.setAttribute('aria-pressed', String(this.stopped));
+        this.button.removeAttribute('aria-pressed');
+        this.button.classList.toggle('vvj-autoplay--stopped', this.stopped);
         const label = this.button.querySelector('.vvj-autoplay-label');
         if (label) {
-          label.textContent = this.stopped ? Drupal.t('Play') : Drupal.t('Pause');
+          label.textContent = this.stopped
+            ? Drupal.t('Play')
+            : Drupal.t('Pause');
         }
       }
       if (!running) {

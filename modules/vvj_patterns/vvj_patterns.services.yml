@@ -10,3 +10,10 @@ services:
     class: Drupal\vvj_patterns\StylePatterns
     arguments: ['@vvj_patterns.repository', '@messenger']
   Drupal\vvj_patterns\StylePatterns: '@vvj_patterns.style_patterns'
+
+  # Which theme bridge (apex, solo or neutral) the active theme gets; read by
+  # Drupal\vvj_patterns\Hook\VvjPatternsLibraryInfoAlterHook.
+  vvj_patterns.theme_bridge:
+    class: Drupal\vvj_patterns\Theme\VvjThemeBridge
+    arguments: ['@theme.manager']
+  Drupal\vvj_patterns\Theme\VvjThemeBridgeInterface: '@vvj_patterns.theme_bridge'

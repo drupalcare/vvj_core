@@ -16,7 +16,7 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
 interface FormatProbeInterface {
 
   /**
-   * A format's style plugin, initialised with the given options.
+   * A format's style plugin, initialized with the given options.
    *
    * @param string $pluginId
    *   Views style plugin id, such as `views_vvjs`.
@@ -24,7 +24,7 @@ interface FormatProbeInterface {
    *   Options to initialise it with; the format's defaults fill the rest.
    *
    * @return \Drupal\views\Plugin\views\style\StylePluginBase
-   *   The initialised plugin.
+   *   The initialized plugin.
    *
    * @throws \RuntimeException
    *   When the id is not a Views style plugin.

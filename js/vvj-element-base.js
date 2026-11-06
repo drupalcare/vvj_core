@@ -47,6 +47,9 @@
  *     view without a Pattern renders and behaves exactly as before.
  *   - Static `Drupal.Vvj.reducedMotion()` and `Drupal.Vvj.withTransition(cb)`
  *     for scripts that are not elements; the instance members delegate.
+ *   - `Drupal.Vvj.ownWidth(el)` and `Drupal.Vvj.watchOwnWidth(el, signal,
+ *     onChange)`: the width a Pattern compares its breakpoint against (its
+ *     own content box), and a debounced ResizeObserver on it.
  *
  * @license SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -127,6 +130,67 @@
       cb(el);
     };
     document.addEventListener('vvj:ready', onReady, { signal });
+  };
+
+  /**
+   * The width a Pattern compares its breakpoint against: its own room.
+   *
+   * The element is the `vvj-region` size container, so this is the same
+   * content-box width the Pattern's `@container` rules see. A root that is
+   * not laid out yet (inside a closed tab, say) measures 0; the window
+   * width stands in until the observer reports a real size.
+   *
+   * @param {HTMLElement} el
+   *   The Pattern root.
+   *
+   * @return {number}
+   *   The content-box inline size in CSS pixels.
+   */
+  Drupal.Vvj.ownWidth = (el) => {
+    const style = getComputedStyle(el);
+    const width =
+      el.clientWidth -
+      (parseFloat(style.paddingLeft) || 0) -
+      (parseFloat(style.paddingRight) || 0);
+    return width > 0 ? width : window.innerWidth;
+  };
+
+  /**
+   * Calls `onChange(width)` after the element's own width settles.
+   *
+   * Debounced, and a width of 0 (the root stopped being laid out) is
+   * ignored so a hidden Pattern keeps its last state. The observer is
+   * disconnected when `signal` aborts (the element left the page).
+   *
+   * @param {HTMLElement} el
+   *   The Pattern root.
+   * @param {AbortSignal} signal
+   *   The element's lifetime signal.
+   * @param {function(number): void} onChange
+   *   Receives the new content-box inline size.
+   */
+  Drupal.Vvj.watchOwnWidth = (el, signal, onChange) => {
+    if (!('ResizeObserver' in window) || signal.aborted) {
+      return;
+    }
+    let timer = 0;
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[entries.length - 1].contentRect.width;
+      if (width <= 0) {
+        return;
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => onChange(width), 100);
+    });
+    observer.observe(el);
+    signal.addEventListener(
+      'abort',
+      () => {
+        clearTimeout(timer);
+        observer.disconnect();
+      },
+      { once: true },
+    );
   };
 
   Drupal.Vvj.ElementBase = class VvjElementBase extends HTMLElement {
@@ -295,12 +359,12 @@
       if (!this.classList.contains('vvj-pattern') || index < 0) {
         return;
       }
-      const value =
-        typeof progress === 'number'
-          ? progress
-          : total > 0
-            ? (index + 1) / total
-            : 0;
+      let value = 0;
+      if (typeof progress === 'number') {
+        value = progress;
+      } else if (total > 0) {
+        value = (index + 1) / total;
+      }
       this.dataset.vvjIndex = String(index);
       this.style.setProperty('--vvj-index', String(index));
       this.style.setProperty('--vvj-total', String(total));

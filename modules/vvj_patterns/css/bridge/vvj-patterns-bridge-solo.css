@@ -1,0 +1,146 @@
+/**
+ * @file
+ * VVJ Patterns theme bridge: Solo region colours.
+ *
+ * Loaded only when the active theme is Solo or a Solo sub-theme
+ * (VvjPatternsLibraryInfoAlterHook). Token mapping ONLY: it gives the
+ * --vvj-* colour tokens of vvj-patterns-base.css new values taken from the
+ * Solo region the Pattern sits in, and never paints an element.
+ *
+ * Step 1 reads the theme's region colours into --vvj-theme-* role tokens
+ * (the same 18 names the APEX bridge declares; every module bridge reads these
+ * and never spells a --r-* name, so each theme's spelling lives only here). Step 2 derives every Pattern token
+ * from those roles with color-mix(); no colour is hard-coded except the
+ * black-and-white fallbacks, which repeat vvj-patterns-base.css for a
+ * region that leaves a colour unset.
+ *
+ * Selector: `.vvj-pattern` (0,1,0), not `:where()`. vvj-patterns-base.css
+ * declares the tokens at 0,1,0, so a 0,0,0 bridge would lose to it; at
+ * equal specificity this file wins because it loads later (weight 100).
+ *
+ * Solo names, each checked against solo/css (2026-11-05): --r-bg, --r-tx,
+ * --r-h1, --r-sc-h1, --r-lk, --r-sc-lk, --r-lk-h, --r-sc-lk-h, --r-br,
+ * --r-bg-fr, --r-tx-lk, --r-menu-tx-h, --r-menu-bg-h, --r-tx-bt,
+ * --r-tx-bt-h, --r-bg-bt, --r-bg-bt-h. --r-sc-tx-bt and --r-sc-tx-bt-h are only
+ * READ (by Solo's own button rule, solo-variables-regions.css:89 and 99) and are
+ * declared in no Solo stylesheet, so they are a fallback hook, not a checked name.
+ * Solo sets several of the others to `initial` at :root, so the var() fallbacks
+ * below take over where a region is silent.
+ */
+
+.vvj-pattern {
+  /* Step 1: the theme's colours as roles. */
+  --vvj-theme-bg: var(--r-bg, #fff);
+  --vvj-theme-text: var(--r-tx, #111);
+  --vvj-theme-heading: var(--r-h1, var(--r-sc-h1, var(--vvj-theme-text)));
+  --vvj-theme-link: var(--r-lk, var(--r-sc-lk, var(--vvj-theme-text)));
+  --vvj-theme-link-hover: var(--r-lk-h, var(--r-sc-lk-h, var(--vvj-theme-link)));
+  --vvj-theme-border: var(--r-br, color-mix(in oklab, var(--vvj-theme-text) 16%, var(--vvj-theme-bg)));
+  --vvj-theme-form-bg: var(--r-bg-fr, var(--vvj-theme-bg));
+  --vvj-theme-menu-text: var(--r-tx-lk, var(--vvj-theme-text));
+  --vvj-theme-menu-text-hover: var(--r-menu-tx-h, var(--vvj-theme-menu-text));
+  /* Not --r-header-bg: Solo schemes often set it to a gradient, which is
+     not a colour, and it belongs to the header region, not this one. */
+  --vvj-theme-menu-bg: var(--vvj-theme-bg);
+  --vvj-theme-menu-bg-hover: var(--r-menu-bg-h, var(--vvj-theme-menu-bg));
+  --vvj-theme-button-text: var(--r-tx-bt, var(--r-sc-tx-bt, var(--vvj-theme-bg)));
+  --vvj-theme-button-text-hover: var(--r-tx-bt-h, var(--r-sc-tx-bt-h, var(--vvj-theme-button-text)));
+  --vvj-theme-button-bg: var(--r-bg-bt, var(--vvj-theme-text));
+  --vvj-theme-button-bg-hover: var(--r-bg-bt-h, var(--vvj-theme-button-bg));
+  /*
+   * Pairs: a fill and the text on it come from the same pair of roles, and the
+   * fallbacks of a pair are the page pair swapped (fill = text colour, text =
+   * ground), so with both unset they are a black-and-white pair. A scheme that
+   * sets only one of a pair gets that colour next to the fallback: it must set both
+   * (NEEDS OWNER: a contrast-derived text role, B36-W10-result.md).
+   */
+  /* The active pair (current tab, active chip, open bar): menu hover colours, ink fill and ground text when unset. */
+  --vvj-theme-active-bg: var(--r-menu-bg-h, var(--vvj-theme-text));
+  --vvj-theme-active-text: var(--r-menu-tx-h, var(--vvj-theme-bg));
+  /* A control's outline (quiet button line): the theme border, else the muted ink. */
+  --vvj-theme-control-line: var(--r-br, var(--vvj-muted));
+
+  /*
+   * Brand roles, the same five names the APEX bridge reads from its scheme:
+   * primary = the region heading colour, secondary = link, accent = link
+   * hover, and Solo's own light and dark inks (solo-variables-regions.css:12-14).
+   * Used only where a contrast floor holds whatever the region is: the stage.
+   */
+  --vvj-theme-primary: var(--vvj-theme-heading);
+  --vvj-theme-secondary: var(--vvj-theme-link);
+  --vvj-theme-accent: var(--vvj-theme-link-hover);
+  --vvj-theme-ink-light: var(--r-tx-light, var(--vvj-theme-bg));
+  --vvj-theme-ink-dark: var(--r-tx-dark, var(--vvj-theme-text));
+
+  /* Step 2: page tokens. */
+  --vvj-surface: var(--vvj-theme-bg);
+  --vvj-raised: color-mix(in oklab, var(--vvj-theme-bg), var(--vvj-theme-text) 6%);
+  --vvj-ink: var(--vvj-theme-text);
+  /* 15%, not 30%: measured on apex_theme (ink 6.99:1 on its ground) 30% gave
+     3.58:1 and 15% gives 5.0:1, so muted words pass WCAG AA (4.5:1). */
+  --vvj-muted: color-mix(in oklab, var(--vvj-theme-text), var(--vvj-theme-bg) 15%);
+  --vvj-line: var(--vvj-theme-border);
+
+  /*
+   * Stage tokens, the same rule as the APEX bridge. The ground is the brand
+   * primary with its OKLCH lightness capped at 0.4 (a dark primary is used
+   * as it is, a light one is darkened); the words keep 15% of the light ink
+   * and 85% white, so their lightness is at least 0.85. That is at least
+   * about 5.8:1 (WCAG AA 4.5:1) under any scheme, dark Solo schemes included.
+   */
+  --vvj-stage-bg: oklch(from var(--vvj-theme-primary) min(l, 0.4) c h);
+  --vvj-stage-color: color-mix(in oklab, var(--vvj-theme-ink-light) 15%, white);
+  --vvj-stage-muted: color-mix(in oklab, var(--vvj-stage-color), var(--vvj-stage-bg) 22%);
+  --vvj-stage-line: color-mix(in oklab, var(--vvj-stage-color) 50%, transparent);
+  --vvj-stage-scrim: linear-gradient(180deg, transparent 30%, color-mix(in oklab, var(--vvj-stage-bg) 78%, transparent) 68%, color-mix(in oklab, var(--vvj-stage-bg) 94%, transparent) 100%);
+
+  /* Glass tokens: the stage ground and words at the base alpha steps. */
+  --vvj-glass-bg: color-mix(in oklab, var(--vvj-stage-bg) 62%, transparent);
+  --vvj-glass-line: color-mix(in oklab, var(--vvj-stage-color) 16%, transparent);
+  --vvj-glass-shadow: 0 18px 40px color-mix(in oklab, var(--vvj-stage-bg) 35%, transparent);
+
+  /* --vvj-mask-solid is not mapped: a mask reads only alpha, never colour. */
+}
+
+/*
+ * Dark mode. vvj-patterns-base.css swaps its page tokens here; under Solo
+ * the region colours already decide light or dark, so only the fallbacks
+ * for an unset region change, to the base's dark values. Everything in
+ * step 2 recomputes from these roles.
+ */
+@media (prefers-color-scheme: dark) {
+  .vvj-pattern {
+    --vvj-theme-bg: var(--r-bg, #111);
+    --vvj-theme-text: var(--r-tx, #f2f2f2);
+  }
+}
+
+/* The demo stage (vvj_patterns_demo) takes the region ground the Pattern
+   reads, not the system colour scheme, so the stage and the Pattern ink stay a pair. */
+.vvj-demo-stage {
+  --vvj-demo-stage-bg: var(--r-bg, #fff);
+  --vvj-demo-stage-color: var(--r-tx, #111);
+}
+
+@media (prefers-color-scheme: dark) {
+  .vvj-demo-stage {
+    --vvj-demo-stage-bg: var(--r-bg, #111);
+    --vvj-demo-stage-color: var(--r-tx, #f2f2f2);
+  }
+}
+
+@media (forced-colors: active) {
+  .vvj-pattern {
+    --vvj-surface: Canvas;
+    --vvj-raised: Canvas;
+    --vvj-ink: CanvasText;
+    --vvj-muted: CanvasText;
+    --vvj-line: CanvasText;
+    --vvj-stage-bg: Canvas;
+    --vvj-stage-color: CanvasText;
+    --vvj-stage-muted: CanvasText;
+    --vvj-stage-line: CanvasText;
+    --vvj-glass-bg: Canvas;
+    --vvj-glass-line: CanvasText;
+  }
+}

@@ -12,6 +12,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- `vvj_patterns` bridges: three new shared roles (`--vvj-theme-active-bg`, `--vvj-theme-active-text`, `--vvj-theme-control-line`) so module bridges never spell `--r-*` names.
+- **Patterns theme bridges**: under Solo or APEX (or a sub-theme of either), `vvj_patterns` loads a bridge that takes the Pattern colours from the theme region the Pattern sits in, with lighter, darker and see-through shades mixed from those colours. Every other theme keeps the black-and-white look.
+
 - **Patterns**: two new sub-modules. `vvj_patterns` is the shared base for the ready-made designs each VVJ format ships: it reads each format's `patterns/<id>/pattern.yml` and adds a "Patterns" section with a "Pattern" select to the format settings. `vvj_patterns_demo` is optional example content: a "VVJ Slide" content type, five demo slides with pictures, and example views with one page per Pattern.
 
 - **`vvj_core_ai`**: optional AI sub-module: **Build a VVJ view with AI** on the
@@ -25,7 +28,20 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   Replaces the chat tools and agent of the first draft (unreleased), removed on
   2026-09-27.
 
+### Changed
+
+- Element base: `Drupal.Vvj.ownWidth()` and `Drupal.Vvj.watchOwnWidth()` now live here, so vvjb, vvjf, vvjp and vvjr share one copy of the Pattern-width helpers. Behavior is unchanged.
+- JavaScript follows Drupal core's ESLint and Prettier rules. As in core's own JavaScript, files no longer start with `'use strict';`.
+- Code style: JavaScript and CSS follow Drupal core's ESLint, Stylelint and Prettier rules, and the spell-check job passes with a project word file. Rendering and behavior are unchanged.
+
 ### Fixed
+
+- Patterns: under Solo and APEX (same rule in both), the dark stage takes the brand primary color (Solo: the region heading color; APEX: the scheme primary) (lightness capped so its words keep at least 4.5:1; 12.8:1 with the default scheme) and the stage words take the light ink. Both bridges declare the same five brand roles for module bridges: `--vvj-theme-primary`, `-secondary`, `-accent`, `-ink-light` and `-ink-dark`.
+- Patterns: under Solo and APEX, muted words (`--vvj-muted`) mix 15% of the ground into the text instead of 30%, so they keep a 4.5:1 contrast (measured 3.58:1 before, 5.0:1 after on apex_theme).
+- The foundation and accessibility layers named the 3D carousel `vvjc-carousel-3d`, a tag vvjc never prints; they now use `vvjc-carousel`, so vvjc gets the same container setup, focus ring and visually-hidden rules as the other VVJ elements.
+- VVJ Patterns demo: the Stage, Spotlight and Cards example pages show 5, 6 and 8 slides, the most each Pattern is designed for (its pattern.yml), so extra content no longer squeezes them.
+
+- `scripts/check-vvj-motion.py`: a deliberate style-write-then-read can be allowed with `// vvj-motion: allow (d) <reason>` on the function's first line; a marker without a reason still warns (two self-test cases).
 
 - **v1 → v2 conversion, and an upgrade audit that tells the truth.** A real v1
   database showed VVJ views keeping their v1 option shapes: numbers stored as
@@ -54,6 +70,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   uses `text_long`.
 - Four README table rows that had been truncated mid-sentence at exactly 80
   characters, restored from git history.
+- The AI brief and the demo stage remove their event listeners when Drupal detaches the behavior, so content replaced by Ajax no longer leaves listeners behind.
 
 ### Changed
 

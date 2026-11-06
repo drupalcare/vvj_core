@@ -5,6 +5,20 @@ base:
   dependencies:
     - vvj_core/tokens
 
+# Theme bridges: added to "base" by VvjPatternsLibraryInfoAlterHook when the
+# active theme is Solo or APEX (or a sub-theme of either). Weight 100 puts
+# them after vvj-patterns-base.css, so they replace its black-and-white
+# colour tokens. Other themes get no bridge.
+theme-bridge-solo:
+  css:
+    theme:
+      css/bridge/vvj-patterns-bridge-solo.css: { weight: 100 }
+
+theme-bridge-apex:
+  css:
+    theme:
+      css/bridge/vvj-patterns-bridge-apex.css: { weight: 100 }
+
 state:
   js:
     js/vvj-state.js: {}

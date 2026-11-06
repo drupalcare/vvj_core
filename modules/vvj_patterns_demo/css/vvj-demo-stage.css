@@ -9,9 +9,12 @@
  * live on the Pattern, which is inside the stage).
  *
  * Without JavaScript the stage stays inside the theme's content column. With
- * it, vvj-demo-stage.js measures the column and the viewport WITHOUT its
- * scrollbar and writes the two variables below, so the stage reaches both
- * edges and never causes sideways scroll (100vw would include the scrollbar).
+ * it, vvj-demo-stage.js first checks the page's layout: when a sidebar (or
+ * anything else) sits beside the column, the stage stays in the column and
+ * is never moved. Only when nothing does, it measures the column and the
+ * viewport WITHOUT its scrollbar and writes the two variables below, so the
+ * stage reaches both edges and never causes sideways scroll (100vw would
+ * include the scrollbar).
  */
 
 .vvj-demo-stage {

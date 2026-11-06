@@ -218,6 +218,7 @@ final class SvgSanitizer {
     /** @var list<string> $remove */
     $remove = [];
 
+    /** @var \DOMAttr $attr */
     foreach ($element->attributes as $attr) {
       $name = strtolower($attr->nodeName);
 

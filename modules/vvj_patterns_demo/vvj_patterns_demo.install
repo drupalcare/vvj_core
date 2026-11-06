@@ -123,11 +123,14 @@ function vvj_patterns_demo_install(bool $is_syncing): void {
  */
 function vvj_patterns_demo_uninstall(): void {
   $created = \Drupal::state()->get('vvj_patterns_demo.created', ['nids' => [], 'fids' => []]);
-  $nodes = Node::loadMultiple($created['nids']);
+  $created = is_array($created) ? $created : [];
+  $nids = is_array($created['nids'] ?? NULL) ? $created['nids'] : [];
+  $fids = is_array($created['fids'] ?? NULL) ? $created['fids'] : [];
+  $nodes = Node::loadMultiple($nids);
   if ($nodes) {
     \Drupal::entityTypeManager()->getStorage('node')->delete($nodes);
   }
-  foreach (File::loadMultiple($created['fids']) as $file) {
+  foreach (File::loadMultiple($fids) as $file) {
     $file->delete();
   }
   \Drupal::state()->delete('vvj_patterns_demo.created');

@@ -143,7 +143,7 @@
           }
           // A leftward swipe moves towards the end in LTR, the start in RTL.
           const rtl = this.direction === -1;
-          this.scrollByPage((dx < 0) !== rtl ? 1 : -1);
+          this.scrollByPage(dx < 0 !== rtl ? 1 : -1);
           const swallow = (click) => {
             click.preventDefault();
             click.stopPropagation();

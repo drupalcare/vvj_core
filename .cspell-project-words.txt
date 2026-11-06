@@ -1,0 +1,31 @@
+# Project words for cspell (drupal.org CI reads this file by name).
+# Pattern names (machine names and labels shipped in the format modules)
+bento
+dockrail
+fieldbook
+nightstory
+# Terms used in comments and docs
+coverflow
+janks
+longhands
+playhead
+precheck
+swipeable
+tokenless
+# Local variable and option names in scripts/*.py (followlinks is os.walk's keyword)
+allc
+bdir
+cand
+fcontent
+followlinks
+frel
+odir
+rkeys
+rpairs
+rtags
+sels
+tany
+tmap
+toks
+unwhere
+vroot

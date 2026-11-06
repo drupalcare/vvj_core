@@ -95,9 +95,9 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   /**
    * The Patterns provider, or NULL when vvj_patterns is not enabled.
    *
-   * vvj_core does not depend on vvj_patterns: the optional module supplies the
-   * service, and every use is guarded. Protected and not readonly so
-   * DependencySerializationTrait can restore it.
+   * The vvj_core module does not depend on vvj_patterns: the optional module
+   * supplies the service, and every use is guarded. Protected and not readonly
+   * so DependencySerializationTrait can restore it.
    */
   protected ?StylePatternsInterface $stylePatterns = NULL;
 
@@ -630,9 +630,9 @@ abstract class VvjStylePluginBase extends StylePluginBase {
           <li><code>{{ body }}</code> ➜ <code>[@slug:body:plain]</code></li>
         </ul>
         <p>These tokens offer safe and flexible field output for dynamic headings, summaries, and fallback messages in @upper-enabled Views.</p>', [
-        '@slug' => $slug,
-        '@upper' => strtoupper($slug),
-      ]),
+          '@slug' => $slug,
+          '@upper' => strtoupper($slug),
+        ]),
     ];
   }
 
@@ -657,9 +657,7 @@ abstract class VvjStylePluginBase extends StylePluginBase {
       '#type' => 'select',
       '#title' => $this->t('Active Breakpoint'),
       '#options' => $this->breakpointRegistry->getOptions(),
-      '#default_value' => $this->options[$option_key]
-        ?? $default
-        ?? $this->breakpointRegistry->getDefault(),
+      '#default_value' => $this->options[$option_key] ?? $default ?? $this->breakpointRegistry->getDefault(),
       '#description' => $this->t('Switch responsive behavior at this viewport width.'),
     ];
   }
@@ -761,7 +759,8 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   }
 
   /*
-   * Patterns hooks — thin, guarded calls into the optional vvj_patterns service.
+   * Patterns hooks: thin, guarded calls into the optional vvj_patterns
+   * service.
    */
 
   /**

@@ -27,7 +27,10 @@
         "exceptMethods": [
           "onDisconnect",
           "onHydrate",
-          "reducedMotion"
+          "reducedMotion",
+          // Public instance helper documented as this.withTransition(cb);
+          // subclasses call and may override it.
+          "withTransition"
         ]
       }
     ]

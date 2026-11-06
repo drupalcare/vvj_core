@@ -11,8 +11,6 @@
  */
 
 ((Drupal, drupalSettings, once) => {
-  'use strict';
-
   /**
    * The best-practice brief, sliding down from the top.
    *
@@ -28,13 +26,29 @@
    * or a CSP blocks the module's own assets. The one control that closes this
    * must never be the thing that fails.
    */
+  /**
+   * Per format select: its own AbortController, and the run it was wired in.
+   *
+   * A run owns the listeners on the shared panel and the document; it is
+   * aborted when the last select it wired is unloaded.
+   *
+   * @type {WeakMap<HTMLSelectElement, {own: AbortController, run: {controller: AbortController, selects: Set<HTMLSelectElement>}}>}
+   */
+  const wired = new WeakMap();
+
   Drupal.behaviors.vvjAiBrief = {
     attach(context) {
-      const selects = once('vvj-ai-brief', '.vvj-ai-panel select[name="format"]', context);
+      const selects = once(
+        'vvj-ai-brief',
+        '.vvj-ai-panel select[name="format"]',
+        context,
+      );
 
       if (!selects.length) {
         return;
       }
+
+      const run = { controller: new AbortController(), selects: new Set() };
 
       // ONE KEY PER SWITCH. They are independent — either, both or neither —
       // so a shared key would make hiding the practices also hide the prompts.
@@ -42,9 +56,10 @@
       // sees everything.
       const KEY = 'vvjAiBriefOff';
       const PROMPT_KEY = 'vvjAiPromptsOff';
-      const CLOSE = '<svg viewBox="0 -960 960 960" aria-hidden="true">'
-        + '<path d="M256-200l-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 '
-        + '224 224-56 56-224-224-224 224Z"/></svg>';
+      const CLOSE =
+        '<svg viewBox="0 -960 960 960" aria-hidden="true">' +
+        '<path d="M256-200l-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 ' +
+        '224 224-56 56-224-224-224 224Z"/></svg>';
 
       let panel = document.querySelector('.vvj-ai-brief');
 
@@ -54,16 +69,19 @@
         // THREE ROWS, AND THE CLOSE BUTTON SITS IN THE FIRST ONE. There is no
         // separate head bar: the name used to live there and is now part of
         // row one, so a head would have shown it twice.
-        panel.innerHTML = '<div class="vvj-ai-brief__card">'
-          + '<div class="vvj-ai-brief__body">'
-          + '<div class="vvj-ai-brief__meta">'
-          + '<p class="vvj-ai-brief__about"></p>'
-          + '<button type="button" class="vvj-ai-brief__close">' + CLOSE + '</button>'
-          + '</div>'
-          + '<p class="vvj-ai-brief__heading"></p>'
-          + '<ul class="vvj-ai-brief__list"></ul>'
-          + '<div class="vvj-ai-brief__prompts"></div>'
-          + '</div></div>';
+        panel.innerHTML =
+          `<div class="vvj-ai-brief__card">` +
+          `<div class="vvj-ai-brief__body">` +
+          `<div class="vvj-ai-brief__meta">` +
+          `<p class="vvj-ai-brief__about"></p>` +
+          `<button type="button" class="vvj-ai-brief__close">${
+            CLOSE
+          }</button>` +
+          `</div>` +
+          `<p class="vvj-ai-brief__heading"></p>` +
+          `<ul class="vvj-ai-brief__list"></ul>` +
+          `<div class="vvj-ai-brief__prompts"></div>` +
+          `</div></div>`;
         // IN THE FORM, under the format select — not fixed to the top of the
         // window as in PB. PB's controls sit in a bottom bar; here the form IS
         // the top of the page, and a fixed panel covered the select driving it.
@@ -82,6 +100,10 @@
       const close = () => panel.classList.remove('vvj-ai-brief--open');
 
       selects.forEach((select) => {
+        const own = new AbortController();
+        const { signal } = own;
+        run.selects.add(select);
+        wired.set(select, { own, run });
         const bar = select.closest('.vvj-ai-panel');
 
         // BOUND BY NAME, NEVER BY CLASS. Both switches carry
@@ -89,7 +111,9 @@
         // declared first — Prompts — and would silently drive the panel from
         // the wrong control.
         const boxes = {
-          practices: bar.querySelector('input[type="checkbox"][name="best_practices"]'),
+          practices: bar.querySelector(
+            'input[type="checkbox"][name="best_practices"]',
+          ),
           prompts: bar.querySelector('input[type="checkbox"][name="prompts"]'),
         };
 
@@ -180,7 +204,7 @@
             key.className = 'vvj-ai-brief__key';
             key.textContent = fact[0];
             about.appendChild(key);
-            about.appendChild(document.createTextNode(' ' + fact[1] + ' '));
+            about.appendChild(document.createTextNode(` ${fact[1]} `));
           });
 
           // ROWS TWO AND THREE. The first line of the practices is the
@@ -190,7 +214,7 @@
           // "Best practices…" would work in one language and nowhere else —
           // the same defect removed from the PHP, where warning severity was
           // recovered with str_starts_with($note, 'CAREFUL:').
-          // CLEARED FIRST, ALWAYS. Unticking a switch has to empty its section
+          // CLEARED FIRST, ALWAYS. Unchecking a switch has to empty its section
           // rather than leave the last section's text behind it.
           heading.textContent = '';
           list.textContent = '';
@@ -221,8 +245,9 @@
           // it. Passing it through Drupal.t() would freeze it in English.
           prompts.textContent = '';
 
-          const examples = (wants('prompts') ? (brief.prompts || []) : [])
-            .filter((example) => example && example.text);
+          const examples = (wants('prompts') ? brief.prompts || [] : []).filter(
+            (example) => example && example.text,
+          );
 
           // ONE PROMPT AT A TIME, NOT ALL OF THEM.
           //
@@ -253,7 +278,10 @@
             holder.textContent = '';
 
             switches.forEach((button, position) => {
-              button.setAttribute('aria-pressed', position === index ? 'true' : 'false');
+              button.setAttribute(
+                'aria-pressed',
+                position === index ? 'true' : 'false',
+              );
             });
 
             const block = document.createElement('div');
@@ -267,7 +295,9 @@
               label.className = 'vvj-ai-brief__prompt-name';
               // The variant's own word — "images", "hero" — announced as what
               // this example is FOR, not as a bare label.
-              label.textContent = Drupal.t('Example — @variant', { '@variant': example.name });
+              label.textContent = Drupal.t('Example — @variant', {
+                '@variant': example.name,
+              });
               block.appendChild(label);
             }
 
@@ -300,7 +330,7 @@
               const showAs = bar.querySelector('select[name="show_as"]');
               const mode = example.name === 'View mode' ? 'teaser' : 'fields';
 
-              if (showAs && showAs.querySelector('option[value="' + mode + '"]')) {
+              if (showAs && showAs.querySelector(`option[value="${mode}"]`)) {
                 showAs.value = mode;
                 showAs.dispatchEvent(new Event('change', { bubbles: true }));
               }
@@ -332,7 +362,9 @@
               // schema, like the practices; passing one through Drupal.t()
               // would freeze it in English. Only the numbered fallback, which
               // this file invents, is interface text.
-              choice.textContent = example.name || Drupal.t('Example @number', { '@number': index + 1 });
+              choice.textContent =
+                example.name ||
+                Drupal.t('Example @number', { '@number': index + 1 });
               choice.setAttribute('aria-pressed', 'false');
               choice.addEventListener('click', () => draw(index));
               switches.push(choice);
@@ -351,10 +383,10 @@
           panel.classList.add('vvj-ai-brief--open');
         };
 
-        select.addEventListener('change', show);
+        select.addEventListener('change', show, { signal });
 
         // ALWAYS show(), NEVER a close() branch here. With one switch, "off"
-        // meant "close the panel". With two it does not: unticking Prompts
+        // meant "close the panel". With two it does not: unchecking Prompts
         // while Best practices is still on has to leave the panel open with
         // one section fewer. show() already decides that — it closes only when
         // BOTH are off — so the listener's whole job is to remember the choice
@@ -366,34 +398,67 @@
             return;
           }
 
-          box.addEventListener('change', () => {
-            try {
-              localStorage.setItem(key, box.checked ? '0' : '1');
-            } catch (error) {
-              // A private window, or storage switched off. The switch still
-              // works; it just will not be remembered.
-            }
+          box.addEventListener(
+            'change',
+            () => {
+              try {
+                localStorage.setItem(key, box.checked ? '0' : '1');
+              } catch (error) {
+                // A private window, or storage switched off. The switch still
+                // works; it just will not be remembered.
+              }
 
-            show();
-          });
+              show();
+            },
+            { signal },
+          );
         };
 
         remember('practices', KEY);
         remember('prompts', PROMPT_KEY);
       });
 
-      closeBtn.addEventListener('click', close);
+      closeBtn.addEventListener('click', close, {
+        signal: run.controller.signal,
+      });
 
       // Escape closes it only from the panel or the select that opened it;
       // elsewhere on the page Escape belongs to whatever has focus.
-      document.addEventListener('keydown', (event) => {
-        const from = event.target;
+      document.addEventListener(
+        'keydown',
+        (event) => {
+          const from = event.target;
 
-        if (event.key === 'Escape' && from instanceof Node
-          && (panel.contains(from) || selects.includes(from))) {
-          close();
-        }
-      });
+          if (
+            event.key === 'Escape' &&
+            from instanceof Node &&
+            (panel.contains(from) || selects.includes(from))
+          ) {
+            close();
+          }
+        },
+        { signal: run.controller.signal },
+      );
+    },
+
+    detach(context, settings, trigger) {
+      if (trigger !== 'unload') {
+        return;
+      }
+      once
+        .remove('vvj-ai-brief', '.vvj-ai-panel select[name="format"]', context)
+        .forEach((select) => {
+          const entry = wired.get(select);
+          if (!entry) {
+            return;
+          }
+          wired.delete(select);
+          entry.own.abort();
+          entry.run.selects.delete(select);
+          if (!entry.run.selects.size) {
+            entry.run.controller.abort();
+          }
+        });
     },
   };
 })(Drupal, drupalSettings, once);
