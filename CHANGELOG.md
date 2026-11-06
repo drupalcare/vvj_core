@@ -10,8 +10,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.0.1] (UNRELEASED)
 
+- Extend and Appearance pages: every module and theme description is a short, professional statement that begins with a verb; credits, links and version notes moved out of the info files.
+
 ### Added
 
+- Help page: follows the drupal.org help text standard (translatable About and Uses sections) instead of printing README.md as raw text.
 - `scripts/check-vvj-bridges.py` and a `vvj-bridges` CI job: fail on a bridge library with `dependencies`, a module bridge token its Pattern base never declares, or a shared `--vvj-theme-*` role missing from one of the two bridges.
 - `vvj_patterns` bridges: three new shared roles (`--vvj-theme-active-bg`, `--vvj-theme-active-text`, `--vvj-theme-control-line`) so module bridges never spell `--r-*` names.
 - **Patterns theme bridges**: under Solo or APEX (or a sub-theme of either), `vvj_patterns` loads a bridge that takes the Pattern colors from the theme region the Pattern sits in, with lighter, darker and see-through shades mixed from those colors. Every other theme keeps the black-and-white look.

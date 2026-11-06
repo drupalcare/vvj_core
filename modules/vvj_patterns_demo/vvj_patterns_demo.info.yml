@@ -1,6 +1,6 @@
 name: 'VVJ Patterns Demo'
 type: module
-description: 'Example content for the VVJ Patterns: the VVJ Slide content type, its fields, image styles and five demo slides with original pictures.'
+description: 'Adds example content for the VVJ Patterns: a VVJ Slide content type with its fields, image styles and five demo slides.'
 core_version_requirement: ^11.3 || ^12
 package: VVJ
 php: 8.3

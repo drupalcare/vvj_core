@@ -36,11 +36,7 @@ services:
   # primary service ID so the OOP-hook dispatcher can resolve each
   # class via ClassResolver.
   Drupal\vvj_core\Hook\VvjCoreHelpHook:
-    arguments:
-      - '@extension.list.module'
-      - '@module_handler'
-      - '@plugin.manager.filter'
-      - '@config.factory'
+    autowire: true
 
   Drupal\vvj_core\Hook\VvjCoreThemeHook:
     autowire: true
