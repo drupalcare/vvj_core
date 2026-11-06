@@ -31,6 +31,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Text follows the drupal.org standards: the module description begins with a verb, settings titles are in sentence case, the reserved-identifier error no longer says "Please", comments use American spelling, and the README has its project and issue queue links.
 - Element base: `Drupal.Vvj.ownWidth()` and `Drupal.Vvj.watchOwnWidth()` now live here, so vvjb, vvjf, vvjp and vvjr share one copy of the Pattern-width helpers. Behavior is unchanged.
 - JavaScript follows Drupal core's ESLint and Prettier rules. As in core's own JavaScript, files no longer start with `'use strict';`.
 - Code style: JavaScript and CSS follow Drupal core's ESLint, Stylelint and Prettier rules, and the spell-check job passes with a project word file. Rendering and behavior are unchanged.

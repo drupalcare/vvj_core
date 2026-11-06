@@ -4,8 +4,8 @@
  *
  * Writes `--vvj-origin-x` and `--vvj-origin-y` (px, relative to the matched
  * element) on the element matching `selector` that the pointer enters or
- * presses, or, for Enter and Space, at the centre of the focused control.
- * CSS reads them, for example as the centre of a clip-path circle.
+ * presses, or, for Enter and Space, at the center of the focused control.
+ * CSS reads them, for example as the center of a clip-path circle.
  *
  * @license SPDX-License-Identifier: GPL-2.0-or-later
  */

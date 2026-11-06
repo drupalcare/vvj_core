@@ -454,13 +454,13 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   protected function buildAdvancedSection(array &$form): void {
     $form['advanced_section'] = [
       '#type' => 'details',
-      '#title' => $this->t('Advanced Options'),
+      '#title' => $this->t('Advanced options'),
       '#open' => FALSE,
       '#weight' => -10,
     ];
     $form['advanced_section']['enable_css'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable CSS Library'),
+      '#title' => $this->t('Enable CSS library'),
       '#default_value' => $this->options['enable_css'] ?? TRUE,
       '#description' => $this->getEnableCssDescription(),
     ];
@@ -519,14 +519,14 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   protected function buildDeepLinkingSection(array &$form): void {
     $form['deeplink_section'] = [
       '#type' => 'details',
-      '#title' => $this->t('Deep Linking Settings'),
+      '#title' => $this->t('Deep linking settings'),
       '#open' => FALSE,
       '#weight' => -5,
     ];
 
     $form['deeplink_section']['enable_deeplink'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable Deep Linking'),
+      '#title' => $this->t('Enable deep linking'),
       '#description' => $this->getDeeplinkEnableDescription(),
       '#default_value' => $this->options['enable_deeplink'] ?? FALSE,
       '#attributes' => [
@@ -536,7 +536,7 @@ abstract class VvjStylePluginBase extends StylePluginBase {
 
     $form['deeplink_section']['deeplink_identifier'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('URL Identifier'),
+      '#title' => $this->t('URL identifier'),
       '#description' => $this->getDeeplinkIdentifierDescription(),
       '#default_value' => $this->options['deeplink_identifier'] ?? '',
       '#maxlength' => ValidationBounds::DEEPLINK_IDENTIFIER_MAX_LENGTH,
@@ -593,7 +593,7 @@ abstract class VvjStylePluginBase extends StylePluginBase {
     if (in_array($clean, $this->getDeeplinkReservedWords(), TRUE)) {
       $form_state->setError(
         $element,
-        $this->t('Please choose a more specific identifier. "@id" is reserved.', ['@id' => $clean]),
+        $this->t('Choose a more specific identifier. "@id" is reserved.', ['@id' => $clean]),
       );
       return;
     }
@@ -612,7 +612,7 @@ abstract class VvjStylePluginBase extends StylePluginBase {
 
     $form['token_section'] = [
       '#type' => 'details',
-      '#title' => $this->t('Token Documentation'),
+      '#title' => $this->t('Token documentation'),
       '#open' => FALSE,
       '#weight' => 100,
     ];
@@ -655,7 +655,7 @@ abstract class VvjStylePluginBase extends StylePluginBase {
   protected function buildBreakpointSelect(string $option_key, ?string $default = NULL): array {
     return [
       '#type' => 'select',
-      '#title' => $this->t('Active Breakpoint'),
+      '#title' => $this->t('Active breakpoint'),
       '#options' => $this->breakpointRegistry->getOptions(),
       '#default_value' => $this->options[$option_key] ?? $default ?? $this->breakpointRegistry->getDefault(),
       '#description' => $this->t('Switch responsive behavior at this viewport width.'),

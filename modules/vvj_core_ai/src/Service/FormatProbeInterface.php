@@ -21,7 +21,7 @@ interface FormatProbeInterface {
    * @param string $pluginId
    *   Views style plugin id, such as `views_vvjs`.
    * @param array<string, mixed> $options
-   *   Options to initialise it with; the format's defaults fill the rest.
+   *   Options to initialize it with; the format's defaults fill the rest.
    *
    * @return \Drupal\views\Plugin\views\style\StylePluginBase
    *   The initialized plugin.

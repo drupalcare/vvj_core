@@ -30,7 +30,7 @@
    * The behavior exists for two reasons:
    *   1. Backwards compat with v1 — sites can keep referring to
    *      `Drupal.behaviors.<name>` from custom code.
-   *   2. Drupal core attaches behaviors after AJAX swaps; this is the
+   *   2. Drupal core attaches behaviors after Ajax swaps; this is the
    *      moment to ensure freshly-injected custom elements have been
    *      noticed by the browser. (No-op when none are present.)
    *

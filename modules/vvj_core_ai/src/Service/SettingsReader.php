@@ -13,7 +13,7 @@ use Drupal\vvj_core_ai\Model\FormatSetting;
  *
  * WHY THE FORM AND NOT defineOptions(). Measured on sts.local 2026-09-04:
  * `defineOptions()` is protected, and `->options` is empty until a view
- * initialises the plugin. `buildOptionsForm()` is public — and is the better
+ * initializes the plugin. `buildOptionsForm()` is public — and is the better
  * source anyway, because it carries the human label, the help text and the
  * ALLOWED VALUES for each setting. `defineOptions()` would have given machine
  * names and defaults, which is the half a person already has.

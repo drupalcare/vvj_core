@@ -3,6 +3,12 @@
 Foundation module for the **VVJ Views renderer family**: required by every
 `drupal/vvj*` pattern module v2.x.
 
+- Project page:
+  [drupal.org/project/vvj_core](https://www.drupal.org/project/vvj_core)
+- Issue queue:
+  [drupal.org/project/issues/vvj_core](https://www.drupal.org/project/issues/vvj_core)
+
+
 ## Table of contents
 
 - Overview
@@ -16,6 +22,7 @@ Foundation module for the **VVJ Views renderer family**: required by every
 - Changelog
 - Maintainers
 - License
+
 
 ## Overview
 
@@ -36,14 +43,18 @@ VVJ Core is **not useful on its own**. It provides the abstract base class,
 shared services, JS Custom Element base, and CSS contract that every VVJ pattern
 module consumes. Composer auto-installs it when you add any VVJ pattern module.
 
+
 ## Requirements
 
 - Drupal core `^11.3 || ^12`.
 - PHP 8.3 or later.
 - Drupal core modules Views and Filter.
-- The optional `vvj_core_ai` sub-module also needs `drupal/ai` and supports Drupal `^11.3` only.
+- The optional `vvj_core_ai` sub-module also needs `drupal/ai` and supports
+  Drupal `^11.3` only.
+
 
 ## Installation
+
 
 ### Composer (recommended)
 
@@ -63,13 +74,15 @@ drush en vvja vvjs vvjt -y
 drush cr
 ```
 
+
 ### Manual download (drupal.org tarball)
 
 1. Download and extract **`vvj_core`** to `modules/contrib/vvj_core`
-2. Download pattern module(s) to `modules/contrib/`
-3. Enable at `/admin/modules`. Pattern modules require VVJ Core
+1. Download pattern module(s) to `modules/contrib/`
+1. Enable at `/admin/modules`. Pattern modules require VVJ Core
 
 **Do not** enable a VVJ pattern v2.x module without `vvj_core` on disk.
+
 
 ### How the JavaScript is shared
 
@@ -103,13 +116,19 @@ the pattern that has survived every Drupal version.
 > Web Components (`customElements.define`, `class extends`) are still used —
 > they're authored in the `Drupal.Vvj` namespace instead of via ESM `import`.
 
+
 ## Configuration
 
-VVJ Core has no settings page of its own. Each format's settings live in the Views UI format settings of the view. Pattern choices are made there (see Patterns).
+VVJ Core has no settings page of its own. Each format's settings live in the
+Views UI format settings of the view. Pattern choices are made there (see
+Patterns).
+
 
 ## Usage
 
+
 ### What VVJ Core provides
+
 
 #### PHP
 
@@ -124,6 +143,7 @@ VVJ Core has no settings page of its own. Each format's settings live in the Vie
 | `Drupal\vvj_core\Hook\VvjCorePreprocessHook` | Shared `preprocess_views_view`: adds `.vvj-component` and `.vvj-{slug}` on the view wrapper for every display using `VvjStylePluginBase`, so global CSS/a11y in `vvj-a11y.css` applies to all patterns. |
 | `Drupal\vvj_core\Hook\VvjCoreHelpHook` | `hook_help` implementation |
 
+
 #### Constants enums (typed PHP 8.3 const classes)
 
 | Class | Purpose |
@@ -132,6 +152,7 @@ VVJ Core has no settings page of its own. Each format's settings live in the Vie
 | `Drupal\vvj_core\Constants\Easing` | CSS easing keywords. |
 | `Drupal\vvj_core\Constants\AnimationDirection` | Animation presets. |
 | `Drupal\vvj_core\Constants\ValidationBounds` | Min/max bounds shared across pattern modules: transition speed, slide timing and the rest. |
+
 
 #### JS
 
@@ -143,6 +164,7 @@ VVJ Core has no settings page of its own. Each format's settings live in the Vie
 | `js/vvj-deeplink-bridge.js` | `wireDeeplink` + `writeDeeplinkHash` |
 | `js/vvj-token-bridge.js` | `registerVvjBehavior` |
 
+
 #### CSS
 
 | File | Purpose |
@@ -151,9 +173,11 @@ VVJ Core has no settings page of its own. Each format's settings live in the Vie
 | `css/vvj-base.css` | Cascade-layer ladder (`vvj.foundation, .tokens, .base, .pattern, .theme`), container-query setup, reduced-motion baseline, FOUC-prevention for unupgraded custom elements. |
 | `css/vvj-a11y.css` | AAA-level focus indicators + visually-hidden utility, with forced-colors-mode fallbacks. |
 
+
 ### What each format module adds
 
-Every `drupal/vvj*` package layers these on top of the foundation (see each module's `README.md`):
+Every `drupal/vvj*` package layers these on top of the foundation (see each
+module's `README.md`):
 
 | Surface | Typical contents |
 |--------|------------------|
@@ -162,6 +186,7 @@ Every `drupal/vvj*` package layers these on top of the foundation (see each modu
 | `src/Hook/*TokenHooks.php` | `hook_token_info` / `hook_tokens` |
 | `src/Hook/*HelpHook.php` | `hook_help` |
 | `config/optional/views.view.*_example.yml` | Optional starter View . |
+
 
 ### How a format module consumes VVJ Core
 
@@ -256,6 +281,7 @@ Sketch of `vvja/js/vvja-accordion-element.js` (abridged):
 })(Drupal);
 ```
 
+
 ### Drop-in upgrade contract
 
 Every VVJ v2 module, including this foundation module, preserves the v1
@@ -277,11 +303,15 @@ The drop-in contract preserves all v1 plugin IDs, theme hooks, Twig template
 names, library names, option keys, CSS classes on rendered HTML, and public
 `Drupal.vvj*` JavaScript APIs.
 
+
 ## Patterns
 
-A Pattern is a ready-made design for a VVJ format. Choosing one in the Views format settings applies its layout,
-animation, styling and deep linking settings to the view. Each format module ships its Patterns in
-`<module>/patterns/<id>/pattern.yml`; VVJ Core ships none of its own, and carries the code that offers them.
+A Pattern is a ready-made design for a VVJ format. Choosing one in the Views
+format settings applies its layout,
+animation, styling and deep linking settings to the view. Each format module
+ships its Patterns in
+`<module>/patterns/<id>/pattern.yml`; VVJ Core ships none of its own, and
+carries the code that offers them.
 
 | Format | Patterns | Names |
 |---|---|---|
@@ -304,13 +334,17 @@ VVJ Core carries three sub-modules:
 | `vvj_patterns_demo` | Optional example content. It creates a "VVJ Slide" content type, five demo slides with pictures and five image styles, plus example views titled "VVJ demo: <format>" with one page per Pattern at `vvj/<module>/<pattern>`. Uninstalling it removes the slides and pictures it created. |
 | `vvj_core_ai` | Optional. Adds "Build a VVJ view with AI" to the Views admin page. It creates the view disabled, as a block, and never edits an existing view. Requires `drupal/ai`; the parent module does not. See its own [README](./modules/vvj_core_ai/README.md). |
 
+
 ### Choosing a Pattern
 
 1. Enable the format module and `vvj_patterns`: `drush en vvja vvj_patterns`.
-2. Edit a view that uses the format and open the format settings.
-3. In the "Patterns" section, pick a Pattern in the "Pattern" select and save. A list titled
-   "To finish the <name> Pattern" shows what the view must supply (fields, markup classes, item count).
-4. Pick "None" to keep your own settings.
+1. Edit a view that uses the format and open the format settings.
+1. In the "Patterns" section, pick a Pattern in the "Pattern" select and save. A
+   list titled
+   "To finish the <name> Pattern" shows what the view must supply (fields,
+   markup classes, item count).
+1. Pick "None" to keep your own settings.
+
 
 ### Example views
 
@@ -318,8 +352,10 @@ VVJ Core carries three sub-modules:
 drush en vvj_patterns_demo -y
 ```
 
-Visit `vvj/<module>/<pattern>`, for example `vvj/vvja/stage`. Example views are created for the format modules that are
+Visit `vvj/<module>/<pattern>`, for example `vvj/vvja/stage`. Example views are
+created for the format modules that are
 enabled.
+
 
 ## Upgrading from VVJ 1.x
 
@@ -342,6 +378,7 @@ site is not supported.
 **Stay on 1.x** if you are on Drupal 10, 11.0–11.2, or PHP 8.1/8.2: v2
 requires Drupal 11.3+ and PHP 8.3+.
 
+
 ### Manual / tarball upgrade (no Composer)
 
 Composer users get `vvj_core` automatically. If you install from drupal.org
@@ -349,14 +386,15 @@ tarballs, **you must download `vvj_core` yourself**. The pattern modules
 require it and will not enable without it.
 
 1. Download the new pattern tarball(s) **and** the `vvj_core` tarball.
-2. Extract `vvj_core` to `modules/contrib/vvj_core` (keep it under the same
+1. Extract `vvj_core` to `modules/contrib/vvj_core` (keep it under the same
    parent as the pattern modules, see "How the JavaScript is shared" above).
-3. Overwrite each pattern module with its 2.x files.
-4. `drush updb -y`: the `*_update_10001()` hooks enable `vvj_core`.
-5. `drush cr`.
+1. Overwrite each pattern module with its 2.x files.
+1. `drush updb -y`: the `*_update_10001()` hooks enable `vvj_core`.
+1. `drush cr`.
 
 If you cannot run `drush updb`, enable `vvj_core` manually first
 (`drush en vvj_core -y` or via **Extend**), then clear caches.
+
 
 ### How the `vvj_core` requirement is handled
 
@@ -374,6 +412,7 @@ code is on disk but `vvj_core` is not yet enabled:
 
 You therefore never have to enable `vvj_core` by hand on a Composer upgrade —
 but doing so early (before `updb`) is harmless.
+
 
 ### `drush vvj:upgrade`: migration audit
 
@@ -395,19 +434,21 @@ logic lives in the Drush-independent
 `\Drupal\vvj_core\Service\VvjUpgradeAuditor` service (unit tested); the
 command is a thin wrapper.
 
+
 ### Verify the upgrade
 
 After `drush cr`, confirm:
 
 1. `drush pm:list --status=enabled | grep vvj`: `vvj_core` **and** every
    pattern module are enabled.
-2. `drush vvj:upgrade --dry-run`: reports *"No migration needed"*.
-3. Each existing VVJ view still renders on the front end (the wrapper element
+1. `drush vvj:upgrade --dry-run`: reports *"No migration needed"*.
+1. Each existing VVJ view still renders on the front end (the wrapper element
    is now `<vvja-accordion>` etc.; every v1 CSS class is unchanged).
-4. Interactions work in the browser (open/close, next/prev, play/pause…).
-5. Turn **JS aggregation** on (`/admin/config/development/performance`) and
+1. Interactions work in the browser (open/close, next/prev, play/pause…).
+1. Turn **JS aggregation** on (`/admin/config/development/performance`) and
    re-check. Shared code loads via the `Drupal.Vvj` namespace + library
    dependency order, so aggregation is safe.
+
 
 ## Troubleshooting
 
@@ -420,16 +461,21 @@ After `drush cr`, confirm:
 | `updb` errors before `vvj_core` is enabled | Enable it first: `drush en vvj_core -y`, then `drush updb -y && drush cr` |
 | Dependency error: pattern needs `vvj_core` | Manual install |
 
-Report bugs in the [issue queue](https://www.drupal.org/project/issues/vvj_core).
+Report bugs in the
+[issue queue](https://www.drupal.org/project/issues/vvj_core).
+
 
 ## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
+
 ## Maintainers
 
 - Alaa Haddad - [flashwebcenter](https://www.drupal.org/u/flashwebcenter)
 
+
 ## License
 
-GPL-2.0-or-later. See the [GNU General Public License, version 2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
+GPL-2.0-or-later. See the
+[GNU General Public License, version 2 or later](https://www.gnu.org/licenses/gpl-2.0.html).

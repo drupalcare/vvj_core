@@ -133,7 +133,7 @@ final class FormatRegistry implements FormatRegistryInterface {
    * How many settings a format exposes.
    *
    * `defineOptions()` is protected and `->options` is empty until a view
-   * initialises the plugin, so neither can be read from here — measured
+   * initializes the plugin, so neither can be read from here — measured
    * 2026-09-04. The option definitions are reachable through the plugin's own
    * public form builder instead, which is also the only source carrying the
    * human labels a person needs.
