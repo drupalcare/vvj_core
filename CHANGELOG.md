@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ## [2.0.1] (UNRELEASED)
 
 - Extend and Appearance pages: every module and theme description is a short, professional statement that begins with a verb; credits, links and version notes moved out of the info files.
+- VVJ logo in a header on the VVJ AI page (vvj_core_ai).
 
 ### Added
 

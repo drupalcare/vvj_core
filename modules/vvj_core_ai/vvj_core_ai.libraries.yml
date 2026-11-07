@@ -8,3 +8,8 @@ brief:
     - core/drupal
     - core/drupalSettings
     - core/once
+
+brand:
+  css:
+    theme:
+      css/vvj-ai-brand.css: {}

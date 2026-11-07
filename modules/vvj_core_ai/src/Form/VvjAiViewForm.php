@@ -104,6 +104,35 @@ final class VvjAiViewForm extends FormBase {
    *   The form.
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    $form['#attached']['library'][] = 'vvj_core_ai/brand';
+    $form['band'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'header',
+      '#attributes' => ['class' => ['vvj-ai-band']],
+      '#weight' => -100,
+      'logo' => [
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#attributes' => ['class' => ['vvj-ai-band__logo'], 'aria-hidden' => 'true'],
+      ],
+      'text' => [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['vvj-ai-band__text']],
+        'name' => [
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => $this->t('VVJ AI'),
+          '#attributes' => ['class' => ['vvj-ai-band__name']],
+        ],
+        'purpose' => [
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => $this->t('Builds a VVJ view from a description, as a disabled block for you to review.'),
+          '#attributes' => ['class' => ['vvj-ai-band__purpose']],
+        ],
+      ],
+    ];
+
     $formats = [];
     $viewModeFormats = [];
 
