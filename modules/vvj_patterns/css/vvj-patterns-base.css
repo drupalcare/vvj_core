@@ -35,9 +35,110 @@
   --vvj-radius: 16px;
   --vvj-font-display: "Iowan Old Style", "Palatino Linotype", georgia, serif;
   --vvj-font-ui: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+  --vvj-font-mono: ui-monospace, "SF Mono", menlo, consolas, monospace;
+  --vvj-accent: var(--vvj-ink);
+  --vvj-focus: currentColor;
   --vvj-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --vvj-ease-io: cubic-bezier(0.76, 0, 0.24, 1);
   --vvj-spring: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 20.3%, 1.043 24.3%, 1.035 28.7%, 1.007 38.4%, 0.998 46.3%, 1);
+
+  /* Spacing, corners, type, motion and elevation scales (rule 16). Pattern CSS
+     reads these with a fallback; a site or a bridge may set them. */
+  --vvj-space-2: 2px;
+  --vvj-space-3: 3px;
+  --vvj-space-4: 4px;
+  --vvj-space-5: 5px;
+  --vvj-space-6: 6px;
+  --vvj-space-8: 8px;
+  --vvj-space-10: 10px;
+  --vvj-space-12: 12px;
+  --vvj-space-14: 14px;
+  --vvj-space-16: 16px;
+  --vvj-space-18: 18px;
+  --vvj-space-20: 20px;
+  --vvj-space-22: 22px;
+  --vvj-space-24: 24px;
+  --vvj-space-26: 26px;
+  --vvj-space-28: 28px;
+  --vvj-space-30: 30px;
+  --vvj-space-32: 32px;
+  --vvj-space-36: 36px;
+  --vvj-space-40: 40px;
+  --vvj-space-48: 48px;
+  --vvj-space-56: 56px;
+  --vvj-space-64: 64px;
+  --vvj-space-72: 72px;
+  --vvj-space-80: 80px;
+  --vvj-space-96: 96px;
+  --vvj-space-120: 120px;
+  --vvj-space-150: 150px;
+  --vvj-radius-2: 2px;
+  --vvj-radius-3: 3px;
+  --vvj-radius-4: 4px;
+  --vvj-radius-6: 6px;
+  --vvj-radius-8: 8px;
+  --vvj-radius-10: 10px;
+  --vvj-radius-12: 12px;
+  --vvj-radius-14: 14px;
+  --vvj-radius-16: 16px;
+  --vvj-radius-18: 18px;
+  --vvj-radius-20: 20px;
+  --vvj-radius-24: 24px;
+  --vvj-radius-28: 28px;
+  --vvj-radius-32: 32px;
+  --vvj-radius-36: 36px;
+  --vvj-radius-48: 48px;
+  --vvj-radius-pill: 999px;
+  --vvj-text-11: 0.6875rem;
+  --vvj-text-12: 0.75rem;
+  --vvj-text-13: 0.8125rem;
+  --vvj-text-14: 0.875rem;
+  --vvj-text-15: 0.9375rem;
+  --vvj-text-16: 1rem;
+  --vvj-text-17: 1.0625rem;
+  --vvj-text-18: 1.125rem;
+  --vvj-text-20: 1.25rem;
+  --vvj-text-22: 1.375rem;
+  --vvj-text-24: 1.5rem;
+  --vvj-text-26: 1.625rem;
+  --vvj-text-30: 1.875rem;
+  --vvj-text-32: 2rem;
+  --vvj-text-56: 3.5rem;
+  --vvj-text-64: 4rem;
+  --vvj-text-72: 4.5rem;
+  --vvj-dur-100: 0.1s;
+  --vvj-dur-150: 0.15s;
+  --vvj-dur-200: 0.2s;
+  --vvj-dur-250: 0.25s;
+  --vvj-dur-300: 0.3s;
+  --vvj-dur-350: 0.35s;
+  --vvj-dur-400: 0.4s;
+  --vvj-dur-450: 0.45s;
+  --vvj-dur-500: 0.5s;
+  --vvj-dur-550: 0.55s;
+  --vvj-dur-600: 0.6s;
+  --vvj-dur-650: 0.65s;
+  --vvj-dur-700: 0.7s;
+  --vvj-dur-800: 0.8s;
+  --vvj-dur-900: 0.9s;
+  --vvj-dur-1000: 1s;
+  --vvj-dur-1100: 1.1s;
+  --vvj-dur-1200: 1.2s;
+  --vvj-dur-1400: 1.4s;
+  --vvj-dur-1600: 1.6s;
+  --vvj-dur-1800: 1.8s;
+  --vvj-ease-plain: ease;
+  --vvj-ease-plain-out: ease-out;
+  --vvj-ease-plain-io: ease-in-out;
+  --vvj-ease-lift: cubic-bezier(0.25, 0.8, 0.5, 1);
+  --vvj-ease-spring-soft: cubic-bezier(0.3, 1.35, 0.5, 1);
+  --vvj-ease-spring-strong: cubic-bezier(0.3, 1.6, 0.5, 1);
+  --vvj-ease-back: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --vvj-shadow-lift-sm: 0 4px 10px rgb(0 0 0 / 0.1);
+  --vvj-shadow-lift-md: 0 8px 15px rgb(0 0 0 / 0.2);
+  --vvj-shadow-lift-lg: 0 10px 20px rgb(0 0 0 / 0.3);
+  --vvj-shadow-glow-sm: 0 0 10px rgb(255 255 255 / 0.5);
+  --vvj-shadow-glow-lg: 0 0 20px rgb(255 255 255 / 0.8);
 
   color-scheme: light dark;
   font-family: var(--vvj-font-ui);
@@ -138,7 +239,7 @@
 }
 
 .vvj-pattern :where([aria-hidden="false"]) :where(.vvj-stagger) > * {
-  animation: vvj-rise 0.7s var(--vvj-ease-out) both;
+  animation: vvj-rise var(--vvj-dur-700, 0.7s) var(--vvj-ease-out) both;
 }
 
 :where(.vvj-pattern) :where([aria-hidden="false"]) :where(.vvj-stagger) > :nth-child(2) {
@@ -146,11 +247,11 @@
 }
 
 :where(.vvj-pattern) :where([aria-hidden="false"]) :where(.vvj-stagger) > :nth-child(3) {
-  animation-delay: 0.16s;
+  animation-delay: var(--vvj-dur-150, 0.15s);
 }
 
 :where(.vvj-pattern) :where([aria-hidden="false"]) :where(.vvj-stagger) > :nth-child(4) {
-  animation-delay: 0.24s;
+  animation-delay: var(--vvj-dur-250, 0.25s);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -163,4 +264,13 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Right-to-left: Previous sits on the right and points right, Next on the
+   left and points left. The arrow drawings point the left-to-right way.
+   Arrows are an <svg>, a masked .vvja-i span or a ::before mask; `scale` (not
+   `transform`) also mirrors their hover nudge. */
+.vvj-pattern:dir(rtl) :is(.vvja-prev, .vvja-next, .vvjb-prev, .vvjb-next, .vvjf-prev, .vvjf-next, .prev-arrow, .next-arrow, .modal-prev, .modal-next, .vvjt-scroll-prev, .vvjt-scroll-next) :is(svg, .vvja-i),
+.vvj-pattern:dir(rtl) :is(.vvja-prev, .vvja-next, .vvjb-prev, .vvjb-next, .vvjf-prev, .vvjf-next, .prev-arrow, .next-arrow, .modal-prev, .modal-next, .vvjt-scroll-prev, .vvjt-scroll-next)::before {
+  scale: -1 1;
 }

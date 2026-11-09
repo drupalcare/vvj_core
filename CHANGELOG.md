@@ -42,6 +42,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Patterns: new shared spacing, radius, type, motion and shadow variables, and `--vvj-accent`, `--vvj-font-mono`, `--vvj-focus`, which Patterns already used but nothing defined.
+- Patterns: `scripts/check-vvj-rules.py` and `scripts/browser/` check the Pattern rules, each with a self-test.
+- Patterns: on right-to-left pages the Previous and Next arrows point the reading way (Previous on the right points right).
+- Patterns: split text (Board, Aperture, Nightstory, Story Reel) follows the text's own direction, so English on an Arabic page no longer prints its words back to front; Arabic and Hebrew text splits by word only, so letters stay joined.
 - Patterns under APEX: where a region leaves its button, menu-hover or border colors to APEX (which derives them from Color 1 and 2), Pattern buttons, active tabs, marks and progress fills no longer take the region ground and vanish; they use the region text color with ground-colored words, idle tabs the raised step and progress tracks a light text mix. Schemes that set their own colors are unchanged. Under Solo, Pattern button words no longer read `--r-sc-tx-bt(-h)`, which four predefined schemes set for Solo's own button ground.
 - Patterns: under Solo and APEX (same rule in both), the dark stage takes the brand primary color (Solo: the region heading color; APEX: the scheme primary) (lightness capped so its words keep at least 4.5:1; 12.8:1 with the default scheme) and the stage words take the light ink. Both bridges declare the same five brand roles for module bridges: `--vvj-theme-primary`, `-secondary`, `-accent`, `-ink-light` and `-ink-dark`.
 - Patterns: under Solo and APEX, muted words (`--vvj-muted`) mix 15% of the ground into the text instead of 30%, so they keep a 4.5:1 contrast (measured 3.58:1 before, 5.0:1 after on apex_theme).
