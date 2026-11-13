@@ -17,3 +17,11 @@ services:
     class: Drupal\vvj_patterns\Theme\VvjThemeBridge
     arguments: ['@theme.manager']
   Drupal\vvj_patterns\Theme\VvjThemeBridgeInterface: '@vvj_patterns.theme_bridge'
+
+  # Refuses to uninstall this module while one of the image styles it ships
+  # is still used, and says where (view, display or responsive image style).
+  vvj_patterns.uninstall_validator:
+    class: Drupal\vvj_patterns\Extension\VvjPatternsUninstallValidator
+    arguments: ['@entity_type.manager', '@config.manager', '@extension.list.module', '@string_translation']
+    tags:
+      - { name: module_install.uninstall_validator }

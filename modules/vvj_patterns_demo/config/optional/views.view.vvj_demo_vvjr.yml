@@ -8,7 +8,6 @@ dependencies:
     - field.storage.node.vvj_summary
     - image.style.vvj_landscape_1200
     - image.style.vvj_square_800
-    - image.style.vvj_thumb_240
     - node.type.vvj_slide
   module:
     - image
@@ -1103,7 +1102,7 @@ display:
           type: image
           settings:
             image_link: ''
-            image_style: vvj_thumb_240
+            image_style: vvj_landscape_1200
             image_loading:
               attribute: lazy
             svg_attributes:

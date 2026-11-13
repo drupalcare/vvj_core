@@ -5,4 +5,5 @@ core_version_requirement: ^11.3 || ^12
 package: VVJ
 php: 8.3
 dependencies:
+  - drupal:image
   - vvj_core:vvj_core

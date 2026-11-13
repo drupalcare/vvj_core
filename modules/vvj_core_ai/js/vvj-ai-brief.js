@@ -88,6 +88,24 @@
         (selects[0].closest('.form-item') || selects[0]).after(panel);
       }
 
+      // A NAMED REGION, so a screen reader can find the panel again after it
+      // opens below the select.
+      panel.setAttribute('role', 'region');
+      panel.setAttribute('aria-label', Drupal.t('Format brief'));
+
+      // THE ANNOUNCEMENT LIVES OUTSIDE THE PANEL. The panel is display:none
+      // while closed, and a live region inside a hidden box is not reliably
+      // read when it appears. This one is always rendered (visually hidden)
+      // and is only written after the person changes the format or a switch.
+      let status = panel.parentNode.querySelector('.vvj-ai-brief__status');
+
+      if (!status) {
+        status = document.createElement('div');
+        status.className = 'vvj-ai-brief__status visually-hidden';
+        status.setAttribute('role', 'status');
+        panel.after(status);
+      }
+
       const body = panel.querySelector('.vvj-ai-brief__body');
       const about = panel.querySelector('.vvj-ai-brief__about');
       const heading = panel.querySelector('.vvj-ai-brief__heading');
@@ -97,7 +115,19 @@
 
       closeBtn.setAttribute('aria-label', Drupal.t('Close'));
 
-      const close = () => panel.classList.remove('vvj-ai-brief--open');
+      // The select that opened the panel last; focus goes back to it when the
+      // panel closes from inside, so focus never falls to the page body.
+      let opener = selects[0];
+
+      const close = () => {
+        const hadFocus = panel.contains(document.activeElement);
+
+        panel.classList.remove('vvj-ai-brief--open');
+
+        if (hadFocus) {
+          opener.focus();
+        }
+      };
 
       selects.forEach((select) => {
         const own = new AbortController();
@@ -156,10 +186,13 @@
             heading.textContent = '';
             list.textContent = '';
             prompts.textContent = '';
+            status.textContent = '';
             close();
 
             return;
           }
+
+          opener = select;
 
           const chosen = select.selectedOptions[0];
           const name = chosen ? chosen.textContent.trim() : '';
@@ -381,6 +414,11 @@
 
           body.scrollTop = 0;
           panel.classList.add('vvj-ai-brief--open');
+          status.textContent = name
+            ? Drupal.t('The brief for @name is shown below the format.', {
+                '@name': name,
+              })
+            : Drupal.t('The format brief is shown below the format.');
         };
 
         select.addEventListener('change', show, { signal });

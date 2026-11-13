@@ -29,3 +29,7 @@ tmap
 toks
 unwhere
 vroot
+Thaana
+normalises
+ctls
+pdir

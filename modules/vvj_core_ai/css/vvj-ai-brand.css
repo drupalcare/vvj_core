@@ -1,12 +1,12 @@
 /* The VVJ AI header band: logo, name and purpose, as on the other product
-   settings pages. The rule under it is the VVJ AI palette colour. */
+   settings pages. The rule under it is the VVJ AI palette color. */
 .vvj-ai-band {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-block: 0 1.5rem;
   padding: 1rem 1.25rem;
-  border: 1px solid color-mix(in srgb, currentcolor 15%, transparent);
+  border: 1px solid color-mix(in sRGB, currentColor 15%, transparent);
   border-block-end: 3px solid #386fab;
   border-radius: 0.75rem;
 }

@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_portrait_1280
+label: 'VVJ Portrait (3:4)'
+effects:
+  6218c480-e006-4607-b6fe-e6d1ab642833:
+    uuid: 6218c480-e006-4607-b6fe-e6d1ab642833
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 960
+      height: 1280
+      anchor: center-center

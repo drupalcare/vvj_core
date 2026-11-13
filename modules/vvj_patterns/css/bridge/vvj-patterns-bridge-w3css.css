@@ -1,0 +1,137 @@
+/**
+ * @file
+ * VVJ Patterns theme bridge: W3CSS region colors.
+ *
+ * Loaded only when the active theme is the W3CSS theme (d8w3css) or one of its
+ * sub-themes (VvjPatternsLibraryInfoAlterHook). Token mapping ONLY: it gives the
+ * --vvj-* color tokens of vvj-patterns-base.css new values taken from the
+ * W3CSS region the Pattern sits in, and never paints an element.
+ *
+ * Step 1 reads the theme's region colors into --vvj-theme-* role tokens
+ * (the same 19 names the Solo and APEX bridges declare; the Pattern tokens read
+ * these and never spell a --r-* name). Step 2 derives every Pattern token from
+ * those roles with color-mix(), exactly as the Solo bridge does.
+ *
+ * The W3CSS theme sets three roles on a region class: --r-background, --r-text
+ * and --r-border (checked in d8w3css/css 2026-11-11: 336, 368 and 31
+ * declarations). It sets no link, heading, menu or button role, so each of
+ * those is derived from text and ground, the way the Solo bridge does when its
+ * region leaves them unset: link, heading and primary follow the text color, a button is the
+ * ink fill with ground text. The literals are the base file's neutral values
+ * for a region that leaves a role unset.
+ *
+ * Selector: `.vvj-pattern` (0,1,0). vvj-patterns-base.css
+ * declares the tokens at 0,1,0, so a 0,0,0 bridge would lose to it; at equal
+ * specificity this file wins because it loads later (weight 100).
+ */
+
+.vvj-pattern {
+  /* Step 1: the theme's colors as roles. */
+  --vvj-theme-bg: var(--r-background, #fff);
+  --vvj-theme-text: var(--r-text, #111);
+  --vvj-theme-heading: var(--vvj-theme-text);
+  --vvj-theme-link: var(--vvj-theme-text);
+  --vvj-theme-link-hover: var(--vvj-theme-link);
+  --vvj-theme-border: var(--r-border, color-mix(in oklab, var(--vvj-theme-text) 16%, var(--vvj-theme-bg)));
+  --vvj-theme-form-bg: var(--vvj-theme-bg);
+  --vvj-theme-menu-text: var(--vvj-theme-text);
+  --vvj-theme-menu-text-hover: var(--vvj-theme-menu-text);
+  --vvj-theme-menu-bg: var(--vvj-theme-bg);
+  --vvj-theme-menu-bg-hover: var(--vvj-theme-menu-bg);
+  /* Pairs: a fill and the text on it are the page pair swapped (fill = text color, text = ground), a black-and-white pair on any region. */
+  --vvj-theme-button-text: var(--vvj-theme-bg);
+  --vvj-theme-button-text-hover: var(--vvj-theme-button-text);
+  --vvj-theme-button-bg: var(--vvj-theme-text);
+  --vvj-theme-button-bg-hover: var(--vvj-theme-button-bg);
+  /* The active pair (current tab, active chip, open bar): ink fill and ground text. */
+  --vvj-theme-active-bg: var(--vvj-theme-text);
+  --vvj-theme-active-text: var(--vvj-theme-bg);
+  /* A control's outline (quiet button line): the theme border. */
+  --vvj-theme-control-line: var(--r-border, var(--vvj-muted));
+  /* The track a progress fill runs on: the theme border. */
+  --vvj-theme-track: var(--vvj-theme-border);
+
+  /*
+   * Brand roles, the same five names the Solo and APEX bridges declare:
+   * primary = the heading color, secondary = link, accent = link hover, and
+   * the light and dark inks, here the ground and the text of the region.
+   * Used only where a contrast floor holds whatever the region is: the stage.
+   */
+  --vvj-theme-primary: var(--vvj-theme-heading);
+  --vvj-theme-secondary: var(--vvj-theme-link);
+  --vvj-theme-accent: var(--vvj-theme-link-hover);
+  --vvj-theme-ink-light: var(--vvj-theme-bg);
+  --vvj-theme-ink-dark: var(--vvj-theme-text);
+
+  /* Step 2: page tokens. */
+  --vvj-surface: var(--vvj-theme-bg);
+  --vvj-raised: color-mix(in oklab, var(--vvj-theme-bg), var(--vvj-theme-text) 6%);
+  --vvj-ink: var(--vvj-theme-text);
+  /* 15%, not 30%: measured on apex_theme (ink 6.99:1 on its ground) 30% gave
+     3.58:1 and 15% gives 5.0:1, so muted words pass WCAG AA (4.5:1). */
+  --vvj-muted: color-mix(in oklab, var(--vvj-theme-text), var(--vvj-theme-bg) 15%);
+  --vvj-line: var(--vvj-theme-border);
+
+  /*
+   * Stage tokens, the same rule as the APEX bridge. The ground is the brand
+   * primary with its OKLCH lightness capped at 0.4 (a dark primary is used
+   * as it is, a light one is darkened); the words keep 15% of the light ink
+   * and 85% white, so their lightness is at least 0.85. That is at least
+   * about 5.8:1 (WCAG AA 4.5:1) under any scheme, dark schemes included.
+   */
+  --vvj-stage-bg: oklch(from var(--vvj-theme-primary) min(l, 0.4) c h);
+  --vvj-stage-color: color-mix(in oklab, var(--vvj-theme-ink-light) 15%, white);
+  --vvj-stage-muted: color-mix(in oklab, var(--vvj-stage-color), var(--vvj-stage-bg) 22%);
+  --vvj-stage-line: color-mix(in oklab, var(--vvj-stage-color) 50%, transparent);
+  --vvj-stage-scrim: linear-gradient(180deg, transparent 30%, color-mix(in oklab, var(--vvj-stage-bg) 78%, transparent) 68%, color-mix(in oklab, var(--vvj-stage-bg) 94%, transparent) 100%);
+
+  /* Glass tokens: the stage ground and words at the base alpha steps. */
+  --vvj-glass-bg: color-mix(in oklab, var(--vvj-stage-bg) 62%, transparent);
+  --vvj-glass-line: color-mix(in oklab, var(--vvj-stage-color) 16%, transparent);
+  --vvj-glass-shadow: 0 18px 40px color-mix(in oklab, var(--vvj-stage-bg) 35%, transparent);
+
+  /* --vvj-mask-solid is not mapped: a mask reads only alpha, never color. */
+}
+
+/*
+ * Dark mode. vvj-patterns-base.css swaps its page tokens here; under W3CSS
+ * the region colors already decide light or dark, so only the fallbacks
+ * for an unset region change, to the base's dark values. Everything in
+ * step 2 recomputes from these roles.
+ */
+@media (prefers-color-scheme: dark) {
+  .vvj-pattern {
+    --vvj-theme-bg: var(--r-background, #111);
+    --vvj-theme-text: var(--r-text, #f2f2f2);
+  }
+}
+
+/* The demo stage (vvj_patterns_demo) takes the region ground the Pattern
+   reads, not the system color scheme, so the stage and the Pattern ink stay a pair. */
+.vvj-demo-stage {
+  --vvj-demo-stage-bg: var(--r-background, #fff);
+  --vvj-demo-stage-color: var(--r-text, #111);
+}
+
+@media (prefers-color-scheme: dark) {
+  .vvj-demo-stage {
+    --vvj-demo-stage-bg: var(--r-background, #111);
+    --vvj-demo-stage-color: var(--r-text, #f2f2f2);
+  }
+}
+
+@media (forced-colors: active) {
+  .vvj-pattern {
+    --vvj-surface: Canvas;
+    --vvj-raised: Canvas;
+    --vvj-ink: CanvasText;
+    --vvj-muted: CanvasText;
+    --vvj-line: CanvasText;
+    --vvj-stage-bg: Canvas;
+    --vvj-stage-color: CanvasText;
+    --vvj-stage-muted: CanvasText;
+    --vvj-stage-line: CanvasText;
+    --vvj-glass-bg: Canvas;
+    --vvj-glass-line: CanvasText;
+  }
+}

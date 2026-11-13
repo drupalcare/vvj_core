@@ -20,6 +20,11 @@ interface VvjThemeBridgeInterface {
   public const string BRIDGE_SOLO = 'solo';
 
   /**
+   * Bridge identifier for the W3CSS theme and its sub-themes.
+   */
+  public const string BRIDGE_W3CSS = 'w3css';
+
+  /**
    * Bridge identifier for every other theme (black and white stays).
    */
   public const string BRIDGE_NEUTRAL = 'neutral';
@@ -28,8 +33,8 @@ interface VvjThemeBridgeInterface {
    * Resolves the bridge id from the active theme and its base themes.
    *
    * @return string
-   *   One of {@see self::BRIDGE_APEX}, {@see self::BRIDGE_SOLO} or
-   *   {@see self::BRIDGE_NEUTRAL}.
+   *   One of {@see self::BRIDGE_APEX}, {@see self::BRIDGE_SOLO},
+   *   {@see self::BRIDGE_W3CSS} or {@see self::BRIDGE_NEUTRAL}.
    */
   public function resolveBridgeId(): string;
 

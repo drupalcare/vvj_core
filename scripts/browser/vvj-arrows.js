@@ -30,8 +30,8 @@
     const out = [];
     [...doc.querySelectorAll('.vvj-pattern')].filter((s) => !(s.parentElement && s.parentElement.closest('.vvj-pattern'))).forEach((sec) => {
       const btn = (re) => [...sec.querySelectorAll('button, a, [role=button]')].find((b) => re.test((b.getAttribute('aria-label') || '') + ' ' + b.className));
-      const prev = btn(/prev|السابق/i);
-      const next = btn(/next|التالي/i);
+      const prev = btn(/prev|\u0627\u0644\u0633\u0627\u0628\u0642/i);
+      const next = btn(/next|\u0627\u0644\u062a\u0627\u0644\u064a/i);
       if (!prev || !next) return;
       const pr = prev.getBoundingClientRect();
       const nr = next.getBoundingClientRect();

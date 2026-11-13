@@ -11,8 +11,8 @@ use Drupal\Core\Theme\ThemeManagerInterface;
  * Default {@see VvjThemeBridgeInterface} implementation.
  *
  * Mirrors Paragraphs Bundles' PbThemeBridgeService: the active theme and
- * then its base themes are walked in order, and the first APEX or Solo name
- * decides the bridge.
+ * then its base themes are walked in order, and the first APEX, Solo or W3CSS
+ * name decides the bridge.
  */
 final class VvjThemeBridge implements VvjThemeBridgeInterface {
 
@@ -43,6 +43,11 @@ final class VvjThemeBridge implements VvjThemeBridgeInterface {
       }
       if ($name === 'solo' || str_starts_with($name, 'solo_')) {
         return self::BRIDGE_SOLO;
+      }
+      // The W3CSS theme's machine name; its sub-themes (amun, amunet, anhur,
+      // a site sub-theme) reach it through the base-theme chain.
+      if ($name === 'drupal8_w3css_theme') {
+        return self::BRIDGE_W3CSS;
       }
     }
     return self::BRIDGE_NEUTRAL;

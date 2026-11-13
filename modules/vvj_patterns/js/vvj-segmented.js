@@ -61,6 +61,8 @@
           'aria-pressed',
           button === target ? 'true' : 'false',
         );
+        // The roving Tab stop follows the pressed button, for a click too.
+        button.setAttribute('tabindex', button === target ? '0' : '-1');
       });
       this.onSelect(index, target);
     }

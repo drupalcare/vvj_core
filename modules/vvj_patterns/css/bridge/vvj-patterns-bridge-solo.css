@@ -29,27 +29,27 @@
 
 .vvj-pattern {
   /* Step 1: the theme's colors as roles. */
-  --vvj-theme-bg: var(--r-bg, #fff);
-  --vvj-theme-text: var(--r-tx, #111);
-  --vvj-theme-heading: var(--r-h1, var(--r-sc-h1, var(--vvj-theme-text)));
-  --vvj-theme-link: var(--r-lk, var(--r-sc-lk, var(--vvj-theme-text)));
-  --vvj-theme-link-hover: var(--r-lk-h, var(--r-sc-lk-h, var(--vvj-theme-link)));
-  --vvj-theme-border: var(--r-br, color-mix(in oklab, var(--vvj-theme-text) 16%, var(--vvj-theme-bg)));
-  --vvj-theme-form-bg: var(--r-bg-fr, var(--vvj-theme-bg));
-  --vvj-theme-menu-text: var(--r-tx-lk, var(--vvj-theme-text));
-  --vvj-theme-menu-text-hover: var(--r-menu-tx-h, var(--vvj-theme-menu-text));
+  --vvj-theme-bg: var(--r-background, var(--r-bg, #fff));
+  --vvj-theme-text: var(--r-text, var(--r-tx, #111));
+  --vvj-theme-heading: var(--r-heading, var(--r-h1, var(--r-sc-h1, var(--vvj-theme-text))));
+  --vvj-theme-link: var(--r-link, var(--r-lk, var(--r-sc-lk, var(--vvj-theme-text))));
+  --vvj-theme-link-hover: var(--r-link-hover, var(--r-lk-h, var(--r-sc-lk-h, var(--vvj-theme-link))));
+  --vvj-theme-border: var(--r-border, var(--r-br, color-mix(in oklab, var(--vvj-theme-text) 16%, var(--vvj-theme-bg))));
+  --vvj-theme-form-bg: var(--r-form-background, var(--r-bg-fr, var(--vvj-theme-bg)));
+  --vvj-theme-menu-text: var(--r-menu-text, var(--r-tx-lk, var(--vvj-theme-text)));
+  --vvj-theme-menu-text-hover: var(--r-menu-text-hover, var(--r-menu-tx-h, var(--vvj-theme-menu-text)));
   /* Not --r-header-bg: Solo schemes often set it to a gradient, which is
      not a color, and it belongs to the header region, not this one. */
   --vvj-theme-menu-bg: var(--vvj-theme-bg);
-  --vvj-theme-menu-bg-hover: var(--r-menu-bg-h, var(--vvj-theme-menu-bg));
+  --vvj-theme-menu-bg-hover: var(--r-menu-background-hover, var(--r-menu-bg-h, var(--vvj-theme-menu-bg)));
   /* Not --r-sc-tx-bt(-h): Solo pairs those with its own button ground
      (--r-bg, solo-variables-regions.css:89-99), and 20 regions in 4
      predefined schemes set --r-sc-tx-bt-h with no --r-bg-bt-h, so on the ink
      fill below it would be a color chosen for another ground. */
-  --vvj-theme-button-text: var(--r-tx-bt, var(--vvj-theme-bg));
-  --vvj-theme-button-text-hover: var(--r-tx-bt-h, var(--vvj-theme-button-text));
-  --vvj-theme-button-bg: var(--r-bg-bt, var(--vvj-theme-text));
-  --vvj-theme-button-bg-hover: var(--r-bg-bt-h, var(--vvj-theme-button-bg));
+  --vvj-theme-button-text: var(--r-button-text, var(--r-tx-bt, var(--vvj-theme-bg)));
+  --vvj-theme-button-text-hover: var(--r-button-text-hover, var(--r-tx-bt-h, var(--vvj-theme-button-text)));
+  --vvj-theme-button-bg: var(--r-button-background, var(--r-bg-bt, var(--vvj-theme-text)));
+  --vvj-theme-button-bg-hover: var(--r-button-background-hover, var(--r-bg-bt-h, var(--vvj-theme-button-bg)));
   /*
    * Pairs: a fill and the text on it come from the same pair of roles, and the
    * fallbacks of a pair are the page pair swapped (fill = text color, text =
@@ -58,10 +58,10 @@
    * fill without its text, so no pair here mixes a scheme color with a fallback.
    */
   /* The active pair (current tab, active chip, open bar): menu hover colors, ink fill and ground text when unset. */
-  --vvj-theme-active-bg: var(--r-menu-bg-h, var(--vvj-theme-text));
-  --vvj-theme-active-text: var(--r-menu-tx-h, var(--vvj-theme-bg));
+  --vvj-theme-active-bg: var(--r-menu-background-hover, var(--r-menu-bg-h, var(--vvj-theme-text)));
+  --vvj-theme-active-text: var(--r-menu-text-hover, var(--r-menu-tx-h, var(--vvj-theme-bg)));
   /* A control's outline (quiet button line): the theme border, else the muted ink. */
-  --vvj-theme-control-line: var(--r-br, var(--vvj-muted));
+  --vvj-theme-control-line: var(--r-border, var(--r-br, var(--vvj-muted)));
   /* The track a progress fill runs on: the theme border. */
   --vvj-theme-track: var(--vvj-theme-border);
 
@@ -74,8 +74,8 @@
   --vvj-theme-primary: var(--vvj-theme-heading);
   --vvj-theme-secondary: var(--vvj-theme-link);
   --vvj-theme-accent: var(--vvj-theme-link-hover);
-  --vvj-theme-ink-light: var(--r-tx-light, var(--vvj-theme-bg));
-  --vvj-theme-ink-dark: var(--r-tx-dark, var(--vvj-theme-text));
+  --vvj-theme-ink-light: var(--solo-tone-text-light, var(--r-tx-light, var(--vvj-theme-bg)));
+  --vvj-theme-ink-dark: var(--solo-tone-text-dark, var(--r-tx-dark, var(--vvj-theme-text)));
 
   /* Step 2: page tokens. */
   --vvj-surface: var(--vvj-theme-bg);
@@ -115,22 +115,22 @@
  */
 @media (prefers-color-scheme: dark) {
   .vvj-pattern {
-    --vvj-theme-bg: var(--r-bg, #111);
-    --vvj-theme-text: var(--r-tx, #f2f2f2);
+    --vvj-theme-bg: var(--r-background, var(--r-bg, #111));
+    --vvj-theme-text: var(--r-text, var(--r-tx, #f2f2f2));
   }
 }
 
 /* The demo stage (vvj_patterns_demo) takes the region ground the Pattern
    reads, not the system color scheme, so the stage and the Pattern ink stay a pair. */
 .vvj-demo-stage {
-  --vvj-demo-stage-bg: var(--r-bg, #fff);
-  --vvj-demo-stage-color: var(--r-tx, #111);
+  --vvj-demo-stage-bg: var(--r-background, var(--r-bg, #fff));
+  --vvj-demo-stage-color: var(--r-text, var(--r-tx, #111));
 }
 
 @media (prefers-color-scheme: dark) {
   .vvj-demo-stage {
-    --vvj-demo-stage-bg: var(--r-bg, #111);
-    --vvj-demo-stage-color: var(--r-tx, #f2f2f2);
+    --vvj-demo-stage-bg: var(--r-background, var(--r-bg, #111));
+    --vvj-demo-stage-color: var(--r-text, var(--r-tx, #f2f2f2));
   }
 }
 

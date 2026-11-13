@@ -10,6 +10,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.0.1] (UNRELEASED)
 
+- Accessibility: the focus trap skips hidden, inert and roving (tabindex -1) controls, reads the controls on every Tab, takes the opener from the caller and removes its listener on release; Left and Right swap on right-to-left pages in keyboard navigation; a segmented control moves its Tab stop on click; the VVJ AI brief panel is a named region, announces itself, returns focus to the format select when closed from inside, and its separator text passes 4.5:1.
+- VVJ Patterns has a W3CSS bridge: the W3CSS theme and its sub-themes give the Patterns their `--r-text`, `--r-background` and `--r-border` colors.
+- VVJ Patterns Solo bridge reads the current Solo region color names first and the 1.x short names second, so it keeps its colors on current Solo.
 - Extend and Appearance pages: every module and theme description is a short, professional statement that begins with a verb; credits, links and version notes moved out of the info files.
 - VVJ logo in a header on the VVJ AI page (vvj_core_ai).
 

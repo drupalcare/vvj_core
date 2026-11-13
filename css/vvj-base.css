@@ -1,86 +1,96 @@
 /**
  * @file
- * VVJ Core — base reset + cascade-layer ladder.
+ * VVJ Core — base reset and the locked layer.
  *
- * The cascade-layer ladder lets pattern modules and themes layer
- * their CSS at the right specificity level without selector hacks.
- * Order (lowest to highest priority within layered rules):
+ * VVJ CSS sits outside cascade layers on purpose: layered module CSS
+ * loses to every unlayered theme rule, which is most themes. Working
+ * parts hold through normal specificity; the look reads --vvj-* tokens
+ * and low-specificity :where() selectors so a theme can restyle it.
  *
- *   vvj.foundation  — universal box-sizing, container queries
- *   vvj.tokens      — design-token definitions (vvj-tokens.css)
- *   vvj.base        — reduced-motion baseline, accessibility primitives
- *   vvj.pattern     — per-pattern layout (vvja.css, vvjs.css, etc.)
- *   vvj.theme       — site theme overrides — always wins (themes layer
- *                     into this from their own CSS)
- *
- * Unlayered CSS still beats layered CSS, so site themes can drop
- * unlayered overrides if they want to win against everything.
+ * One layer only: vvj.locked. It holds !important values that must
+ * never change (reduced motion, visually-hidden). Inside layers
+ * !important runs backwards, so these beat every theme rule, layered or
+ * not, including the theme's own !important.
  *
  * Filename:     vvj-base.css
  * Website:      https://www.flashwebcenter.com
  * Developer:    Alaa Haddad https://www.alaahaddad.com.
  */
 
-/* stylelint-disable layer-name-pattern -- These are NESTED cascade layer
-   names. `vvj.base` is a sublayer of `vvj`, which is valid CSS and is the
-   point: a site theme can order every VVJ layer as a group by writing
-   `@layer vvj, theme;`. stylelint's kebab-case pattern for this rule does not
-   allow the dot, so satisfying it would mean flattening the hierarchy to
-   `vvj-base` and taking that capability away for a naming preference. */
-@layer vvj.foundation, vvj.tokens, vvj.base, vvj.pattern, vvj.theme;
-
-@layer vvj.foundation {
-  /* Container-query setup for every VVJ custom element.
-     Pattern stylesheets can use @container queries against `vvj-region`
-     to respond to their parent's size, not the viewport. */
-  .vvj-component,
-  vvja-accordion,
-  vvjb-carousel,
-  vvjc-carousel,
-  vvjf-flipbox,
-  vvjh-hero,
-  vvjl-lightbox,
-  vvjp-parallax,
-  vvjr-reveal,
-  vvjs-slideshow,
-  vvjt-tabs {
-    display: block;
-    box-sizing: border-box;
-    container-name: vvj-region;
-    container-type: inline-size;
-  }
-
-  :where(.vvj-component) *,
-  :where(.vvj-component) *::before,
-  :where(.vvj-component) *::after,
-  :where(vvja-accordion) *,
-  :where(vvjb-carousel) *,
-  :where(vvjc-carousel) *,
-  :where(vvjf-flipbox) *,
-  :where(vvjh-hero) *,
-  :where(vvjl-lightbox) *,
-  :where(vvjp-parallax) *,
-  :where(vvjr-reveal) *,
-  :where(vvjs-slideshow) *,
-  :where(vvjt-tabs) * {
-    box-sizing: inherit;
-  }
-
-  /* Note on `<X>:not(:defined)` FOUC-hiding:
-   * We deliberately do NOT hide unupgraded custom elements. If the
-   * JS module fails to load (network error, blocked by extension,
-   * etc.), users would see nothing forever. Instead the markup
-   * inside each custom element is structured so that, without JS,
-   * a sensible static representation renders — inner `.vvja-inner`
-   * etc. divs are the visual elements; the custom element itself is
-   * a thin behavior wrapper.
-   */
+/* Container-query setup for every VVJ custom element.
+   Pattern stylesheets can use @container queries against `vvj-region`
+   to respond to their parent's size, not the viewport. */
+.vvj-component,
+vvja-accordion,
+vvjb-carousel,
+vvjc-carousel,
+vvjf-flipbox,
+vvjh-hero,
+vvjl-lightbox,
+vvjp-parallax,
+vvjr-reveal,
+vvjs-slideshow,
+vvjt-tabs {
+  display: block;
+  box-sizing: border-box;
+  container-name: vvj-region;
+  container-type: inline-size;
 }
 
-@layer vvj.base {
-  /* Reduced-motion baseline — applies to every VVJ component.
-     Pattern-specific motion overrides also respect this query, but
-     this is the cross-cutting safety net. */
+:where(.vvj-component) *,
+:where(.vvj-component) *::before,
+:where(.vvj-component) *::after,
+:where(vvja-accordion) *,
+:where(vvjb-carousel) *,
+:where(vvjc-carousel) *,
+:where(vvjf-flipbox) *,
+:where(vvjh-hero) *,
+:where(vvjl-lightbox) *,
+:where(vvjp-parallax) *,
+:where(vvjr-reveal) *,
+:where(vvjs-slideshow) *,
+:where(vvjt-tabs) * {
+  box-sizing: inherit;
+}
+
+/* Note on `<X>:not(:defined)` FOUC-hiding:
+ * We deliberately do NOT hide unupgraded custom elements. If the
+ * JS module fails to load (network error, blocked by extension,
+ * etc.), users would see nothing forever. Instead the markup
+ * inside each custom element is structured so that, without JS,
+ * a sensible static representation renders — inner `.vvja-inner`
+ * etc. divs are the visual elements; the custom element itself is
+ * a thin behavior wrapper.
+ */
+
+/* stylelint-disable layer-name-pattern -- `vvj.locked` is a nested layer
+   name; the dot keeps it in the vvj group, which stylelint's kebab-case
+   pattern does not allow. */
+@layer vvj.locked {
+  /* Visually-hidden: no theme rule may make screen-reader text visible. */
+  :where(.vvj-component) .visually-hidden,
+  :where(vvja-accordion) .visually-hidden,
+  :where(vvjb-carousel) .visually-hidden,
+  :where(vvjc-carousel) .visually-hidden,
+  :where(vvjf-flipbox) .visually-hidden,
+  :where(vvjh-hero) .visually-hidden,
+  :where(vvjl-lightbox) .visually-hidden,
+  :where(vvjp-parallax) .visually-hidden,
+  :where(vvjr-reveal) .visually-hidden,
+  :where(vvjs-slideshow) .visually-hidden,
+  :where(vvjt-tabs) .visually-hidden {
+    position: absolute !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  /* Reduced motion: a visitor's setting must never be overridden. */
   @media (prefers-reduced-motion: reduce) {
     :where(.vvj-component) *,
     :where(.vvj-component) *::before,
@@ -92,3 +102,4 @@
     }
   }
 }
+/* stylelint-enable layer-name-pattern */

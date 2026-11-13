@@ -4,8 +4,8 @@
  * you are not padded the text so it is touching the edges").
  *
  * For every painted line of text inside a pattern sample (or a top-level
- * .pb-sl section on a real page), find the box whose COLOUR the words sit
- * on: the nearest ancestor with a background colour or image that differs
+ * .pb-sl section on a real page), find the box whose COLOR the words sit
+ * on: the nearest ancestor with a background color or image that differs
  * from what is behind it. Its painted area is its border box, grown by a
  * box-shadow spread (the full-bleed grounds), cut by its own clip-path
  * inset, by every clipping ancestor (overflow not visible) and by the
@@ -13,7 +13,7 @@
  * or MIN_Y px to its top or bottom, is a finding.
  *
  * Cannot see: words over an <img> (the picture is a sibling, not an
- * ancestor), rounded corners, colours under 1% alpha difference, text drawn
+ * ancestor), rounded corners, colors under 1% alpha difference, text drawn
  * by ::before/::after content.
  *
  * Evaluates to { audit(doc), selfTest() }. audit returns unique strings:
@@ -43,7 +43,7 @@
     const a = m.length > 3 ? Number(m[3]) : 1;
     return a > 0.01 ? s.backgroundColor : null;
   };
-  // The colour behind an element: the first painted ancestor above it.
+  // The color behind an element: the first painted ancestor above it.
   const behind = (el, win) => {
     for (let e = el.parentElement; e; e = e.parentElement) {
       const c = solid(win.getComputedStyle(e));
@@ -56,7 +56,7 @@
     const s = win.getComputedStyle(el);
     const r = el.getBoundingClientRect();
     let l = r.left, t = r.top, rt = r.right, b = r.bottom;
-    // Box-shadow spread (non-inset): 0 0 0 <spread> colour.
+    // Box-shadow spread (non-inset): 0 0 0 <spread> color.
     if (s.boxShadow && s.boxShadow !== 'none' && !/inset/.test(s.boxShadow)) {
       const nums = s.boxShadow.replace(/rgba?\([^)]*\)|oklch\([^)]*\)|oklab\([^)]*\)/g, '').match(/-?[\d.]+px/g) || [];
       const spread = nums.length >= 4 ? px(nums[3]) : 0;
@@ -144,7 +144,7 @@
         if (!m.isIdentity && (scale > 1.15 || scale < 0.87)) return;
         const area = paintArea(box, win, doc);
         if (area.right - area.left < 4 || area.bottom - area.top < 4) return;
-        // Clipping boxes between the words and their colour (a carousel
+        // Clipping boxes between the words and their color (a carousel
         // window): a line they cut is scrolled content, not an edge.
         const inner = [];
         for (let a = el; a && a !== box; a = a.parentElement) {

@@ -6,8 +6,8 @@ dependencies:
     - field.storage.node.vvj_kicker
     - field.storage.node.vvj_link
     - field.storage.node.vvj_summary
-    - image.style.vvj_cinema_1680
     - image.style.vvj_landscape_1200
+    - image.style.vvj_wide_1600
     - node.type.vvj_slide
   module:
     - image
@@ -312,7 +312,7 @@ display:
           type: image
           settings:
             image_link: ''
-            image_style: vvj_cinema_1680
+            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
             svg_attributes:

@@ -32,12 +32,23 @@
    *   The index of the currently-focused item.
    * @param {{horizontal?: boolean}} [options]
    *   Pass `{ horizontal: true }` to use Left/Right instead of Up/Down
-   *   (e.g., for horizontal tab strips).
+   *   (e.g., for horizontal tab strips). In a right-to-left context the
+   *   horizontal keys swap, so Left moves to the next item, matching the
+   *   mirrored arrow icons.
    */
   Drupal.Vvj.handleArrowKeyNav = (event, items, currentIndex, options = {}) => {
     const { horizontal = false } = options;
-    const PREV_KEY = horizontal ? 'ArrowLeft' : 'ArrowUp';
-    const NEXT_KEY = horizontal ? 'ArrowRight' : 'ArrowDown';
+    const current = items[currentIndex];
+    const rtl =
+      horizontal &&
+      current instanceof Element &&
+      getComputedStyle(current).direction === 'rtl';
+    let PREV_KEY = 'ArrowUp';
+    let NEXT_KEY = 'ArrowDown';
+    if (horizontal) {
+      PREV_KEY = rtl ? 'ArrowRight' : 'ArrowLeft';
+      NEXT_KEY = rtl ? 'ArrowLeft' : 'ArrowRight';
+    }
 
     let targetIndex;
     switch (event.key) {

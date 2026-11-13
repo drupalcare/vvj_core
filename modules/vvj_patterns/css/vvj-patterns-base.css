@@ -21,17 +21,16 @@
   --vvj-stage-bg: #000;
   --vvj-stage-color: #fff;
   --vvj-stage-muted: #c8c8c8;
-  --vvj-stage-line: rgb(255 255 255 / 0.5);
-  --vvj-stage-scrim: linear-gradient(180deg, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0.78) 68%, rgb(0 0 0 / 0.94) 100%);
+  --vvj-stage-line: rgb(255, 255, 255, 0.5);
+  --vvj-stage-scrim: linear-gradient(180deg, rgb(0, 0, 0, 0) 30%, rgb(0, 0, 0, 0.78) 68%, rgb(0, 0, 0, 0.94) 100%);
 
   /* Glass: a translucent dark control bar over a photo. */
-  --vvj-glass-bg: rgb(20 20 20 / 0.62);
-  --vvj-glass-line: rgb(255 255 255 / 0.16);
-  --vvj-glass-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+  --vvj-glass-bg: rgb(20, 20, 20, 0.62);
+  --vvj-glass-line: rgb(255, 255, 255, 0.16);
+  --vvj-glass-shadow: 0 18px 40px rgb(0, 0, 0, 0.35);
 
   /* Mask: the opaque stop of a fade mask (not a visible color). */
   --vvj-mask-solid: #000;
-
   --vvj-radius: 16px;
   --vvj-font-display: "Iowan Old Style", "Palatino Linotype", georgia, serif;
   --vvj-font-ui: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
@@ -134,11 +133,11 @@
   --vvj-ease-spring-soft: cubic-bezier(0.3, 1.35, 0.5, 1);
   --vvj-ease-spring-strong: cubic-bezier(0.3, 1.6, 0.5, 1);
   --vvj-ease-back: cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  --vvj-shadow-lift-sm: 0 4px 10px rgb(0 0 0 / 0.1);
-  --vvj-shadow-lift-md: 0 8px 15px rgb(0 0 0 / 0.2);
-  --vvj-shadow-lift-lg: 0 10px 20px rgb(0 0 0 / 0.3);
-  --vvj-shadow-glow-sm: 0 0 10px rgb(255 255 255 / 0.5);
-  --vvj-shadow-glow-lg: 0 0 20px rgb(255 255 255 / 0.8);
+  --vvj-shadow-lift-sm: 0 4px 10px rgb(0, 0, 0, 0.1);
+  --vvj-shadow-lift-md: 0 8px 15px rgb(0, 0, 0, 0.2);
+  --vvj-shadow-lift-lg: 0 10px 20px rgb(0, 0, 0, 0.3);
+  --vvj-shadow-glow-sm: 0 0 10px rgb(255, 255, 255, 0.5);
+  --vvj-shadow-glow-lg: 0 0 20px rgb(255, 255, 255, 0.8);
 
   color-scheme: light dark;
   font-family: var(--vvj-font-ui);
@@ -190,10 +189,10 @@
 }
 
 .vvj-pattern.vvj-pattern :where(a) {
+  text-decoration: underline;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-  text-decoration: underline;
 }
 
 .vvj-pattern.vvj-pattern :where(img) {
@@ -233,8 +232,8 @@
 /* Words in a pane rise in order when the pane opens. */
 @keyframes vvj-rise {
   from {
-    opacity: 0;
     transform: translateY(14px);
+    opacity: 0;
   }
 }
 
@@ -258,10 +257,10 @@
   :where(.vvj-pattern) *,
   :where(.vvj-pattern) *::before,
   :where(.vvj-pattern) *::after {
+    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
@@ -270,7 +269,7 @@
    left and points left. The arrow drawings point the left-to-right way.
    Arrows are an <svg>, a masked .vvja-i span or a ::before mask; `scale` (not
    `transform`) also mirrors their hover nudge. */
-.vvj-pattern:dir(rtl) :is(.vvja-prev, .vvja-next, .vvjb-prev, .vvjb-next, .vvjf-prev, .vvjf-next, .prev-arrow, .next-arrow, .modal-prev, .modal-next, .vvjt-scroll-prev, .vvjt-scroll-next) :is(svg, .vvja-i),
-.vvj-pattern:dir(rtl) :is(.vvja-prev, .vvja-next, .vvjb-prev, .vvjb-next, .vvjf-prev, .vvjf-next, .prev-arrow, .next-arrow, .modal-prev, .modal-next, .vvjt-scroll-prev, .vvjt-scroll-next)::before {
+:where(.vvj-pattern:dir(rtl)) :where(.vvja-prev, .vvja-next, .vvjb-prev, .vvjb-next, .vvjf-prev, .vvjf-next, .prev-arrow, .next-arrow, .modal-prev, .modal-next, .vvjt-scroll-prev, .vvjt-scroll-next) :is(svg, .vvja-i),
+:where(.vvj-pattern:dir(rtl)) :is(.vvja-prev, .vvja-next, .vvjb-prev, .vvjb-next, .vvjf-prev, .vvjf-next, .prev-arrow, .next-arrow, .modal-prev, .modal-next, .vvjt-scroll-prev, .vvjt-scroll-next)::before {
   scale: -1 1;
 }

@@ -5,7 +5,7 @@
  * R11: no two Patterns share a control style or place, per kind of control.
  * R13: words use a VVJ font, and no button keeps the browser's default ground.
  * R14: words on a solid ground reach 4.5:1 (3:1 at 24px, or 18.66px bold), in
- * the machine's colour scheme, or with window.__vvjLight the light tokens.
+ * the machine's color scheme, or with window.__vvjLight the light tokens.
  *
  * Run in a tab on the demo site. Evaluates to { run(pages, opts), selfTest() }.
  * run() resolves to { rows, findings }; pages are "vvja/agenda" paths. Cannot
@@ -15,7 +15,7 @@
 (() => {
   const CTL = 'button,[role="button"],summary';
   const LIGHT = '.vvj-pattern{--vvj-surface:#fff!important;--vvj-raised:#f2f2f2!important;--vvj-ink:#111!important;--vvj-muted:#555!important;--vvj-line:#d4d4d4!important;color-scheme:light!important}.vvj-demo-stage{background:#fff!important;color:#111!important}';
-  // Any CSS colour (rgb, color(), oklab ...), read back through a 1px canvas.
+  // Any CSS color (rgb, color(), oklab ...), read back through a 1px canvas.
   const paint = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
   const rgba = (c) => {
     if (!c || c === 'transparent') return [0, 0, 0, 0];
@@ -39,7 +39,7 @@
     }
     return true;
   };
-  // The solid colour behind an element, or null when a photo or gradient is.
+  // The solid color behind an element, or null when a photo or gradient is.
   const ground = (el, win) => {
     const layers = [];
     for (let e = el; e && e.nodeType === 1; e = e.parentElement) {
