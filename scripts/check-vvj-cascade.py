@@ -12,7 +12,8 @@ to a temporary directory and deleted afterwards. Solo and Olivero are read from 
 only VVJ edits can change a winner. The baseline is git itself: no snapshot file to drift.
 
 Exit 1 when, against the revision: a pair's winner changed; a Pattern selector over 0,2,0 is new; a new
-P4 loss appears (Solo/Olivero must beat VVJ layered CSS); or a new P5 token-ownership violation appears.
+P4 loss appears (Solo/Olivero must beat VVJ layered CSS, except the vvj.locked layer, whose
+!important values must beat every theme); or a new P5 token-ownership violation appears.
 Exit 2 on a usage or input error. Exit 0 otherwise.
 
 Winner model (CSS Cascade 5): !important beats normal; normal unlayered beats layered and a later layer
@@ -53,6 +54,9 @@ CAP = (0, 2, 0)
 VVJ_SKIP = ('-admin.css', 'vvj-ai-brief.css')
 SOLO_ADMIN_LIBS = {'solo-form-theme-settings', 'solo-node-edit-form', 'solo-debug'}
 SOLO_ADMIN_FILES = ('css/theme/solo-ckeditor', 'css/debug/', 'css/components/solo-layout-builder.css')
+# Layers whose !important values must beat every theme (vvj-base.css): a theme losing to them is the
+# point, not a P4 loss.
+LOCKED_LAYERS = {'vvj.locked'}
 # Custom property namespaces and their one owner (contract P5; same table as solo/scripts/check-cascade.py).
 OWNERS = {'--r-': {'solo', 'generated'}, '--vvj-': {'vvj'}, '--pb-': {'paragraphs_bundles'},
           '--selectify-': {'selectify', 'solo'}, '--uk-': {'utilikit'}, '--w3-': {'w3css_paragraphs'}}
@@ -438,7 +442,7 @@ def analyse(vroot, themes, layers_hint=None):
             for th in tby.get((v['p'], t), ()):
                 if id(th) not in cand and th['v'] != v['v'] and th['toks'] <= v['el']:
                     cand.add(id(th))
-                    if not record(th, v) and v['layer']:
+                    if not record(th, v) and v['layer'] and v['layer'] not in LOCKED_LAYERS:
                         p4.add('%s:%s %s {%s} | %s:%s %s' % (th['f'], th['ln'], th['sel'], th['p'], v['f'], v['ln'], v['sel']))
     # Shorthand against longhand (animation vs animation-delay ...): same meet rules, values not compared.
     props = sorted({d['p'] for d in vvj} | {d['p'] for d in themes})
