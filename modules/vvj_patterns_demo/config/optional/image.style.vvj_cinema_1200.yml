@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_cinema_1200
+label: 'VVJ Cinema 1200x514'
+effects:
+  8159d863-17bd-4972-96be-8fb2611793dd:
+    uuid: 8159d863-17bd-4972-96be-8fb2611793dd
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 514
+      anchor: center-center
+  38ea680b-57e6-4105-9e54-bebe1de7f49e:
+    uuid: 38ea680b-57e6-4105-9e54-bebe1de7f49e
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

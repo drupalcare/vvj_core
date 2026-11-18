@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_landscape_600
+label: 'VVJ Landscape 600x400'
+effects:
+  cfd8ddc6-a29a-4b78-86aa-2ab0cf192afa:
+    uuid: cfd8ddc6-a29a-4b78-86aa-2ab0cf192afa
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 600
+      height: 400
+      anchor: center-center
+  24ec7ff9-1c9c-4499-bc43-f4e74180bb1f:
+    uuid: 24ec7ff9-1c9c-4499-bc43-f4e74180bb1f
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

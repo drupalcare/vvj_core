@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.vvj_thumb_240
+    - image.style.vvj_thumb_480
+id: vvj_thumb
+label: 'VVJ Thumb (3:2)'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '(min-width: 600px) 240px, 120px'
+      sizes_image_styles:
+        - vvj_thumb_240
+        - vvj_thumb_480
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: vvj_thumb_240

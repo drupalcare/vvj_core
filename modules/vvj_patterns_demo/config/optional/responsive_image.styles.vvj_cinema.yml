@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.vvj_cinema_1200
+    - image.style.vvj_cinema_1600
+    - image.style.vvj_cinema_800
+id: vvj_cinema
+label: 'VVJ Cinema (7:3)'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '100vw'
+      sizes_image_styles:
+        - vvj_cinema_800
+        - vvj_cinema_1200
+        - vvj_cinema_1600
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: vvj_cinema_1200

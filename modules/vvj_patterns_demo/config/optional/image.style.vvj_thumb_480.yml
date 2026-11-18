@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_thumb_480
+label: 'VVJ Thumb 480x320'
+effects:
+  8e16064b-8a3c-4135-a2b6-a185e1908631:
+    uuid: 8e16064b-8a3c-4135-a2b6-a185e1908631
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 320
+      anchor: center-center
+  5925f4ae-dd44-4528-914a-c535db278b13:
+    uuid: 5925f4ae-dd44-4528-914a-c535db278b13
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

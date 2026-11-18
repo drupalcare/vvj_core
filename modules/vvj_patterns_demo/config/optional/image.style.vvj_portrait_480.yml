@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_portrait_480
+label: 'VVJ Portrait 480x640'
+effects:
+  a4b3e357-b90f-415b-ad1e-be77e33130b6:
+    uuid: a4b3e357-b90f-415b-ad1e-be77e33130b6
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 480
+      height: 640
+      anchor: center-center
+  4b5f88e6-9953-4352-b115-2c8e9fe5d3ea:
+    uuid: 4b5f88e6-9953-4352-b115-2c8e9fe5d3ea
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

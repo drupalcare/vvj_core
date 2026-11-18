@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_square_400
+label: 'VVJ Square 400x400'
+effects:
+  89fc7873-8efa-4784-a62f-91a08983e37a:
+    uuid: 89fc7873-8efa-4784-a62f-91a08983e37a
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 400
+      height: 400
+      anchor: center-center
+  7db45ce0-f0b3-4efb-8c04-73906a1bc115:
+    uuid: 7db45ce0-f0b3-4efb-8c04-73906a1bc115
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

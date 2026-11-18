@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_square_1000
+label: 'VVJ Square 1000x1000'
+effects:
+  5f96ad64-2e92-4289-8401-7de98a638fc1:
+    uuid: 5f96ad64-2e92-4289-8401-7de98a638fc1
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1000
+      height: 1000
+      anchor: center-center
+  3141536e-4286-4ceb-b20f-8a6c742e9860:
+    uuid: 3141536e-4286-4ceb-b20f-8a6c742e9860
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_cinema_1600
+label: 'VVJ Cinema 1600x686'
+effects:
+  bcc6b736-6b25-4a96-bb62-b56010d7e6fb:
+    uuid: bcc6b736-6b25-4a96-bb62-b56010d7e6fb
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1600
+      height: 686
+      anchor: center-center
+  7dda1af3-a2d2-4612-824b-087ca557619a:
+    uuid: 7dda1af3-a2d2-4612-824b-087ca557619a
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

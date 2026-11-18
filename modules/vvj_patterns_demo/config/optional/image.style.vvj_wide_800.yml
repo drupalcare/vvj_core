@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_wide_800
+label: 'VVJ Wide 800x450'
+effects:
+  c618f6c0-7eaf-47ad-af56-adff8e2da843:
+    uuid: c618f6c0-7eaf-47ad-af56-adff8e2da843
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 800
+      height: 450
+      anchor: center-center
+  47ec5c61-c416-4d66-8e00-8071b5dae8df:
+    uuid: 47ec5c61-c416-4d66-8e00-8071b5dae8df
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

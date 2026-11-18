@@ -4,11 +4,12 @@ dependencies:
   config:
     - field.storage.node.vvj_image
     - field.storage.node.vvj_kicker
-    - image.style.vvj_wide_1600
     - node.type.vvj_slide
+    - responsive_image.styles.vvj_wide
   module:
     - image
     - node
+    - responsive_image
     - user
     - vvjl
 id: vvj_demo_vvjl
@@ -240,16 +241,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_wide
             image_link: ''
-            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -487,16 +484,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_wide
             image_link: ''
-            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -734,16 +727,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_wide
             image_link: ''
-            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -981,16 +970,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_wide
             image_link: ''
-            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -1228,16 +1213,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_wide
             image_link: ''
-            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true

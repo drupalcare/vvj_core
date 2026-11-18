@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.vvj_portrait_480
+    - image.style.vvj_portrait_750
+id: vvj_portrait
+label: 'VVJ Portrait (3:4)'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '(min-width: 768px) 375px, 100vw'
+      sizes_image_styles:
+        - vvj_portrait_480
+        - vvj_portrait_750
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: vvj_portrait_480

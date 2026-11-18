@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_landscape_900
+label: 'VVJ Landscape 900x600'
+effects:
+  c49c4433-fc23-468b-a097-063bc26b97fb:
+    uuid: c49c4433-fc23-468b-a097-063bc26b97fb
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 900
+      height: 600
+      anchor: center-center
+  e6fa4d7a-749b-401c-b99a-181ee98a0214:
+    uuid: e6fa4d7a-749b-401c-b99a-181ee98a0214
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

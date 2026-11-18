@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_landscape_1500
+label: 'VVJ Landscape 1500x1000'
+effects:
+  b13c2fd4-3e71-47f9-a5a2-04e2f805e3ca:
+    uuid: b13c2fd4-3e71-47f9-a5a2-04e2f805e3ca
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1500
+      height: 1000
+      anchor: center-center
+  504ded40-2b89-4e4e-8d90-c88a93b7f3eb:
+    uuid: 504ded40-2b89-4e4e-8d90-c88a93b7f3eb
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

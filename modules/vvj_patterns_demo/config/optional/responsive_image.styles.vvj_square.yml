@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.vvj_square_1000
+    - image.style.vvj_square_400
+    - image.style.vvj_square_800
+id: vvj_square
+label: 'VVJ Square (1:1)'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '(min-width: 1200px) 400px, (min-width: 600px) 50vw, 100vw'
+      sizes_image_styles:
+        - vvj_square_400
+        - vvj_square_800
+        - vvj_square_1000
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: vvj_square_800

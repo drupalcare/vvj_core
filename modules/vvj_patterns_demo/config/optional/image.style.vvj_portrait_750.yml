@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_portrait_750
+label: 'VVJ Portrait 750x1000'
+effects:
+  1a8c5284-aa61-4e1e-9bbc-6deee047eab1:
+    uuid: 1a8c5284-aa61-4e1e-9bbc-6deee047eab1
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 750
+      height: 1000
+      anchor: center-center
+  63f6a027-d90a-4e70-a917-b63d950ef618:
+    uuid: 63f6a027-d90a-4e70-a917-b63d950ef618
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

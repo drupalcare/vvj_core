@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.vvj_wide_1200
+    - image.style.vvj_wide_1600
+    - image.style.vvj_wide_480
+    - image.style.vvj_wide_800
+id: vvj_wide
+label: 'VVJ Wide (16:9)'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '100vw'
+      sizes_image_styles:
+        - vvj_wide_480
+        - vvj_wide_800
+        - vvj_wide_1200
+        - vvj_wide_1600
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: vvj_wide_1200

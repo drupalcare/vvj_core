@@ -6,13 +6,14 @@ dependencies:
     - field.storage.node.vvj_kicker
     - field.storage.node.vvj_link
     - field.storage.node.vvj_summary
-    - image.style.vvj_landscape_1200
-    - image.style.vvj_wide_1600
     - node.type.vvj_slide
+    - responsive_image.styles.vvj_landscape
+    - responsive_image.styles.vvj_wide
   module:
     - image
     - link
     - node
+    - responsive_image
     - user
     - vvjh
 id: vvj_demo_vvjh
@@ -81,16 +82,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_landscape
             image_link: ''
-            image_style: vvj_landscape_1200
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -309,16 +306,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_wide
             image_link: ''
-            image_style: vvj_wide_1600
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -697,16 +690,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_landscape
             image_link: ''
-            image_style: vvj_landscape_1200
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -1085,16 +1074,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_landscape
             image_link: ''
-            image_style: vvj_landscape_1200
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -1410,16 +1395,12 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: target_id
-          type: image
+          type: responsive_image
           settings:
+            responsive_image_style: vvj_landscape
             image_link: ''
-            image_style: vvj_landscape_1200
             image_loading:
               attribute: lazy
-            svg_attributes:
-              width: null
-              height: null
-            svg_render_as_image: true
           group_column: ''
           group_columns: {  }
           group_rows: true

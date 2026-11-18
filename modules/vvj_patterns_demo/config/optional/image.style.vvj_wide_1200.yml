@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies: {  }
+name: vvj_wide_1200
+label: 'VVJ Wide 1200x675'
+effects:
+  d0cf62c5-70cf-4de4-86f8-8e6b5659b2fa:
+    uuid: d0cf62c5-70cf-4de4-86f8-8e6b5659b2fa
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1200
+      height: 675
+      anchor: center-center
+  23f1288e-cfef-4121-960e-67acd3b7d7d8:
+    uuid: 23f1288e-cfef-4121-960e-67acd3b7d7d8
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

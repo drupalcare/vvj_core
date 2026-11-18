@@ -10,4 +10,5 @@ dependencies:
   - drupal:image
   - drupal:link
   - drupal:node
+  - drupal:responsive_image
   - vvj_core:vvj_patterns
